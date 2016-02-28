@@ -1,6 +1,8 @@
 package com.flyzebra.xinyi.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.Util;
+import com.flyzebra.xinyi.data.UserCheck;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
@@ -45,10 +48,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lg_iv_qq.setOnClickListener(this);
         lg_bt_lg = (Button) findViewById(R.id.lg_bt_lg);
         lg_bt_lg.setOnClickListener(this);
-        if (mTencent == null) {
+        if (UserCheck.isLogin(this)) {
+            StartHomeActivity();
+        } else if (mTencent == null) {
             mTencent = Tencent.createInstance(QQ_APP_ID, this);
         }
         Log.i(TAG, "onCreate");
+    }
+
+    private void StartHomeActivity() {
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -61,15 +73,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.lg_bt_lg:
-                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                intent.setAction(Intent.ACTION_MAIN);
-                startActivity(intent);
-                finish();
                 break;
             case R.id.lg_iv_qq:
                 if (!mTencent.isSessionValid()) {
                     mTencent.login(this, "all", loginListener);
-                }else{
+                } else {
                     mTencent.logout(this);
                     updateUserInfo();
                 }
@@ -93,11 +101,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     IUiListener loginListener = new BaseUiListener() {
         @Override
         protected void doComplete(JSONObject values) {
+            Log.i(TAG,"JSONObject--"+values.toString());
+            //登陆成功，写入TOKEN，跳转到主界面，存储用户信息
             initOpenidAndToken(values);
-            updateUserInfo();
-            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-            startActivity(intent);
-            finish();
+            SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            try {
+                editor.putString("openid", values.getString("openid"));
+                Log.i(TAG, "openid:" + values.getString("openid"));
+                editor.putString("access_token", values.getString("access_token"));
+                Log.i(TAG, "access_token:" + values.getString("access_token"));
+                Log.i(TAG, "getAccessToken:" + mTencent.getAccessToken());
+                Log.i(TAG,"getOpenID:"+mTencent.getOpenId());
+            } catch (JSONException e) {
+                editor.clear();
+                e.printStackTrace();
+            }
+            editor.commit();
+            StartHomeActivity();
         }
     };
 
@@ -116,13 +137,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            Util.showResultDialog(LoginActivity.this, response.toString(), "登录成功");
             doComplete((JSONObject) response);
         }
+
         protected void doComplete(JSONObject values) {
         }
+
         @Override
         public void onError(UiError e) {
             Util.toastMessage(LoginActivity.this, "onError: " + e.errorDetail);
             Util.dismissDialog();
         }
+
         @Override
         public void onCancel() {
             Util.toastMessage(LoginActivity.this, "onCancel: ");
@@ -136,17 +160,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onError(UiError e) {
                 }
+
                 @Override
                 public void onComplete(final Object response) {
                     Message msg = new Message();
                     msg.obj = response;
                     msg.what = 0;
                     mHandler.sendMessage(msg);
-                    new Thread(){
+                    new Thread() {
                         @Override
                         public void run() {
-                            JSONObject json = (JSONObject)response;
-                            if(json.has("figureurl")){
+                            JSONObject json = (JSONObject) response;
+                            if (json.has("figureurl")) {
                                 Bitmap bitmap = null;
                                 try {
                                     bitmap = Util.getbitmap(json.getString("figureurl_qq_2"));
@@ -160,24 +185,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }.start();
                 }
+
                 @Override
                 public void onCancel() {
                 }
             };
-            Log.i(TAG,"get userInfo");
+            Log.i(TAG, "get userInfo");
             mInfo = new UserInfo(this, mTencent.getQQToken());
             mInfo.getUserInfo(listener);
         } else {
             lg_ed_us.setText("");
             lg_iv_qq.setImageResource(R.drawable.qq_login);
-            Log.i(TAG,"no info");
+            Log.i(TAG, "no info");
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR){
-            Tencent.onActivityResultData(requestCode,resultCode,data,loginListener);
+        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
+            Tencent.onActivityResultData(requestCode, resultCode, data, loginListener);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -194,8 +220,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         e.printStackTrace();
                     }
                 }
-            }else if(msg.what == 1){
-                Bitmap bitmap = (Bitmap)msg.obj;
+            } else if (msg.what == 1) {
+                Bitmap bitmap = (Bitmap) msg.obj;
                 lg_iv_qq.setImageBitmap(bitmap);
             }
         }
