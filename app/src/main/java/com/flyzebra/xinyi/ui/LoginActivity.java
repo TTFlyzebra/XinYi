@@ -61,6 +61,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.lg_bt_lg:
+                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                intent.setAction(Intent.ACTION_MAIN);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.lg_iv_qq:
                 if (!mTencent.isSessionValid()) {
@@ -91,6 +95,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         protected void doComplete(JSONObject values) {
             initOpenidAndToken(values);
             updateUserInfo();
+            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+            startActivity(intent);
+            finish();
         }
     };
 
@@ -106,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Util.showResultDialog(LoginActivity.this, "返回为空", "登录失败");
                 return;
             }
-            Util.showResultDialog(LoginActivity.this, response.toString(), "登录成功");
+//            Util.showResultDialog(LoginActivity.this, response.toString(), "登录成功");
             doComplete((JSONObject) response);
         }
         protected void doComplete(JSONObject values) {

@@ -1,18 +1,18 @@
 package com.flyzebra.xinyi.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.flyzebra.xinyi.R;
 
 /**
  * Created by Administrator on 2016/2/28.
  */
-public class HomeActivity extends Activity{
+public class HomeActivity extends AppCompatActivity {
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
     }
 }
