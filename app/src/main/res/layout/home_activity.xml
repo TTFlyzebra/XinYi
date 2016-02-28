@@ -16,8 +16,7 @@
 
             <android.support.v4.view.ViewPager
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </android.support.v4.view.ViewPager>
+                android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
         </LinearLayout>
     </ScrollView>
 
@@ -26,62 +25,114 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+        android:background="#EEFFFF"
         android:gravity="center"
-        android:background="#BBB"
-        android:alpha="0.5"
         android:orientation="horizontal"
         android:weightSum="4">
 
         <LinearLayout
+            android:id="@+id/home_ll_01"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:layout_weight="1">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/home_bt_01"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/icon_set" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_menu_deal"
+                android:duplicateParentState="true" />
+
+            <TextView
+                android:id="@+id/home_tv_01"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:text="首页"
+                android:textColor="@color/color_select" />
 
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/home_ll_02"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:layout_weight="1">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/home_bt_02"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/icon_find"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_menu_poi"
+                android:duplicateParentState="true" />
+
+            <TextView
+                android:id="@+id/home_tv_02"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:text="商城"
+                android:textColor="@color/color_select" />
 
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/home_ll_03"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:layout_weight="1">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/home_bt_03"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/icon_user" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_menu_user"
+                android:duplicateParentState="true"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/home_tv_03"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:text="我的"
+                android:textColor="@color/color_select" />
 
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/home_ll_04"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:layout_weight="1">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/home_bt_04"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/icon_more" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_menu_more"
+                android:duplicateParentState="true" />
+
+            <TextView
+                android:id="@+id/home_tv_04"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:text="更多"
+                android:textColor="@color/color_select" />
 
         </LinearLayout>
     </LinearLayout>
