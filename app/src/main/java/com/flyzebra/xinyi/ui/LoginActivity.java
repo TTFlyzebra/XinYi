@@ -16,9 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.Util;
-import com.flyzebra.xinyi.data.UserCheck;
-import com.tencent.connect.UserInfo;
+import com.flyzebra.xinyi.data.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -33,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText lg_ed_ps;
     private ImageView lg_iv_qq;
     private Button lg_bt_lg;
-    private UserInfo mInfo;
+    private com.tencent.connect.UserInfo mInfo;
 
     private static Tencent mTencent;
     private String QQ_APP_ID = "1105211644";
@@ -48,12 +46,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lg_iv_qq.setOnClickListener(this);
         lg_bt_lg = (Button) findViewById(R.id.lg_bt_lg);
         lg_bt_lg.setOnClickListener(this);
-        if (UserCheck.isLogin(this)) {
+        if (UserInfo.isLogin(this)) {
             StartHomeActivity();
         } else if (mTencent == null) {
             mTencent = Tencent.createInstance(QQ_APP_ID, this);
         }
-        Log.i(TAG, "onCreate");
     }
 
     private void StartHomeActivity() {
@@ -113,11 +110,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.i(TAG, "access_token:" + values.getString("access_token"));
                 Log.i(TAG, "getAccessToken:" + mTencent.getAccessToken());
                 Log.i(TAG,"getOpenID:"+mTencent.getOpenId());
+                UserInfo.saveToServer(values.getString("openid"), values.getString("access_token"));
             } catch (JSONException e) {
                 editor.clear();
                 e.printStackTrace();
             }
             editor.commit();
+            mTencent.logout(LoginActivity.this);
             StartHomeActivity();
         }
     };
@@ -191,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             };
             Log.i(TAG, "get userInfo");
-            mInfo = new UserInfo(this, mTencent.getQQToken());
+            mInfo = new com.tencent.connect.UserInfo(this, mTencent.getQQToken());
             mInfo.getUserInfo(listener);
         } else {
             lg_ed_us.setText("");
