@@ -1,7 +1,11 @@
 package com.flyzebra.xinyi.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.flyzebra.xinyi.R;
@@ -9,18 +13,13 @@ import com.flyzebra.xinyi.R;
 /**
  * Created by Administrator on 2016/2/29.
  */
-public class UserActivity extends BaseActivity{
+public class UserActivity extends BaseActivity {
+    private Button bt_clear_user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        base_bt_01.setImageResource(R.drawable.ic_menu_deal);
-//        base_bt_02.setImageResource(R.drawable.ic_menu_poi);
         base_bt_03.setImageResource(R.drawable.ic_menu_user_on);
-//        base_bt_04.setImageResource(R.drawable.ic_menu_more);
-//        base_tv_01.setTextColor(colorStateList);
-//        base_tv_02.setTextColor(colorStateList);
         base_tv_03.setTextColor(getResources().getColor(R.color.menu_select_on));
-//        base_tv_04.setTextColor(colorStateList);
     }
 
     @Override
@@ -28,5 +27,15 @@ public class UserActivity extends BaseActivity{
         LayoutInflater lf = LayoutInflater.from(this);
         LinearLayout ll = (LinearLayout) lf.inflate(R.layout.user_view, null);
         root.addView(ll);
+        bt_clear_user = (Button) ll.findViewById(R.id.clear_user);
+        bt_clear_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+            }
+        });
     }
 }

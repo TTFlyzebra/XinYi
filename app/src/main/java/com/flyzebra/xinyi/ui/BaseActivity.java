@@ -14,7 +14,7 @@ import com.flyzebra.xinyi.R;
 /**
  * Created by Administrator on 2016/2/28.
  */
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     protected ImageView base_bt_01;
     protected ImageView base_bt_02;
     protected ImageView base_bt_03;
@@ -35,7 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
-        colorStateList=getResources().getColorStateList(R.color.color_select);
+        colorStateList = getResources().getColorStateList(R.color.color_select);
         base_bt_01 = (ImageView) findViewById(R.id.base_bt_01);
         base_bt_02 = (ImageView) findViewById(R.id.base_bt_02);
         base_bt_03 = (ImageView) findViewById(R.id.base_bt_03);
@@ -63,21 +63,53 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.base_ll_01:
+                base_bt_01.setImageResource(R.drawable.ic_menu_deal_on);
+                base_bt_02.setImageResource(R.drawable.ic_menu_poi);
+                base_bt_03.setImageResource(R.drawable.ic_menu_user);
+                base_bt_04.setImageResource(R.drawable.ic_menu_more);
+                base_tv_01.setTextColor(getResources().getColor(R.color.menu_select_on));
+                base_tv_02.setTextColor(colorStateList);
+                base_tv_03.setTextColor(colorStateList);
+                base_tv_04.setTextColor(colorStateList);
                 startActivity(new Intent(BaseActivity.this, HomeAcitivy.class));
                 overridePendingTransition(0, 0);
                 finish();
                 break;
             case R.id.base_ll_02:
+                base_bt_01.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_02.setImageResource(R.drawable.ic_menu_poi_on);
+                base_bt_03.setImageResource(R.drawable.ic_menu_user);
+                base_bt_04.setImageResource(R.drawable.ic_menu_more);
+                base_tv_01.setTextColor(colorStateList);
+                base_tv_02.setTextColor(getResources().getColor(R.color.menu_select_on));
+                base_tv_03.setTextColor(colorStateList);
+                base_tv_04.setTextColor(colorStateList);
                 startActivity(new Intent(BaseActivity.this, PoiActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
                 break;
             case R.id.base_ll_03:
+                base_bt_01.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_02.setImageResource(R.drawable.ic_menu_poi);
+                base_bt_03.setImageResource(R.drawable.ic_menu_user_on);
+                base_bt_04.setImageResource(R.drawable.ic_menu_more);
+                base_tv_01.setTextColor(colorStateList);
+                base_tv_02.setTextColor(colorStateList);
+                base_tv_03.setTextColor(getResources().getColor(R.color.menu_select_on));
+                base_tv_04.setTextColor(colorStateList);
                 startActivity(new Intent(BaseActivity.this, UserActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
                 break;
             case R.id.base_ll_04:
+                base_bt_01.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_02.setImageResource(R.drawable.ic_menu_poi);
+                base_bt_03.setImageResource(R.drawable.ic_menu_user);
+                base_bt_04.setImageResource(R.drawable.ic_menu_more_on);
+                base_tv_01.setTextColor(colorStateList);
+                base_tv_02.setTextColor(colorStateList);
+                base_tv_03.setTextColor(colorStateList);
+                base_tv_04.setTextColor(getResources().getColor(R.color.menu_select_on));
                 startActivity(new Intent(BaseActivity.this, MoreActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
