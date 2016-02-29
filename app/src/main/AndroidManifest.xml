@@ -49,14 +49,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.HomeActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:name=".ui.HomeAcitivy"
+            android:label="@string/deal"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.PoiActivity"
+            android:label="@string/poi"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.UserActivity"
+            android:label="@string/user"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.MoreActivity"
+            android:label="@string/more"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
