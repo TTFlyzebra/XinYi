@@ -23,7 +23,7 @@ public class UserActivity extends BaseActivity {
     }
 
     @Override
-    protected void addView(LinearLayout root) {
+    protected void onCreateAndaddView(LinearLayout root) {
         LayoutInflater lf = LayoutInflater.from(this);
         LinearLayout ll = (LinearLayout) lf.inflate(R.layout.user_view, null);
         root.addView(ll);

@@ -54,10 +54,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         base_ll_04.setOnClickListener(this);
 
         base_add_view = (LinearLayout) findViewById(R.id.base_add_view);
-        addView(base_add_view);
+        onCreateAndaddView(base_add_view);
     }
 
-    protected abstract void addView(LinearLayout root);
+    /**
+     * 在此函数中初始化控件
+     * @param root
+     */
+    protected abstract void onCreateAndaddView(LinearLayout root);
 
     @Override
     public void onClick(View v) {

@@ -17,7 +17,7 @@ public class MoreActivity extends BaseActivity{
     }
 
     @Override
-    protected void addView(LinearLayout root) {
+    protected void onCreateAndaddView(LinearLayout root) {
 
     }
 }
