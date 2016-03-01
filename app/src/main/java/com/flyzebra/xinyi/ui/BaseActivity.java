@@ -15,6 +15,7 @@ import com.flyzebra.xinyi.R;
  * Created by FlyZebra on 2016/2/28.
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+    public final String TAG = "com.flyzebra";
     protected ImageView base_bt_01;
     protected ImageView base_bt_02;
     protected ImageView base_bt_03;

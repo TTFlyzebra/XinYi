@@ -6,4 +6,7 @@
     <color name="menu_select_on">#36B9AF</color>
     <color name="menu_select_off">#888888</color>
     <color name="hotsells">#000</color>
+    <color name="back01">#F0F0F0</color>
+    <color name="back02">#FFF</color>
+    <color name="back03">#FFF</color>
 </resources>

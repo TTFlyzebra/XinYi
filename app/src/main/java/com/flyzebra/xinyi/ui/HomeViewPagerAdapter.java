@@ -2,6 +2,7 @@ package com.flyzebra.xinyi.ui;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.ImageLoaderConfig;
+import com.flyzebra.xinyi.data.UILImageUtils;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.Cipher;
 
 /**
  * Created by FlyZebra on 2016/3/1.
@@ -28,7 +31,6 @@ public class HomeViewPagerAdapter extends PagerAdapter {
         this.context = context;
         this.list = list;
         this.countItemForViewPager = countItemForViewPager;
-
     }
 
     @Override
@@ -51,7 +53,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
         LayoutInflater lf = LayoutInflater.from(context);
         ImageView iv = (ImageView) lf.inflate(R.layout.iamgeview, null);
         ImageLoader.getInstance().displayImage((String) list.get(position).get("path"),
-                iv, ImageLoaderConfig.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
+                iv, UILImageUtils.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
         iv.setTag(position);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +69,8 @@ public class HomeViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        super.setPrimaryItem(container, position, object);
         countItemForViewPager.setCurrentItem(position + 1);
+        HomeAcitivy.current_viewpager=position;
+        super.setPrimaryItem(container, position, object);
     }
 }

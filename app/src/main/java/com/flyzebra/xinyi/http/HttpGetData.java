@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2016/3/1.
+ * Created by FlyZebra on 2016/3/1.
  */
 public class HttpGetData {
     public static List<Map<String,Object>> getViewPagerList(){
@@ -25,13 +25,20 @@ public class HttpGetData {
         list.add(map3);
         Map<String, Object> mp4 = new HashMap<String, Object>();
         mp4.put("name", "4");
-        mp4.put("path", "http://192.168.1.88/ordermeal/images/aa3.jpg");
+        mp4.put("path", "http://192.168.1.88/ordermeal/images/aa4.jpg");
         list.add(mp4);
         return list;
     }
 
     public static List<Map<String, Object>> getHotsellsList() {
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
+        for (int i = 0; i < 8; i++) {
+            Map<String, Object> map1 = new HashMap<String, Object>();
+            map1.put("name", "超级计算机"+i);
+            map1.put("price", "8888.00元");
+            map1.put("imagepath", "http://192.168.1.88/ordermeal/images/compter.png");
+            list.add(map1);
+        }
         return list;
     }
 }

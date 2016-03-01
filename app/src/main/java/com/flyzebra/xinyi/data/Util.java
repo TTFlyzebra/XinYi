@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.ui;
+package com.flyzebra.xinyi.data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

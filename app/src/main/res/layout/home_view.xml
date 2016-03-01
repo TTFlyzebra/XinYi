@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/back01"
     android:orientation="vertical">
 
     <ScrollView
@@ -12,7 +13,6 @@
         tools:ignore="UselessParent">
 
         <LinearLayout
-            android:background="#BBBBBB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -32,23 +32,24 @@
                     android:id="@+id/home_civp"
                     android:layout_width="match_parent"
                     android:layout_height="12dp"
-                    android:alpha="0.9"
                     android:layout_alignParentBottom="true"/>
             </RelativeLayout>
             <TextView
+                android:layout_marginTop="2dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:paddingLeft="10dp"
                 android:gravity="center_vertical"
-                android:background="#FFF"
+                android:background="@color/back02"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:textSize="@dimen/hotsells"
                 android:textColor="@color/hotsells"
                 android:text="@string/hotsells"/>
 
             <com.flyzebra.xinyi.view.GridViewForScrollView
-                android:layout_margin="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
                 android:id="@+id/home_gv_01"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

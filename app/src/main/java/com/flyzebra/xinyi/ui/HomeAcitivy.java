@@ -1,29 +1,23 @@
 package com.flyzebra.xinyi.ui;
 
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
+import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.ScrollView;
 
+import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.ImageLoaderConfig;
 import com.flyzebra.xinyi.http.HttpGetData;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 主页
  * Created by FlyZebra on 2016/2/29.
  */
 public class HomeAcitivy extends BaseActivity {
@@ -37,6 +31,22 @@ public class HomeAcitivy extends BaseActivity {
     private CountItemForViewPager countItemForViewPager;
     private GridViewForScrollView gridview;
     private HomeGridViewAdapter homeGridViewAdapter;
+    private ScrollView sv;
+
+    //ViewPager自动轮播
+    private final int REFRESH_TIME = 5000;
+    public static int current_viewpager = 0;//需要在HomeViewPagerAdapter中使用所在定义成静态
+    private Handler playsHander = new Handler(); 
+    private Runnable playsTask = new Runnable(){
+        @Override
+        public void run() {
+            current_viewpager++;
+            if(current_viewpager>=viewPager_list.size()){
+                current_viewpager=0;
+            }
+            viewPager.setCurrentItem(current_viewpager);
+            playsHander.postDelayed(playsTask, REFRESH_TIME);
+        }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +70,28 @@ public class HomeAcitivy extends BaseActivity {
 
         mViewPagerAdapter = new HomeViewPagerAdapter(this,viewPager_list,countItemForViewPager);
         viewPager.setAdapter(mViewPagerAdapter);
+        //轮播
+        playsHander.postDelayed(playsTask, REFRESH_TIME);
 
         //--GirdView处理部分
         gridview_list = HttpGetData.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
         gridview = (GridViewForScrollView) view.findViewById(R.id.home_gv_01);
         homeGridViewAdapter = new HomeGridViewAdapter(this,gridview_list,R.layout.home_gridview);
         gridview.setAdapter(homeGridViewAdapter);
+        //处理滚动条，默认会滚动到底部
+        sv = (ScrollView) findViewById(R.id.home_sv_01);
+        sv.post(new Runnable() {
+            @Override
+            public void run() {
+                sv.scrollTo(MyApp.home_sv_x, MyApp.home_sv_y);
+            }
+        });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyApp.home_sv_x = sv.getScrollX();
+        MyApp.home_sv_y = sv.getScrollY();
+    }
 }

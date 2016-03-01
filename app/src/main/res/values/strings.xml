@@ -9,5 +9,5 @@
     <string name="login_pass_mark">密码</string>
     <string name="login_bt">登 陆</string>
     <string name="login_other">使用第三方授权登陆</string>
-    <string name="hotsells">热  卖</string>
+    <string name="hotsells">热卖中</string>
 </resources>

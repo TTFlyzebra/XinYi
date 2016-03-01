@@ -15,8 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
+import com.flyzebra.xinyi.data.Util;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -48,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lg_bt_lg = (Button) findViewById(R.id.lg_bt_lg);
         lg_bt_lg.setOnClickListener(this);
         if (UserInfo.isLogin(this)) {
+            MyApp.home_sv_x = 0;
+            MyApp.home_sv_y = 0;
             StartHomeActivity();
         } else if (mTencent == null) {
             mTencent = Tencent.createInstance(QQ_APP_ID, this);

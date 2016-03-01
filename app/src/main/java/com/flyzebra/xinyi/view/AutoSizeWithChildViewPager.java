@@ -3,7 +3,6 @@ package com.flyzebra.xinyi.view;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -12,7 +11,7 @@ import android.view.View;
  * Created by FlyZebra on 2016/3/1.
  */
 public class AutoSizeWithChildViewPager extends ViewPager{
-    private final String TAG = "com.flyzebra";
+//    private final String TAG = "com.flyzebra";
     public AutoSizeWithChildViewPager(Context context) {
         super(context);
     }
@@ -38,7 +37,7 @@ public class AutoSizeWithChildViewPager extends ViewPager{
             if (h > c_height) //采用最大的view的高度。
                 c_height = h;
         }
-        Log.i(TAG, "AutoImageViewViewPager->onMeasure->p_width=" + p_width + ",p_height=" + p_height + ",c_width=" + c_width + ",c_height=" + c_height);
+//        Log.i(TAG, "AutoImageViewViewPager->onMeasure->p_width=" + p_width + ",p_height=" + p_height + ",c_width=" + c_width + ",c_height=" + c_height);
         if(p_width!=0&&c_width!=0){
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(c_height*p_width/c_width,MeasureSpec.EXACTLY);
         }

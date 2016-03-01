@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 
 /**
@@ -13,7 +13,7 @@ import android.view.View;
  * Created by FlyZebra on 2016/3/1.
  */
 public class CountItemForViewPager extends View {
-    private final String TAG = "com.flyzebra";
+//    private final String TAG = "com.flyzebra";
     private Paint select_paint;
     private Paint un_select_paint;
     private int width;
@@ -44,7 +44,7 @@ public class CountItemForViewPager extends View {
             this.width = width;
             this.height = height;
         }
-        Log.i(TAG, "ViewPagerCountImage->onMeasure->width=" + width);
+//        Log.i(TAG, "ViewPagerCountImage->onMeasure->width=" + width);
     }
 
     public void setSumItem(int sumItem) {
@@ -79,15 +79,17 @@ public class CountItemForViewPager extends View {
             un_select_paint = new Paint();// 实例化Paint
             un_select_paint.setAntiAlias(true);
             un_select_paint.setStrokeWidth(1);// 设置笔画粗细
-            un_select_paint.setColor(Color.GRAY);// 设置颜色
+            un_select_paint.setColor(Color.BLACK);// 设置颜色
             un_select_paint.setStyle(Paint.Style.FILL);// 设置样式
+            un_select_paint.setAlpha(100);
         }
         if (select_paint == null) {
             select_paint = new Paint();
             select_paint.setAntiAlias(true);
             select_paint.setStrokeWidth(1);// 设置笔画粗细
             select_paint.setStyle(Paint.Style.FILL);
-            select_paint.setColor(Color.RED);
+            select_paint.setColor(Color.GREEN);
+            select_paint.setAlpha(200);
         }
     }
 }

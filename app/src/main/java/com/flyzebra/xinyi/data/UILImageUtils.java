@@ -21,7 +21,7 @@ import java.io.File;
  * 初始化
  * Created by Administrator on 2016/2/27.
  */
-public class ImageLoaderConfig {
+public class UILImageUtils {
 
     public static void initImageLoader(Context context) {
         File cacheDir = StorageUtils.getCacheDirectory(context);
