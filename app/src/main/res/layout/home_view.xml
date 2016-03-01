@@ -12,6 +12,7 @@
         tools:ignore="UselessParent">
 
         <LinearLayout
+            android:background="#BBBBBB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -20,7 +21,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp">
+                android:layout_margin="1dp">
 
                 <com.flyzebra.xinyi.view.AutoSizeWithChildViewPager
                     android:id="@+id/home_viewpager"
@@ -34,11 +35,24 @@
                     android:alpha="0.9"
                     android:layout_alignParentBottom="true"/>
             </RelativeLayout>
-
-            <com.flyzebra.xinyi.view.ListViewForScrollView
-                android:id="@+id/home_lv_01"
+            <TextView
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:background="#FFF"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/hotsells"
+                android:textColor="@color/hotsells"
+                android:text="@string/hotsells"/>
+
+            <com.flyzebra.xinyi.view.GridViewForScrollView
+                android:layout_margin="1dp"
+                android:id="@+id/home_gv_01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="2"/>
         </LinearLayout>
     </ScrollView>
 

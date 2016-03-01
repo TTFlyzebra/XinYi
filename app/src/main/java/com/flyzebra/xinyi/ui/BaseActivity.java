@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.flyzebra.xinyi.R;
 
 /**
- * Created by Administrator on 2016/2/28.
+ * Created by FlyZebra on 2016/2/28.
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     protected ImageView base_bt_01;

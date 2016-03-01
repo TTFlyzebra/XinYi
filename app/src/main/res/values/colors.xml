@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="menu_select_on">#36B9AF</color>
     <color name="menu_select_off">#888888</color>
+    <color name="hotsells">#000</color>
 </resources>

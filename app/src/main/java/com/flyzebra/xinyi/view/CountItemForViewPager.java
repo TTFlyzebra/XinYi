@@ -9,8 +9,8 @@ import android.util.Log;
 import android.view.View;
 
 /**
- * 用来指示ViewPager当前显示的页面ViewPager
- * Created by Administrator on 2016/3/1.
+ * ViewPager轮播用的导航条用来指示ViewPager当前显示的页面ViewPager
+ * Created by FlyZebra on 2016/3/1.
  */
 public class CountItemForViewPager extends View {
     private final String TAG = "com.flyzebra";
@@ -19,9 +19,9 @@ public class CountItemForViewPager extends View {
     private int width;
     private int height;
     //总页数
-    private int sumItem = 4;
+    private int sumItem = 10;
     //当前页
-    private int currentItem = 1;
+    private int currentItem = 5;
 
     public CountItemForViewPager(Context context) {
         super(context);
