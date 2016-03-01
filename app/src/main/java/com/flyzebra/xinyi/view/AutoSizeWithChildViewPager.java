@@ -11,13 +11,13 @@ import android.view.View;
  * 如用于ViewPager图片轮播，请保持所有的图像尺寸大小一致
  * Created by FlyZebra on 2016/3/1.
  */
-public class AutoImageViewViewPager extends ViewPager{
+public class AutoSizeWithChildViewPager extends ViewPager{
     private final String TAG = "com.flyzebra";
-    public AutoImageViewViewPager(Context context) {
+    public AutoSizeWithChildViewPager(Context context) {
         super(context);
     }
 
-    public AutoImageViewViewPager(Context context, AttributeSet attrs) {
+    public AutoSizeWithChildViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

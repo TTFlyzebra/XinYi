@@ -13,7 +13,6 @@ import android.widget.ListView;
 public class ListViewForScrollView extends ListView {
     public ListViewForScrollView(Context context) {
         super(context);
-
     }
 
     public ListViewForScrollView(Context context, AttributeSet attrs) {
