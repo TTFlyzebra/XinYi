@@ -5,7 +5,10 @@ import android.util.AttributeSet;
 import android.widget.GridView;
 
 /**
- * Created by Administrator on 2016/3/1.
+ * 自定义适应ScrollView的GridView，需要在代码中设置ScrollView
+ * sv = (ScrollView) findViewById(R.id.act_solution_4_sv);
+ * sv.smoothScrollTo(0, 0);
+ * Created by FlyZebra on 2016/3/1.
  */
 public class GridViewForScrollView extends GridView {
 

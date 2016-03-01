@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.ImageLoaderConfig;
+import com.flyzebra.xinyi.view.AutoImageViewViewPager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -27,7 +28,7 @@ import java.util.Map;
  * Created by Administrator on 2016/2/29.
  */
 public class HomeAcitivy extends BaseActivity {
-    private ViewPager viewPager;
+    private AutoImageViewViewPager viewPager;
     private MyViewPageAdapter myViewPageAdapter;
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
@@ -42,16 +43,7 @@ public class HomeAcitivy extends BaseActivity {
 
     @Override
     public void onCreateAndaddView(LinearLayout root) {
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.image)
-                .showImageForEmptyUri(R.drawable.image)
-                .showImageOnFail(R.drawable.image)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                .build();
+        options = ImageLoaderConfig.getDisplayImageOptions(R.drawable.image,R.drawable.image,R.drawable.image);
 
         LayoutInflater lf = LayoutInflater.from(this);
         LinearLayout ll = (LinearLayout) lf.inflate(R.layout.home_view, null);
@@ -59,19 +51,19 @@ public class HomeAcitivy extends BaseActivity {
         //初始化ViewPager显示的内容
         viewPager_list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map1 = new HashMap<String, Object>();
-        map1.put("name", "s1");
-        map1.put("path", "http://192.168.1.88/ordermeal/images/s1.jpg");
+        map1.put("name", "1");
+        map1.put("path", "http://192.168.1.88/ordermeal/images/aa1.jpg");
         viewPager_list.add(map1);
         Map<String, Object> map2 = new HashMap<String, Object>();
-        map2.put("name", "s2");
-        map2.put("path", "http://192.168.1.88/ordermeal/images/s2.jpg");
+        map2.put("name", "2");
+        map2.put("path", "http://192.168.1.88/ordermeal/images/aa2.jpg");
         viewPager_list.add(map2);
         Map<String, Object> map3 = new HashMap<String, Object>();
-        map3.put("name", "s3");
-        map3.put("path", "http://192.168.1.88/ordermeal/images/s3.jpg");
+        map3.put("name", "3");
+        map3.put("path", "http://192.168.1.88/ordermeal/images/aa3.jpg");
         viewPager_list.add(map3);
 
-        viewPager = (ViewPager) ll.findViewById(R.id.home_viewpager);
+        viewPager = (AutoImageViewViewPager) ll.findViewById(R.id.home_viewpager);
         myViewPageAdapter = new MyViewPageAdapter();
         viewPager.setAdapter(myViewPageAdapter);
     }

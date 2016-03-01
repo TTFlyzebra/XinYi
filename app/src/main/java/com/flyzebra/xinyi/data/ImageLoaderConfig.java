@@ -9,6 +9,7 @@ import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
@@ -44,20 +45,22 @@ public class ImageLoaderConfig {
         config.imageDecoder(new BaseImageDecoder(true)); // default
         config.defaultDisplayImageOptions(DisplayImageOptions.createSimple()); // default
         config.writeDebugLogs(); // Remove for release app
+
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config.build());
     }
 
-//    public static DisplayImageOptions getDisplayImageOptions(int res1, int res2, int res3) {
-//        DisplayImageOptions options = new DisplayImageOptions.Builder()
-//                .showImageOnLoading(res1)
-//                .showImageForEmptyUri(res2)
-//                .showImageOnFail(res3)
-//                .cacheInMemory(true)
-//                .cacheOnDisk(true)
-//                .considerExifParams(true)
-//                .bitmapConfig(Bitmap.Config.RGB_565)
-//                .build();
-//        return options;
-//    }
+    public static DisplayImageOptions getDisplayImageOptions(int res1, int res2, int res3) {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(res1)
+                .showImageForEmptyUri(res2)
+                .showImageOnFail(res3)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .build();
+        return options;
+    }
 }
