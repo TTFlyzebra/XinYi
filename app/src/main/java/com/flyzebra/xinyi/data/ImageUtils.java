@@ -18,9 +18,9 @@ public class ImageUtils {
      */
     public static void ShowImageView (String url,ImageView iv){
         //UILIamge方式显示图片
-        ImageLoader.getInstance().displayImage(url,iv,
-                UILImageUtils.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
+//        ImageLoader.getInstance().displayImage(url,iv,
+//                UILImageUtils.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
         //Volley方式显示图片
-//        VolleyUtils.ShowImageView(url,iv,R.drawable.image, R.drawable.image);
+        VolleyUtils.ShowImageView(url,iv,R.drawable.image, R.drawable.image);
     }
 }

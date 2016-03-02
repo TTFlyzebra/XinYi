@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.ImageUtils;
-import com.flyzebra.xinyi.openutils.VolleyUtils;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 
 import java.util.List;
