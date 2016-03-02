@@ -3,15 +3,18 @@ package com.flyzebra.xinyi.ui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.HttpUtils;
+import com.flyzebra.xinyi.data.ImageUtils;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
+import com.flyzebra.xinyi.view.ListViewForScrollView;
 
 import java.util.List;
 import java.util.Map;
@@ -24,14 +27,17 @@ public class HomeAcitivy extends BaseActivity {
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;
+    private List<Map<String, Object>> listview_list;
 
     //控件定义
     private AutoSizeWithChildViewPager viewPager;
     private HomeViewPagerAdapter mViewPagerAdapter;
     private CountItemForViewPager countItemForViewPager;
     private GridViewForScrollView gridview;
-    private HomeGridViewAdapter homeGridViewAdapter;
+    private TvIvAdapter homeGridViewAdapter;
+    private TvIvAdapter homeListViewAdapter;
     private ScrollView sv;
+    private ListViewForScrollView listview;
 
     //ViewPager自动轮播
     private final int delayMillis = 5000;
@@ -75,8 +81,36 @@ public class HomeAcitivy extends BaseActivity {
         //--GirdView处理部分
         gridview_list = HttpUtils.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
         gridview = (GridViewForScrollView) view.findViewById(R.id.home_gv_01);
-        homeGridViewAdapter = new HomeGridViewAdapter(this,gridview_list,R.layout.home_gridview);
+        homeGridViewAdapter = new TvIvAdapter(this,gridview_list,R.layout.home_gridview,
+                new int[]{R.id.tv01,R.id.tv02},
+                new String[]{"name","price"},
+                new int[]{R.id.iv01},
+                new String[]{"imagepath"},
+                null,new TvIvAdapter.SetImageView(){
+            @Override
+            public void setImageView(String url, ImageView iv) {
+                ImageUtils.ShowImageView(url, iv);
+            }
+        });
         gridview.setAdapter(homeGridViewAdapter);
+
+        //--ListView处理部分
+        listview_list = HttpUtils.gettestNewList();
+        listview = (ListViewForScrollView) view.findViewById(R.id.home_lv_01);
+        homeListViewAdapter = new TvIvAdapter(this,listview_list,R.layout.home_listview,
+                new int[]{R.id.tv01,R.id.tv02},
+                new String[]{"mealname","mealprice"},
+                new int[]{R.id.iv01},
+                new String[]{"mealimage"},
+                null,new TvIvAdapter.SetImageView(){
+            @Override
+            public void setImageView(String url, ImageView iv) {
+                ImageUtils.ShowImageView("http://192.168.1.88/ordermeal" + url, iv);
+            }
+        });
+        listview.setAdapter(homeListViewAdapter);
+        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
+
         //处理滚动条，默认会滚动到底部
         sv = (ScrollView) findViewById(R.id.home_sv_01);
         sv.post(new Runnable() {
@@ -90,7 +124,7 @@ public class HomeAcitivy extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //轮播
+        //开启ViewPager轮播
         playsHander.postDelayed(playsTask, delayMillis);
     }
 

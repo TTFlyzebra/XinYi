@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.ImageUtils;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
@@ -47,7 +48,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater lf = LayoutInflater.from(context);
-        ImageView iv = (ImageView) lf.inflate(R.layout.iamgeview, null);
+        ImageView iv = (ImageView) lf.inflate(R.layout.home_viewpager_img, null);
         ImageUtils.ShowImageView((String) list.get(position).get("path"), iv);
         iv.setTag(position);
         iv.setOnClickListener(new View.OnClickListener() {
