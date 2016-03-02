@@ -92,7 +92,7 @@ public class TvIvAdapter extends BaseAdapter{
             holder = (ViewHolder) convertView.getTag();
         }
         for (int i = 0; i < holder.tv.size(); i++) {
-            holder.tv.get(i).setText((String) list.get(position).get(tvkey[i]));
+            holder.tv.get(i).setText(String.valueOf(list.get(position).get(tvkey[i])));
         }
         for (int i = 0; i < holder.iv.size(); i++) {
             if (mItemClick != null) {
