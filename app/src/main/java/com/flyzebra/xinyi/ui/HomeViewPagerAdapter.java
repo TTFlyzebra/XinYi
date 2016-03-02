@@ -49,7 +49,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater lf = LayoutInflater.from(context);
         ImageView iv = (ImageView) lf.inflate(R.layout.iamgeview, null);
-        VolleyUtils.ShowImageView((String) list.get(position).get("path"), iv);
+        ImageUtils.ShowImageView((String) list.get(position).get("path"), iv);
         iv.setTag(position);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override

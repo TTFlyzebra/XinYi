@@ -4,6 +4,7 @@ import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.openutils.UILImageUtils;
+import com.flyzebra.xinyi.openutils.VolleyUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -16,7 +17,10 @@ public class ImageUtils {
      * @param iv 显示图像的ImageView控件
      */
     public static void ShowImageView (String url,ImageView iv){
+        //UILIamge方式显示图片
         ImageLoader.getInstance().displayImage(url,iv,
                 UILImageUtils.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
+        //Volley方式显示图片
+//        VolleyUtils.ShowImageView(url,iv,R.drawable.image, R.drawable.image);
     }
 }

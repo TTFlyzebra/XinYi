@@ -12,16 +12,16 @@ import com.flyzebra.xinyi.R;
  * Created by FlyZebra on 2016/3/2.
  */
 public class VolleyUtils {
-    private static RequestQueue mQueue;
+    private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
     public static RequestQueue Init(Context context){
-        mQueue = Volley.newRequestQueue(context);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
-        return mQueue;
+        mRequestQueue = Volley.newRequestQueue(context);
+        mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
+        return mRequestQueue;
     }
 
-    public static void ShowImageView(String url,ImageView iv){
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, R.drawable.image, R.drawable.image);
+    public static void ShowImageView(String url,ImageView iv,int res1,int res2){
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv,res1,res2);
         mImageLoader.get(url, listener);
     }
 

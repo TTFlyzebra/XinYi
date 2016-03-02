@@ -69,7 +69,7 @@ public class HomeGridViewAdapter extends BaseAdapter {
 		}
 		holder.tv01.setText((String) list.get(position).get(TV01));
 		holder.tv02.setText(String.valueOf(list.get(position).get(TV02)));
-		VolleyUtils.ShowImageView((String) list.get(position).get(IV01), holder.iv01);
+		ImageUtils.ShowImageView((String) list.get(position).get(IV01), holder.iv01);
 		return convertView;
 	}
 

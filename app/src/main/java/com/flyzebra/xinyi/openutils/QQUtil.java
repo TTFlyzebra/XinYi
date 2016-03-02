@@ -34,9 +34,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-public class Util {
+public class QQUtil {
 
-    private static final String TAG = "SDK_Sample.Util";
+    private static final String TAG = "SDK_Sample.QQUtil";
 
     private static Dialog mProgressDialog;
     private static Toast mToast;
@@ -416,7 +416,7 @@ public class Util {
                                               String title) {
         if (msg == null) return;
         String rmsg = msg.replace(",", "\n");
-        Log.d("Util", rmsg);
+        Log.d("QQUtil", rmsg);
         new AlertDialog.Builder(context).setTitle(title).setMessage(rmsg)
                 .setNegativeButton("知道了", null).create().show();
     }

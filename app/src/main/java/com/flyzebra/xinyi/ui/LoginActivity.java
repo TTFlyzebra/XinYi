@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
-import com.flyzebra.xinyi.openutils.Util;
+import com.flyzebra.xinyi.openutils.QQUtil;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -130,15 +130,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onComplete(Object response) {
             if (null == response) {
-                Util.showResultDialog(LoginActivity.this, "返回为空", "登录失败");
+                QQUtil.showResultDialog(LoginActivity.this, "返回为空", "登录失败");
                 return;
             }
             JSONObject jsonResponse = (JSONObject) response;
             if (null != jsonResponse && jsonResponse.length() == 0) {
-                Util.showResultDialog(LoginActivity.this, "返回为空", "登录失败");
+                QQUtil.showResultDialog(LoginActivity.this, "返回为空", "登录失败");
                 return;
             }
-//            Util.showResultDialog(LoginActivity.this, response.toString(), "登录成功");
+//            QQUtil.showResultDialog(LoginActivity.this, response.toString(), "登录成功");
             doComplete((JSONObject) response);
         }
 
@@ -147,14 +147,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onError(UiError e) {
-            Util.toastMessage(LoginActivity.this, "onError: " + e.errorDetail);
-            Util.dismissDialog();
+            QQUtil.toastMessage(LoginActivity.this, "onError: " + e.errorDetail);
+            QQUtil.dismissDialog();
         }
 
         @Override
         public void onCancel() {
-            Util.toastMessage(LoginActivity.this, "onCancel: ");
-            Util.dismissDialog();
+            QQUtil.toastMessage(LoginActivity.this, "onCancel: ");
+            QQUtil.dismissDialog();
         }
     }
 
@@ -178,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             if (json.has("figureurl")) {
                                 Bitmap bitmap = null;
                                 try {
-                                    bitmap = Util.getbitmap(json.getString("figureurl_qq_2"));
+                                    bitmap = QQUtil.getbitmap(json.getString("figureurl_qq_2"));
                                 } catch (JSONException e) {
                                 }
                                 Message msg = new Message();

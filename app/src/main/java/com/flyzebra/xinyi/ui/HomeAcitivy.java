@@ -8,7 +8,7 @@ import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.http.HttpGetData;
+import com.flyzebra.xinyi.data.HttpUtils;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
@@ -63,7 +63,7 @@ public class HomeAcitivy extends BaseActivity {
         root.addView(view);
 
         //--ViewPager处理部分
-        viewPager_list = HttpGetData.getViewPagerList(); //获取ViewPager显示的数据内容
+        viewPager_list = HttpUtils.getViewPagerList(); //获取ViewPager显示的数据内容
         viewPager = (AutoSizeWithChildViewPager) view.findViewById(R.id.home_viewpager);
         //自定义ViewPager导航条
         countItemForViewPager = (CountItemForViewPager) view.findViewById(R.id.home_civp);
@@ -73,7 +73,7 @@ public class HomeAcitivy extends BaseActivity {
         viewPager.setAdapter(mViewPagerAdapter);
 
         //--GirdView处理部分
-        gridview_list = HttpGetData.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
+        gridview_list = HttpUtils.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
         gridview = (GridViewForScrollView) view.findViewById(R.id.home_gv_01);
         homeGridViewAdapter = new HomeGridViewAdapter(this,gridview_list,R.layout.home_gridview);
         gridview.setAdapter(homeGridViewAdapter);
