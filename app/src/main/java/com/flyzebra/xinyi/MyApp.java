@@ -2,7 +2,9 @@ package com.flyzebra.xinyi;
 
 import android.app.Application;
 
-import com.flyzebra.xinyi.data.UILImageUtils;
+import com.android.volley.toolbox.Volley;
+import com.flyzebra.xinyi.openutils.UILImageUtils;
+import com.flyzebra.xinyi.openutils.VolleyUtils;
 
 /**
  * APP
@@ -16,6 +18,9 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //初始化UIL库
         UILImageUtils.initImageLoader(getApplicationContext());
+        //初始化Volley
+        VolleyUtils.Init(getApplicationContext());
     }
 }

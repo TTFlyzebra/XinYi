@@ -89,7 +89,7 @@ public class CountItemForViewPager extends View {
             select_paint.setStrokeWidth(1);// 设置笔画粗细
             select_paint.setStyle(Paint.Style.FILL);
             select_paint.setColor(Color.GREEN);
-            select_paint.setAlpha(200);
+            select_paint.setAlpha(255);
         }
     }
 }

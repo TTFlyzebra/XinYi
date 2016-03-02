@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.data;
+package com.flyzebra.xinyi.openutils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

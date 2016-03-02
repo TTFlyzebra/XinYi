@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.UILImageUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.flyzebra.xinyi.data.ImageUtils;
+import com.flyzebra.xinyi.openutils.VolleyUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -69,8 +69,7 @@ public class HomeGridViewAdapter extends BaseAdapter {
 		}
 		holder.tv01.setText((String) list.get(position).get(TV01));
 		holder.tv02.setText(String.valueOf(list.get(position).get(TV02)));
-		ImageLoader.getInstance().displayImage((String) list.get(position).get(IV01),
-				holder.iv01, UILImageUtils.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
+		VolleyUtils.ShowImageView((String) list.get(position).get(IV01), holder.iv01);
 		return convertView;
 	}
 

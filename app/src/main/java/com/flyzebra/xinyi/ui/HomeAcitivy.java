@@ -34,7 +34,7 @@ public class HomeAcitivy extends BaseActivity {
     private ScrollView sv;
 
     //ViewPager自动轮播
-    private final int REFRESH_TIME = 5000;
+    private final int delayMillis = 5000;
     public static int current_viewpager = 0;//需要在HomeViewPagerAdapter中使用所在定义成静态
     private Handler playsHander = new Handler(); 
     private Runnable playsTask = new Runnable(){
@@ -45,7 +45,7 @@ public class HomeAcitivy extends BaseActivity {
                 current_viewpager=0;
             }
             viewPager.setCurrentItem(current_viewpager);
-            playsHander.postDelayed(playsTask, REFRESH_TIME);
+            playsHander.postDelayed(playsTask, delayMillis);
         }};
 
     @Override
@@ -54,6 +54,7 @@ public class HomeAcitivy extends BaseActivity {
         base_bt_01.setImageResource(R.drawable.ic_menu_deal_on);
         base_tv_01.setTextColor(getResources().getColor(R.color.menu_select_on));
     }
+
 
     @Override
     public void onCreateAndaddView(LinearLayout root) {
@@ -70,8 +71,6 @@ public class HomeAcitivy extends BaseActivity {
 
         mViewPagerAdapter = new HomeViewPagerAdapter(this,viewPager_list,countItemForViewPager);
         viewPager.setAdapter(mViewPagerAdapter);
-        //轮播
-        playsHander.postDelayed(playsTask, REFRESH_TIME);
 
         //--GirdView处理部分
         gridview_list = HttpGetData.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
@@ -89,9 +88,17 @@ public class HomeAcitivy extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        //轮播
+        playsHander.postDelayed(playsTask, delayMillis);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         MyApp.home_sv_x = sv.getScrollX();
         MyApp.home_sv_y = sv.getScrollY();
+        playsHander.removeCallbacks(playsTask);
     }
 }

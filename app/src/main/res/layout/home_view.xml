@@ -32,28 +32,67 @@
                     android:id="@+id/home_civp"
                     android:layout_width="match_parent"
                     android:layout_height="12dp"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_alignParentBottom="true" />
             </RelativeLayout>
-            <TextView
-                android:layout_marginTop="2dp"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
-                android:paddingLeft="10dp"
-                android:gravity="center_vertical"
+                android:layout_marginTop="2dp"
                 android:background="@color/back02"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:textSize="@dimen/hotsells"
-                android:textColor="@color/hotsells"
-                android:text="@string/hotsells"/>
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/ic_hot" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/hotsells"
+                    android:textColor="@color/hotsells"
+                    android:textSize="@dimen/hotsells" />
+            </LinearLayout>
 
             <com.flyzebra.xinyi.view.GridViewForScrollView
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
                 android:id="@+id/home_gv_01"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:numColumns="2"/>
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:numColumns="2" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/back02"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/ic_love" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/newsells"
+                    android:textColor="@color/hotsells"
+                    android:textSize="@dimen/hotsells" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
-import com.flyzebra.xinyi.data.Util;
+import com.flyzebra.xinyi.openutils.Util;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;

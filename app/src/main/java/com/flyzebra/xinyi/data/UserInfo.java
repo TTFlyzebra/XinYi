@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by Administrator on 2016/2/28.
+ * Created by FlyZebra on 2016/2/28.
  */
 public class UserInfo {
     public static boolean isLogin(Context context){

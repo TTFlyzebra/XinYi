@@ -2,7 +2,6 @@ package com.flyzebra.xinyi.ui;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.UILImageUtils;
+import com.flyzebra.xinyi.data.ImageUtils;
+import com.flyzebra.xinyi.openutils.VolleyUtils;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 import java.util.Map;
-
-import javax.crypto.Cipher;
 
 /**
  * Created by FlyZebra on 2016/3/1.
@@ -52,8 +49,7 @@ public class HomeViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater lf = LayoutInflater.from(context);
         ImageView iv = (ImageView) lf.inflate(R.layout.iamgeview, null);
-        ImageLoader.getInstance().displayImage((String) list.get(position).get("path"),
-                iv, UILImageUtils.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
+        VolleyUtils.ShowImageView((String) list.get(position).get("path"), iv);
         iv.setTag(position);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override

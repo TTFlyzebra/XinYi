@@ -32,7 +32,7 @@ public class HttpGetData {
 
     public static List<Map<String, Object>> getHotsellsList() {
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 5; i++) {
             Map<String, Object> map1 = new HashMap<String, Object>();
             map1.put("name", "超级计算机"+i);
             map1.put("price", "8888.00元");
