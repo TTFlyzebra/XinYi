@@ -9,6 +9,7 @@ import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.adapter.TvIvAdapter;
 import com.flyzebra.xinyi.data.HttpUtils;
 import com.flyzebra.xinyi.data.ImageUtils;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
@@ -16,6 +17,7 @@ import com.flyzebra.xinyi.view.CountItemForViewPager;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
 import com.flyzebra.xinyi.view.ListViewForScrollView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +97,9 @@ public class HomeAcitivy extends BaseActivity {
         gridview.setAdapter(homeGridViewAdapter);
 
         //--ListView处理部分
-        listview_list = HttpUtils.gettestNewList();
+        if(listview_list==null){
+            listview_list = new ArrayList<Map<String, Object>>();
+        }
         listview = (ListViewForScrollView) view.findViewById(R.id.home_lv_01);
         homeListViewAdapter = new TvIvAdapter(this,listview_list,R.layout.home_listview,
                 new int[]{R.id.tv01,R.id.tv02},
@@ -105,11 +109,11 @@ public class HomeAcitivy extends BaseActivity {
                 null,new TvIvAdapter.SetImageView(){
             @Override
             public void setImageView(String url, ImageView iv) {
-                ImageUtils.ShowImageView("http://192.168.1.88/ordermeal" + url, iv);
+//                ImageUtils.ShowImageView("http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listview.setAdapter(homeListViewAdapter);
-        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
+//        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
 
         //处理滚动条，默认会滚动到底部
         sv = (ScrollView) findViewById(R.id.home_sv_01);

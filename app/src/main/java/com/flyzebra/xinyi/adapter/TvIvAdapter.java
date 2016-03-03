@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.ui;
+package com.flyzebra.xinyi.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
