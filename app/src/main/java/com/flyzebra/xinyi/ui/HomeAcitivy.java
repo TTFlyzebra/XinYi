@@ -113,7 +113,7 @@ public class HomeAcitivy extends BaseActivity {
             }
         });
         listview.setAdapter(homeListViewAdapter);
-        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
+//        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
 
         //处理滚动条，默认会滚动到底部
         sv = (ScrollView) findViewById(R.id.home_sv_01);
