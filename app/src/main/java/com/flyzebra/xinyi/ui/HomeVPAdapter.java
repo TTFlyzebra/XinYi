@@ -19,12 +19,12 @@ import java.util.Map;
 /**
  * Created by FlyZebra on 2016/3/1.
  */
-public class HomeViewPagerAdapter extends PagerAdapter {
+public class HomeVPAdapter extends PagerAdapter {
     private List<Map<String, Object>> list;
     private Context context;
     private CountItemForViewPager countItemForViewPager;
 
-    public HomeViewPagerAdapter(Context context, List<Map<String, Object>> list, CountItemForViewPager countItemForViewPager) {
+    public HomeVPAdapter(Context context, List<Map<String, Object>> list, CountItemForViewPager countItemForViewPager) {
         this.context = context;
         this.list = list;
         this.countItemForViewPager = countItemForViewPager;
