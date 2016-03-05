@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (UserInfo.isLogin(this)) {
             MyApp.home_sv_x = 0;
             MyApp.home_sv_y = 0;
+            MyApp.poi_rv_x = 0;
+            MyApp.poi_rv_y = 0;
             StartHomeActivity();
         } else if (mTencent == null) {
             mTencent = Tencent.createInstance(QQ_APP_ID, this);

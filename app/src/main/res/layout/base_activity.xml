@@ -21,10 +21,10 @@
         android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="5">
 
         <LinearLayout
-            android:id="@+id/base_ll_01"
+            android:id="@+id/base_ll_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -33,7 +33,7 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:id="@+id/base_bt_01"
+                android:id="@+id/base_bt_home"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/ic_menu_deal"
@@ -41,7 +41,7 @@
                 android:duplicateParentState="true" />
 
             <TextView
-                android:id="@+id/base_tv_01"
+                android:id="@+id/base_tv_home"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:duplicateParentState="true"
@@ -52,7 +52,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/base_ll_02"
+            android:id="@+id/base_ll_poi"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -61,7 +61,7 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:id="@+id/base_bt_02"
+                android:id="@+id/base_bt_poi"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/ic_menu_poi"
@@ -69,7 +69,7 @@
                 android:duplicateParentState="true" />
 
             <TextView
-                android:id="@+id/base_tv_02"
+                android:id="@+id/base_tv_poi"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:duplicateParentState="true"
@@ -80,7 +80,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/base_ll_03"
+            android:id="@+id/base_ll_buy"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -89,7 +89,37 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:id="@+id/base_bt_03"
+                android:id="@+id/base_bt_buy"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_menu_buy"
+                android:contentDescription="@string/app_name"
+                android:duplicateParentState="true"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/base_tv_buy"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:duplicateParentState="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:text="@string/buy"
+                android:textColor="@color/color_select" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/base_ll_user"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/base_bt_user"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/ic_menu_user"
@@ -98,7 +128,7 @@
                 android:orientation="vertical" />
 
             <TextView
-                android:id="@+id/base_tv_03"
+                android:id="@+id/base_tv_user"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:duplicateParentState="true"
@@ -110,7 +140,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/base_ll_04"
+            android:id="@+id/base_ll_more"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -119,7 +149,7 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:id="@+id/base_bt_04"
+                android:id="@+id/base_bt_more"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/ic_menu_more"
@@ -127,7 +157,7 @@
                 android:duplicateParentState="true" />
 
             <TextView
-                android:id="@+id/base_tv_04"
+                android:id="@+id/base_tv_more"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:duplicateParentState="true"

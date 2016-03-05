@@ -5,6 +5,7 @@
     <string name="poi">商城</string>
     <string name="user">我的</string>
     <string name="more">更多</string>
+    <string name="buy">购物车</string>
     <string name="login_user_mark">手机/邮箱/用户名</string>
     <string name="login_pass_mark">密码</string>
     <string name="login_bt">登 陆</string>

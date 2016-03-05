@@ -1,7 +1,9 @@
 package com.flyzebra.xinyi.ui;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -10,30 +12,30 @@ import android.widget.TextView;
 import com.flyzebra.xinyi.R;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
- * Created by Administrator on 2016/3/5.
+ * Created by FlyZebra on 2016/3/5.
  */
-public class PoiRVAdapter extends RecyclerView.Adapter{
+public class PoiRVAdapter extends RecyclerView.Adapter<PoiRVAdapter.MyViewHolder>{
     private Context context;
-    private List<Map<String,Objects>> list;
+    private List<ApplicationInfo> list;
     private int resId;
 
-    public PoiRVAdapter(Context context, List<Map<String, Objects>> list, int resId){
+    public PoiRVAdapter(Context context, List<ApplicationInfo> list, int resId){
         this.context = context;
         this.list = list;
         this.resId = resId;
     }
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(context).inflate(resId, parent,false));
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        holder.tv01.setText(list.get(position).loadLabel(context.getPackageManager()));
+        holder.iv01.setImageDrawable(list.get(position).loadIcon(context.getPackageManager()));
     }
 
     @Override

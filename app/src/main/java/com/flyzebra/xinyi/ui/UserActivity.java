@@ -18,8 +18,8 @@ public class UserActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        base_bt_03.setImageResource(R.drawable.ic_menu_user_on);
-        base_tv_03.setTextColor(getResources().getColor(R.color.menu_select_on));
+        base_bt_user.setImageResource(R.drawable.ic_menu_user_on);
+        base_tv_user.setTextColor(getResources().getColor(R.color.menu_select_on));
     }
 
     @Override

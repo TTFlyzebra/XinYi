@@ -16,43 +16,54 @@ import com.flyzebra.xinyi.R;
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     public final String TAG = "com.flyzebra";
-    protected ImageView base_bt_01;
-    protected ImageView base_bt_02;
-    protected ImageView base_bt_03;
-    protected ImageView base_bt_04;
-    protected TextView base_tv_01;
-    protected TextView base_tv_02;
-    protected TextView base_tv_03;
-    protected TextView base_tv_04;
+    protected ImageView base_bt_home;
+    protected ImageView base_bt_poi;
+    protected ImageView base_bt_user;
+    protected ImageView base_bt_more;
+    protected TextView base_tv_home;
+    protected TextView base_tv_poi;
+    protected TextView base_tv_user;
+    protected TextView base_tv_more;
     protected ColorStateList colorStateList;
 
-    private LinearLayout base_ll_01;
-    private LinearLayout base_ll_02;
-    private LinearLayout base_ll_03;
-    private LinearLayout base_ll_04;
+    private LinearLayout base_ll_home;
+    private LinearLayout base_ll_poi;
+    private LinearLayout base_ll_user;
+    private LinearLayout base_ll_more;
+
     private LinearLayout base_add_view;
+
+    //购物车
+    protected ImageView base_bt_buy;
+    protected TextView base_tv_buy;
+    private LinearLayout base_ll_buy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         colorStateList = getResources().getColorStateList(R.color.color_select);
-        base_bt_01 = (ImageView) findViewById(R.id.base_bt_01);
-        base_bt_02 = (ImageView) findViewById(R.id.base_bt_02);
-        base_bt_03 = (ImageView) findViewById(R.id.base_bt_03);
-        base_bt_04 = (ImageView) findViewById(R.id.base_bt_04);
-        base_tv_01 = (TextView) findViewById(R.id.base_tv_01);
-        base_tv_02 = (TextView) findViewById(R.id.base_tv_02);
-        base_tv_03 = (TextView) findViewById(R.id.base_tv_03);
-        base_tv_04 = (TextView) findViewById(R.id.base_tv_04);
-        base_ll_01 = (LinearLayout) findViewById(R.id.base_ll_01);
-        base_ll_02 = (LinearLayout) findViewById(R.id.base_ll_02);
-        base_ll_03 = (LinearLayout) findViewById(R.id.base_ll_03);
-        base_ll_04 = (LinearLayout) findViewById(R.id.base_ll_04);
-        base_ll_01.setOnClickListener(this);
-        base_ll_02.setOnClickListener(this);
-        base_ll_03.setOnClickListener(this);
-        base_ll_04.setOnClickListener(this);
+        base_bt_home = (ImageView) findViewById(R.id.base_bt_home);
+        base_bt_poi = (ImageView) findViewById(R.id.base_bt_poi);
+        base_bt_user = (ImageView) findViewById(R.id.base_bt_user);
+        base_bt_more = (ImageView) findViewById(R.id.base_bt_more);
+        base_tv_home = (TextView) findViewById(R.id.base_tv_home);
+        base_tv_poi = (TextView) findViewById(R.id.base_tv_poi);
+        base_tv_user = (TextView) findViewById(R.id.base_tv_user);
+        base_tv_more = (TextView) findViewById(R.id.base_tv_more);
+        base_ll_home = (LinearLayout) findViewById(R.id.base_ll_home);
+        base_ll_poi = (LinearLayout) findViewById(R.id.base_ll_poi);
+        base_ll_user = (LinearLayout) findViewById(R.id.base_ll_user);
+        base_ll_more = (LinearLayout) findViewById(R.id.base_ll_more);
+        base_ll_home.setOnClickListener(this);
+        base_ll_poi.setOnClickListener(this);
+        base_ll_user.setOnClickListener(this);
+        base_ll_more.setOnClickListener(this);
+
+        base_bt_buy = (ImageView) findViewById(R.id.base_bt_buy);
+        base_tv_buy = (TextView) findViewById(R.id.base_tv_buy);
+        base_ll_buy = (LinearLayout) findViewById(R.id.base_ll_buy);
+        base_ll_buy.setOnClickListener(this);
 
         base_add_view = (LinearLayout) findViewById(R.id.base_add_view);
         onCreateAndaddView(base_add_view);
@@ -67,55 +78,78 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.base_ll_01:
-                base_bt_01.setImageResource(R.drawable.ic_menu_deal_on);
-                base_bt_02.setImageResource(R.drawable.ic_menu_poi);
-                base_bt_03.setImageResource(R.drawable.ic_menu_user);
-                base_bt_04.setImageResource(R.drawable.ic_menu_more);
-                base_tv_01.setTextColor(getResources().getColor(R.color.menu_select_on));
-                base_tv_02.setTextColor(colorStateList);
-                base_tv_03.setTextColor(colorStateList);
-                base_tv_04.setTextColor(colorStateList);
+            case R.id.base_ll_home:
+                base_bt_home.setImageResource(R.drawable.ic_menu_deal_on);
+                base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
+                base_bt_user.setImageResource(R.drawable.ic_menu_user);
+                base_bt_more.setImageResource(R.drawable.ic_menu_more);
+                base_tv_home.setTextColor(getResources().getColor(R.color.menu_select_on));
+                base_tv_poi.setTextColor(colorStateList);
+                base_tv_user.setTextColor(colorStateList);
+                base_tv_more.setTextColor(colorStateList);
+                base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
+                base_tv_buy.setTextColor(colorStateList);
                 startActivity(new Intent(BaseActivity.this, HomeAcitivy.class));
                 overridePendingTransition(0, 0);
                 finish();
                 break;
-            case R.id.base_ll_02:
-                base_bt_01.setImageResource(R.drawable.ic_menu_deal);
-                base_bt_02.setImageResource(R.drawable.ic_menu_poi_on);
-                base_bt_03.setImageResource(R.drawable.ic_menu_user);
-                base_bt_04.setImageResource(R.drawable.ic_menu_more);
-                base_tv_01.setTextColor(colorStateList);
-                base_tv_02.setTextColor(getResources().getColor(R.color.menu_select_on));
-                base_tv_03.setTextColor(colorStateList);
-                base_tv_04.setTextColor(colorStateList);
+            case R.id.base_ll_poi:
+                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_poi.setImageResource(R.drawable.ic_menu_poi_on);
+                base_bt_user.setImageResource(R.drawable.ic_menu_user);
+                base_bt_more.setImageResource(R.drawable.ic_menu_more);
+                base_tv_home.setTextColor(colorStateList);
+                base_tv_poi.setTextColor(getResources().getColor(R.color.menu_select_on));
+                base_tv_user.setTextColor(colorStateList);
+                base_tv_more.setTextColor(colorStateList);
+                base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
+                base_tv_buy.setTextColor(colorStateList);
                 startActivity(new Intent(BaseActivity.this, PoiActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
                 break;
-            case R.id.base_ll_03:
-                base_bt_01.setImageResource(R.drawable.ic_menu_deal);
-                base_bt_02.setImageResource(R.drawable.ic_menu_poi);
-                base_bt_03.setImageResource(R.drawable.ic_menu_user_on);
-                base_bt_04.setImageResource(R.drawable.ic_menu_more);
-                base_tv_01.setTextColor(colorStateList);
-                base_tv_02.setTextColor(colorStateList);
-                base_tv_03.setTextColor(getResources().getColor(R.color.menu_select_on));
-                base_tv_04.setTextColor(colorStateList);
+            case R.id.base_ll_user:
+                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
+                base_bt_user.setImageResource(R.drawable.ic_menu_user_on);
+                base_bt_more.setImageResource(R.drawable.ic_menu_more);
+                base_tv_home.setTextColor(colorStateList);
+                base_tv_poi.setTextColor(colorStateList);
+                base_tv_user.setTextColor(getResources().getColor(R.color.menu_select_on));
+                base_tv_more.setTextColor(colorStateList);
+                base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
+                base_tv_buy.setTextColor(colorStateList);
                 startActivity(new Intent(BaseActivity.this, UserActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
                 break;
-            case R.id.base_ll_04:
-                base_bt_01.setImageResource(R.drawable.ic_menu_deal);
-                base_bt_02.setImageResource(R.drawable.ic_menu_poi);
-                base_bt_03.setImageResource(R.drawable.ic_menu_user);
-                base_bt_04.setImageResource(R.drawable.ic_menu_more_on);
-                base_tv_01.setTextColor(colorStateList);
-                base_tv_02.setTextColor(colorStateList);
-                base_tv_03.setTextColor(colorStateList);
-                base_tv_04.setTextColor(getResources().getColor(R.color.menu_select_on));
+            case R.id.base_ll_more:
+                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
+                base_bt_user.setImageResource(R.drawable.ic_menu_user);
+                base_bt_more.setImageResource(R.drawable.ic_menu_more_on);
+                base_tv_home.setTextColor(colorStateList);
+                base_tv_poi.setTextColor(colorStateList);
+                base_tv_user.setTextColor(colorStateList);
+                base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
+                base_tv_buy.setTextColor(colorStateList);
+                base_tv_more.setTextColor(getResources().getColor(R.color.menu_select_on));
                 startActivity(new Intent(BaseActivity.this, MoreActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
+                break;
+            case R.id.base_ll_buy:
+                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
+                base_bt_user.setImageResource(R.drawable.ic_menu_user);
+                base_bt_more.setImageResource(R.drawable.ic_menu_more);
+                base_tv_home.setTextColor(colorStateList);
+                base_tv_poi.setTextColor(colorStateList);
+                base_tv_user.setTextColor(colorStateList);
+                base_bt_buy.setImageResource(R.drawable.ic_menu_buy_on);
+                base_tv_buy.setTextColor(colorStateList);
+                base_tv_more.setTextColor(getResources().getColor(R.color.menu_select_on));
+                startActivity(new Intent(BaseActivity.this, BuyActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
                 break;

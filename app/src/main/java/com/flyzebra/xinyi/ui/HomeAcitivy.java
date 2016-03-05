@@ -2,6 +2,7 @@ package com.flyzebra.xinyi.ui;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +34,7 @@ public class HomeAcitivy extends BaseActivity {
 
     //控件定义
     private AutoSizeWithChildViewPager viewPager;
-    private HomeViewPagerAdapter mViewPagerAdapter;
+    private HomeVPAdapter mViewPagerAdapter;
     private CountItemForViewPager countItemForViewPager;
     private GridViewForScrollView gridview;
     private TvIvAdapter homeGridViewAdapter;
@@ -59,8 +60,8 @@ public class HomeAcitivy extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        base_bt_01.setImageResource(R.drawable.ic_menu_deal_on);
-        base_tv_01.setTextColor(getResources().getColor(R.color.menu_select_on));
+        base_bt_home.setImageResource(R.drawable.ic_menu_deal_on);
+        base_tv_home.setTextColor(getResources().getColor(R.color.menu_select_on));
     }
 
 
@@ -77,12 +78,12 @@ public class HomeAcitivy extends BaseActivity {
         countItemForViewPager = (CountItemForViewPager) view.findViewById(R.id.home_civp);
         countItemForViewPager.setSumItem(viewPager_list.size());
 
-        mViewPagerAdapter = new HomeViewPagerAdapter(this,viewPager_list,countItemForViewPager);
+        mViewPagerAdapter = new HomeVPAdapter(this,viewPager_list,countItemForViewPager);
         viewPager.setAdapter(mViewPagerAdapter);
 
         //--GirdView处理部分
         gridview_list = HttpUtils.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
-        gridview = (GridViewForScrollView) view.findViewById(R.id.home_gv_01);
+        gridview = (GridViewForScrollView) view.findViewById(R.id.home_gv_home);
         homeGridViewAdapter = new TvIvAdapter(this,gridview_list,R.layout.home_gridview,
                 new int[]{R.id.tv01,R.id.tv02},
                 new String[]{"name","price"},
@@ -100,7 +101,7 @@ public class HomeAcitivy extends BaseActivity {
         if(listview_list==null){
             listview_list = new ArrayList<Map<String, Object>>();
         }
-        listview = (ListViewForScrollView) view.findViewById(R.id.home_lv_01);
+        listview = (ListViewForScrollView) view.findViewById(R.id.home_lv_home);
         homeListViewAdapter = new TvIvAdapter(this,listview_list,R.layout.home_listview,
                 new int[]{R.id.tv01,R.id.tv02},
                 new String[]{"mealname","mealprice"},
@@ -116,11 +117,12 @@ public class HomeAcitivy extends BaseActivity {
         HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
 
         //处理滚动条，默认会滚动到底部
-        sv = (ScrollView) findViewById(R.id.home_sv_01);
+        sv = (ScrollView) findViewById(R.id.home_sv_home);
         sv.post(new Runnable() {
             @Override
             public void run() {
                 sv.scrollTo(MyApp.home_sv_x, MyApp.home_sv_y);
+                Log.i(TAG, "sv.scrollTo(MyApp.home_sv_x, MyApp.home_sv_y)" + MyApp.home_sv_x + "," + MyApp.home_sv_y);
             }
         });
     }
@@ -137,6 +139,9 @@ public class HomeAcitivy extends BaseActivity {
         super.onStop();
         MyApp.home_sv_x = sv.getScrollX();
         MyApp.home_sv_y = sv.getScrollY();
+        Log.i(TAG, "PoiActitivy->onStop->sv->x,y" + MyApp.home_sv_x + "," + MyApp.home_sv_y);
+
         playsHander.removeCallbacks(playsTask);
     }
+
 }

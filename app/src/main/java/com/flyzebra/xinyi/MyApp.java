@@ -14,6 +14,8 @@ public class MyApp extends Application {
     //记录HomeActivity中ScrollView的滚动位置，在LoginActivity中置0;
     public static int home_sv_x;
     public static int home_sv_y;
+    public static int poi_rv_x;
+    public static int poi_rv_y;
 
     @Override
     public void onCreate() {
