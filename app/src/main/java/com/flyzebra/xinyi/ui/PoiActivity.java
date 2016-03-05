@@ -42,6 +42,7 @@ public class PoiActivity extends BaseActivity {
 
         recyclerView.post(new Runnable() {
             @Override
+
             public void run() {
                 recyclerView.scrollTo(MyApp.poi_rv_x,MyApp.poi_rv_y);
                 Log.i(TAG," recyclerView.scrollTo(MyApp.poi_rv_x,MyApp.poi_rv_y)"+MyApp.poi_rv_x+","+MyApp.poi_rv_y);

@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.ImageUtils;
+import com.flyzebra.xinyi.utils.ImageUtils;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 
 import java.util.List;

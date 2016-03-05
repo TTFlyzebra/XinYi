@@ -10,9 +10,9 @@ import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.adapter.TvIvAdapter;
-import com.flyzebra.xinyi.data.HttpUtils;
-import com.flyzebra.xinyi.data.ImageUtils;
+import com.flyzebra.xinyi.universal.TvIvAdapter;
+import com.flyzebra.xinyi.utils.HttpUtils;
+import com.flyzebra.xinyi.utils.ImageUtils;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
