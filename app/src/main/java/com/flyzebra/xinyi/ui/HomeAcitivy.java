@@ -1,5 +1,6 @@
 package com.flyzebra.xinyi.ui;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;

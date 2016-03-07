@@ -77,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.lg_bt_lg:
+                StartHomeActivity();
                 break;
             case R.id.lg_iv_qq:
                 if (!mTencent.isSessionValid()) {
