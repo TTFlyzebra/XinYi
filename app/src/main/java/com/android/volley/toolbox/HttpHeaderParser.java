@@ -16,6 +16,8 @@
 
 package com.android.volley.toolbox;
 
+import android.util.Log;
+
 import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 
@@ -113,7 +115,7 @@ public class HttpHeaderParser {
         entry.serverDate = serverDate;
         entry.lastModified = lastModified;
         entry.responseHeaders = headers;
-
+        Log.i("com.flyzebra","entry->lastModified,etag"+entry.lastModified+","+entry.etag);
         return entry;
     }
 

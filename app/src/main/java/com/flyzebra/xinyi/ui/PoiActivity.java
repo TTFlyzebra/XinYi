@@ -45,7 +45,7 @@ public class PoiActivity extends BaseActivity {
 
             public void run() {
                 recyclerView.scrollTo(MyApp.poi_rv_x,MyApp.poi_rv_y);
-                Log.i(TAG," recyclerView.scrollTo(MyApp.poi_rv_x,MyApp.poi_rv_y)"+MyApp.poi_rv_x+","+MyApp.poi_rv_y);
+//                Log.i(TAG," recyclerView.scrollTo(MyApp.poi_rv_x,MyApp.poi_rv_y)"+MyApp.poi_rv_x+","+MyApp.poi_rv_y);
             }
         });
     }
@@ -55,7 +55,7 @@ public class PoiActivity extends BaseActivity {
         super.onStop();
         MyApp.poi_rv_x = recyclerView.getScrollX();
         MyApp.poi_rv_y = recyclerView.getScrollY();
-        Log.i(TAG,"PoiActitivy->onStop->recyclerView->x,y"+MyApp.poi_rv_x+","+MyApp.poi_rv_y);
+//        Log.i(TAG,"PoiActitivy->onStop->recyclerView->x,y"+MyApp.poi_rv_x+","+MyApp.poi_rv_y);
     }
 
 }

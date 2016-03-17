@@ -1,5 +1,6 @@
 package com.flyzebra.xinyi.utils;
 
+import android.content.Context;
 import android.widget.BaseAdapter;
 
 import com.flyzebra.xinyi.openutils.VolleyUtils;
@@ -48,7 +49,7 @@ public class HttpUtils {
         return list;
     }
 
-    public static void upAdapter(String url,List<Map<String,Object>> list ,BaseAdapter adapter){
-        VolleyUtils.upAdapter(url,list,adapter);
+    public static void upAdapter(Context context,String url,List<Map<String,Object>> list ,BaseAdapter adapter){
+        VolleyUtils.upAdapter(context,url,list,adapter);
     }
 }

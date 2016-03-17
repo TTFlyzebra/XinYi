@@ -89,9 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 base_tv_more.setTextColor(colorStateList);
                 base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
                 base_tv_buy.setTextColor(colorStateList);
-                startActivity(new Intent(BaseActivity.this, HomeAcitivy.class));
-                overridePendingTransition(0, 0);
-                finish();
+                runActivity(HomeAcitivy.class);
                 break;
             case R.id.base_ll_poi:
                 base_bt_home.setImageResource(R.drawable.ic_menu_deal);
@@ -104,9 +102,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 base_tv_more.setTextColor(colorStateList);
                 base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
                 base_tv_buy.setTextColor(colorStateList);
-                startActivity(new Intent(BaseActivity.this, PoiActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
+                runActivity(PoiActivity.class);
                 break;
             case R.id.base_ll_user:
                 base_bt_home.setImageResource(R.drawable.ic_menu_deal);
@@ -119,9 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 base_tv_more.setTextColor(colorStateList);
                 base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
                 base_tv_buy.setTextColor(colorStateList);
-                startActivity(new Intent(BaseActivity.this, UserActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
+                runActivity(UserActivity.class);
                 break;
             case R.id.base_ll_more:
                 base_bt_home.setImageResource(R.drawable.ic_menu_deal);
@@ -134,9 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
                 base_tv_buy.setTextColor(colorStateList);
                 base_tv_more.setTextColor(getResources().getColor(R.color.menu_select_on));
-                startActivity(new Intent(BaseActivity.this, MoreActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
+                runActivity(MoreActivity.class);
                 break;
             case R.id.base_ll_buy:
                 base_bt_home.setImageResource(R.drawable.ic_menu_deal);
@@ -149,10 +141,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 base_bt_buy.setImageResource(R.drawable.ic_menu_buy_on);
                 base_tv_buy.setTextColor(colorStateList);
                 base_tv_more.setTextColor(getResources().getColor(R.color.menu_select_on));
-                startActivity(new Intent(BaseActivity.this, BuyActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
+                runActivity(BuyActivity.class);
                 break;
         }
+    }
+
+    private void runActivity(Class<?> cls) {
+        Intent intent = new Intent(BaseActivity.this,cls);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 }

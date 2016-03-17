@@ -48,9 +48,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
                     android:layout_margin="5dp"
-                    android:background="@drawable/ic_hot" />
+                    android:background="@drawable/ic_hot"
+                    android:scaleType="fitCenter" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -68,6 +68,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:numColumns="2" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
@@ -81,9 +82,9 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
                     android:layout_margin="5dp"
-                    android:background="@drawable/ic_love" />
+                    android:background="@drawable/ic_love"
+                    android:scaleType="fitCenter" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -93,12 +94,24 @@
                     android:textColor="@color/hotsells"
                     android:textSize="@dimen/hotsells" />
             </LinearLayout>
-            <com.flyzebra.xinyi.view.ListViewForScrollView
-                android:id="@+id/home_lv_home"
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"/>
+                android:layout_height="match_parent">
+
+                <com.flyzebra.xinyi.view.ListViewForScrollView
+                    android:id="@+id/home_lv_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp" />
+                <TextView
+                    android:id="@+id/empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:gravity="center"
+                    android:text="网络未连接，请检测网络，点击刷新。"/>
+            </FrameLayout>
         </LinearLayout>
     </ScrollView>
 

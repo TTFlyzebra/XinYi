@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
@@ -42,6 +44,7 @@ public class HomeAcitivy extends BaseActivity {
     private TvIvAdapter homeListViewAdapter;
     private ScrollView sv;
     private ListViewForScrollView listview;
+    private TextView list_empty_tv;
 
     //ViewPager自动轮播
     private final int delayMillis = 5000;
@@ -115,7 +118,17 @@ public class HomeAcitivy extends BaseActivity {
             }
         });
         listview.setAdapter(homeListViewAdapter);
-        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
+
+        //设置没有数据时ListView的显示
+        list_empty_tv = (TextView) findViewById(R.id.empty_view);
+        listview.setEmptyView(list_empty_tv);
+        list_empty_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HttpUtils.upAdapter(HomeAcitivy.this,"http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
+            }
+        });
+        HttpUtils.upAdapter(HomeAcitivy.this,"http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
 
         //处理滚动条，默认会滚动到底部
         sv = (ScrollView) findViewById(R.id.home_sv_home);
@@ -123,7 +136,6 @@ public class HomeAcitivy extends BaseActivity {
             @Override
             public void run() {
                 sv.scrollTo(MyApp.home_sv_x, MyApp.home_sv_y);
-                Log.i(TAG, "sv.scrollTo(MyApp.home_sv_x, MyApp.home_sv_y)" + MyApp.home_sv_x + "," + MyApp.home_sv_y);
             }
         });
     }
@@ -140,7 +152,6 @@ public class HomeAcitivy extends BaseActivity {
         super.onStop();
         MyApp.home_sv_x = sv.getScrollX();
         MyApp.home_sv_y = sv.getScrollY();
-        Log.i(TAG, "PoiActitivy->onStop->sv->x,y" + MyApp.home_sv_x + "," + MyApp.home_sv_y);
 
         playsHander.removeCallbacks(playsTask);
     }

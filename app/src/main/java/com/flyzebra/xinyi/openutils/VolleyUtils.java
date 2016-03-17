@@ -1,5 +1,6 @@
 package com.flyzebra.xinyi.openutils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.widget.BaseAdapter;
@@ -31,7 +32,7 @@ public class VolleyUtils {
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
     public static RequestQueue Init(Context context){
-        mRequestQueue = Volley.newRequestQueue(context);
+        mRequestQueue = Volley.newRequestQueue(context,50*1024*1024);
         mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
         return mRequestQueue;
     }
@@ -53,7 +54,8 @@ public class VolleyUtils {
      * @param list
      * @param adapter
      */
-    public static void upAdapter(String url, final List<Map<String,Object>> list , final BaseAdapter adapter){
+    public static void upAdapter(Context context, String url, final List<Map<String,Object>> list , final BaseAdapter adapter){
+        final ProgressDialog mPDlg = ProgressDialog.show(context,null,"正在尝试连接网络，更新数据......");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -74,17 +76,29 @@ public class VolleyUtils {
                         }
                         list.add(map);
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 adapter.notifyDataSetChanged();
+                mPDlg.dismiss();
             }
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mPDlg.dismiss();
             }
         });
         mRequestQueue.add(jsonObjectRequest);
+    }
+
+    public void clearDiskChace(){
+
     }
 
 }

@@ -560,9 +560,7 @@ public class DiskBasedCache implements Cache {
 
     static Map<String, String> readStringStringMap(InputStream is) throws IOException {
         int size = readInt(is);
-        Map<String, String> result = (size == 0)
-                ? Collections.<String, String>emptyMap()
-                : new HashMap<String, String>(size);
+        Map<String, String> result = (size == 0) ? Collections.<String, String>emptyMap() : new HashMap<String, String>(size);
         for (int i = 0; i < size; i++) {
             String key = readString(is).intern();
             String value = readString(is).intern();

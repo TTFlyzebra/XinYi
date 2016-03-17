@@ -131,7 +131,8 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * delivery of responses is provided by subclasses, who have a better idea of how to deliver
      * an already-parsed response.
      */
-    public Request(int method, String url, Response.ErrorListener listener) {
+    public
+    Request(int method, String url, Response.ErrorListener listener) {
         mMethod = method;
         mUrl = url;
         mErrorListener = listener;
@@ -606,9 +607,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
         // High-priority requests are "lesser" so they are sorted to the front.
         // Equal priorities are sorted by sequence number to provide FIFO ordering.
-        return left == right ?
-                this.mSequence - other.mSequence :
-                right.ordinal() - left.ordinal();
+        return left == right ? this.mSequence - other.mSequence : right.ordinal() - left.ordinal();
     }
 
     @Override
