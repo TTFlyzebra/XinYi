@@ -54,8 +54,7 @@ public class VolleyUtils {
      * @param list
      * @param adapter
      */
-    public static void upAdapter(Context context, String url, final List<Map<String,Object>> list , final BaseAdapter adapter){
-        final ProgressDialog mPDlg = ProgressDialog.show(context,null,"正在尝试连接网络，更新数据......");
+    public static void upAdapter(final String url, final List<Map<String,Object>> list , final BaseAdapter adapter){
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -81,7 +80,6 @@ public class VolleyUtils {
                     e.printStackTrace();
                 }
                 adapter.notifyDataSetChanged();
-                mPDlg.dismiss();
             }
         },new Response.ErrorListener(){
             @Override
@@ -91,7 +89,7 @@ public class VolleyUtils {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                mPDlg.dismiss();
+                upAdapter(url, list, adapter);
             }
         });
         mRequestQueue.add(jsonObjectRequest);

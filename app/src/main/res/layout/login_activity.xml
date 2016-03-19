@@ -16,8 +16,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:background="@color/login_welcom"
+                android:textSize="20dp"
+                android:textColor="@color/back04"
+                android:text="帐号申请"/>
 
             <EditText
+                android:layout_marginTop="10dp"
                 android:id="@+id/lg_ed_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

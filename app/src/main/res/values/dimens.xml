@@ -3,5 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="home_ac_vp_iv">240dp</dimen>
-    <dimen name="hotsells">18dp</dimen>
+    <dimen name="hotsells">14dp</dimen>
 </resources>

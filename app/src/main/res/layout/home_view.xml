@@ -6,6 +6,14 @@
     android:background="@color/back01"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/colorPrimary" />
+
     <ScrollView
         android:id="@+id/home_sv_home"
         android:layout_width="match_parent"
@@ -42,19 +50,20 @@
                 android:layout_marginRight="1dp"
                 android:layout_marginTop="2dp"
                 android:background="@color/back02"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@drawable/ic_hot"
                     android:scaleType="fitCenter" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
                     android:text="@string/hotsells"
                     android:textColor="@color/hotsells"
@@ -76,19 +85,20 @@
                 android:layout_marginRight="1dp"
                 android:layout_marginTop="2dp"
                 android:background="@color/back02"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@drawable/ic_love"
                     android:scaleType="fitCenter" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
                     android:text="@string/newsells"
                     android:textColor="@color/hotsells"
@@ -105,12 +115,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="1dp"
                     android:layout_marginRight="1dp" />
-                <TextView
-                    android:id="@+id/empty_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:gravity="center"
-                    android:text="网络未连接，请检测网络，点击刷新。"/>
+
+                <include layout="@layout/list_empty_view"/>
             </FrameLayout>
         </LinearLayout>
     </ScrollView>

@@ -27,7 +27,7 @@ public class HttpUtils {
 
     public static List<Map<String, Object>> getHotsellsList() {
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 2; i++) {
             Map<String, Object> map1 = new HashMap<String, Object>();
             map1.put("name", "超级计算机"+i);
             map1.put("price", "8888.00元");
@@ -49,7 +49,7 @@ public class HttpUtils {
         return list;
     }
 
-    public static void upAdapter(Context context,String url,List<Map<String,Object>> list ,BaseAdapter adapter){
-        VolleyUtils.upAdapter(context,url,list,adapter);
+    public static void upAdapter(String url,List<Map<String,Object>> list ,BaseAdapter adapter){
+        VolleyUtils.upAdapter(url,list,adapter);
     }
 }

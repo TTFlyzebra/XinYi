@@ -115,7 +115,7 @@ public class HttpHeaderParser {
         entry.serverDate = serverDate;
         entry.lastModified = lastModified;
         entry.responseHeaders = headers;
-        Log.i("com.flyzebra","entry->lastModified,etag"+entry.lastModified+","+entry.etag);
+//        Log.i("com.flyzebra","entry->lastModified,etag"+entry.lastModified+","+entry.etag);
         return entry;
     }
 

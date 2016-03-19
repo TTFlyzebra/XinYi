@@ -9,4 +9,6 @@
     <color name="back01">#F0F0F0</color>
     <color name="back02">#FFF</color>
     <color name="back03">#FFF</color>
+    <color name="login_welcom">#f5a8a4</color>
+    <color name="back04">#000</color>
 </resources>
