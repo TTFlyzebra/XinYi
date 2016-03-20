@@ -13,7 +13,8 @@ import com.flyzebra.xinyi.R;
  * Created by Administrator on 2016/3/18.
  */
 public class LeftMenuFragment extends Fragment{
-    @Nullable
+    public LeftMenuFragment(){
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.left_drawer_menu, container, false);

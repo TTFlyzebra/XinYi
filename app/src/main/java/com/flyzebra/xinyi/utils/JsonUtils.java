@@ -26,12 +26,9 @@ public class JsonUtils {
 		return jsonObject.toString();
 	}
 	
-	public static List<Map<String,Object>> getList(String key,String jsonList){
-		List<Map<String,Object>> list =  new ArrayList<Map<String,Object>>();
+	public static void upListFromJsonObject(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey){
 		try {
-			JSONObject jsonObject = new JSONObject(jsonList);
-			JSONArray jsonArray = jsonObject.getJSONArray(key);
-			list =  new ArrayList<Map<String,Object>>();
+			JSONArray jsonArray = jsonObject.getJSONArray(jsonKey);
 			for(int i= 0;i<jsonArray.length();i++){
 				JSONObject jsonObject2 = jsonArray.getJSONObject(i);
 				Map<String,Object> map = new HashMap<String,Object>();
@@ -49,7 +46,6 @@ public class JsonUtils {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return list;
 	}
 	
 //	public static Map<String, Object> getMap(String key, String jsonList) {

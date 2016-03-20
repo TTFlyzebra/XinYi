@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.model.IHttpUpdata;
+import com.flyzebra.xinyi.model.VolleyUtils;
 import com.flyzebra.xinyi.utils.ImageUtils;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 
@@ -22,6 +24,7 @@ public class HomeVPAdapter extends PagerAdapter {
     private List<Map<String, Object>> list;
     private Context context;
     private CountItemForViewPager countItemForViewPager;
+    private IHttpUpdata mHttpUpdata = VolleyUtils.getInstance();
 
     public HomeVPAdapter(Context context, List<Map<String, Object>> list, CountItemForViewPager countItemForViewPager) {
         this.context = context;
@@ -48,7 +51,7 @@ public class HomeVPAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater lf = LayoutInflater.from(context);
         ImageView iv = (ImageView) lf.inflate(R.layout.home_viewpager_img, null);
-        ImageUtils.ShowImageView((String) list.get(position).get("path"), iv);
+        mHttpUpdata.upImageView((String) list.get(position).get("path"), iv);
         iv.setTag(position);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override

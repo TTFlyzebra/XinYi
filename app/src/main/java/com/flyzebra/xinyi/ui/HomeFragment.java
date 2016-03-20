@@ -13,10 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.model.IHttpUpdata;
+import com.flyzebra.xinyi.model.VolleyUtils;
 import com.flyzebra.xinyi.universal.TvIvAdapter;
 import com.flyzebra.xinyi.utils.HttpUtils;
 import com.flyzebra.xinyi.utils.ImageUtils;
@@ -34,6 +35,7 @@ import java.util.Map;
  * Created by FlyZebra on 2016/2/29.
  */
 public class HomeFragment extends Fragment {
+    private IHttpUpdata iHttpUpdata;
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;
@@ -75,6 +77,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActitity) getActivity();
+        iHttpUpdata = VolleyUtils.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -114,7 +117,7 @@ public class HomeFragment extends Fragment {
                 null, new TvIvAdapter.SetImageView() {
             @Override
             public void setImageView(String url, ImageView iv) {
-                ImageUtils.ShowImageView(url, iv);
+                iHttpUpdata.upImageView(url, iv);
             }
         });
         gridview.setAdapter(homeGridViewAdapter);
@@ -122,6 +125,8 @@ public class HomeFragment extends Fragment {
         //--ListView处理部分
         if (listview_list == null) {
             listview_list = new ArrayList<Map<String, Object>>();
+        }else{
+            listview_list.clear();
         }
         listview = (ListViewForScrollView) view.findViewById(R.id.home_lv_home);
         homeListViewAdapter = new TvIvAdapter(activity, listview_list, R.layout.home_listview,
@@ -132,10 +137,11 @@ public class HomeFragment extends Fragment {
                 null, new TvIvAdapter.SetImageView() {
             @Override
             public void setImageView(String url, ImageView iv) {
-                ImageUtils.ShowImageView("http://192.168.1.88/ordermeal" + url, iv);
+                ImageUtils.ShowImageView(activity,"http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listview.setAdapter(homeListViewAdapter);
+        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo",homeListViewAdapter);
 
         //设置没有数据时ListView的显示
         list_empty = (LinearLayout) view.findViewById(R.id.empty_view);
@@ -152,12 +158,9 @@ public class HomeFragment extends Fragment {
         list_empty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
+                iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter);
             }
         });
-
-        //更新数据
-        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
 
         //处理滚动条，默认会滚动到底部
         sv = (ScrollView) view.findViewById(R.id.home_sv_home);

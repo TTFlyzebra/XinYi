@@ -1,18 +1,17 @@
 package com.flyzebra.xinyi.ui;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.model.IHttpUpdata;
+import com.flyzebra.xinyi.model.VolleyUtils;
 import com.flyzebra.xinyi.universal.TvIvAdapter;
 import com.flyzebra.xinyi.utils.HttpUtils;
 import com.flyzebra.xinyi.utils.ImageUtils;
@@ -30,6 +29,8 @@ import java.util.Map;
  * Created by FlyZebra on 2016/2/29.
  */
 public class HomeAcitivy extends BaseActivity {
+    private IHttpUpdata iHttpUpdata;
+
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;
@@ -61,11 +62,14 @@ public class HomeAcitivy extends BaseActivity {
             playsHander.postDelayed(playsTask, delayMillis);
         }};
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         base_bt_home.setImageResource(R.drawable.ic_menu_deal_on);
         base_tv_home.setTextColor(getResources().getColor(R.color.menu_select_on));
+        iHttpUpdata = VolleyUtils.getInstance();
     }
 
 
@@ -96,7 +100,7 @@ public class HomeAcitivy extends BaseActivity {
                 null,new TvIvAdapter.SetImageView(){
             @Override
             public void setImageView(String url, ImageView iv) {
-                ImageUtils.ShowImageView(url, iv);
+                iHttpUpdata.upImageView(url, iv);
             }
         });
         gridview.setAdapter(homeGridViewAdapter);
@@ -104,6 +108,8 @@ public class HomeAcitivy extends BaseActivity {
         //--ListView处理部分
         if(listview_list==null){
             listview_list = new ArrayList<Map<String, Object>>();
+        }else{
+            listview_list.clear();
         }
         listview = (ListViewForScrollView) view.findViewById(R.id.home_lv_home);
         homeListViewAdapter = new TvIvAdapter(this,listview_list,R.layout.home_listview,
@@ -114,21 +120,22 @@ public class HomeAcitivy extends BaseActivity {
                 null,new TvIvAdapter.SetImageView(){
             @Override
             public void setImageView(String url, ImageView iv) {
-                ImageUtils.ShowImageView("http://192.168.1.88/ordermeal" + url, iv);
+                iHttpUpdata.upImageView("http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listview.setAdapter(homeListViewAdapter);
+        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter);
 
         //设置没有数据时ListView的显示
         list_empty_tv = (LinearLayout) findViewById(R.id.empty_view);
         listview.setEmptyView(list_empty_tv);
-        list_empty_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
-            }
-        });
-        HttpUtils.upAdapter("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, homeListViewAdapter);
+//        list_empty_tv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo",homeListViewAdapter);
+//                homeListViewAdapter.notifyDataSetChanged();
+//            }
+//        });
 
         //处理滚动条，默认会滚动到底部
         sv = (ScrollView) findViewById(R.id.home_sv_home);

@@ -1,10 +1,5 @@
 package com.flyzebra.xinyi.utils;
 
-import android.content.Context;
-import android.widget.BaseAdapter;
-
-import com.flyzebra.xinyi.openutils.VolleyUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,19 +32,4 @@ public class HttpUtils {
         return list;
     }
 
-    public static List<Map<String, Object>> gettestNewList() {
-        List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < 8; i++) {
-            Map<String, Object> map1 = new HashMap<String, Object>();
-            map1.put("mealname", "超级计算机"+i);
-            map1.put("maelprice", "8888.00元");
-            map1.put("mealimage", "/images/compter.png");
-            list.add(map1);
-        }
-        return list;
-    }
-
-    public static void upAdapter(String url,List<Map<String,Object>> list ,BaseAdapter adapter){
-        VolleyUtils.upAdapter(url,list,adapter);
-    }
 }
