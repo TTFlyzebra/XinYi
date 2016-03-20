@@ -16,11 +16,10 @@ import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.model.HttpUpdata;
 import com.flyzebra.xinyi.model.IHttpUpdata;
-import com.flyzebra.xinyi.model.VolleyUtils;
 import com.flyzebra.xinyi.universal.TvIvAdapter;
 import com.flyzebra.xinyi.utils.HttpUtils;
-import com.flyzebra.xinyi.utils.ImageUtils;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
@@ -35,7 +34,7 @@ import java.util.Map;
  * Created by FlyZebra on 2016/2/29.
  */
 public class HomeFragment extends Fragment {
-    private IHttpUpdata iHttpUpdata;
+    private IHttpUpdata iHttpUpdata = HttpUpdata.getInstance();
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;
@@ -77,7 +76,6 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActitity) getActivity();
-        iHttpUpdata = VolleyUtils.getInstance();
         setHasOptionsMenu(true);
     }
 
@@ -137,7 +135,7 @@ public class HomeFragment extends Fragment {
                 null, new TvIvAdapter.SetImageView() {
             @Override
             public void setImageView(String url, ImageView iv) {
-                ImageUtils.ShowImageView(activity,"http://192.168.1.88/ordermeal" + url, iv);
+                iHttpUpdata.upImageView("http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listview.setAdapter(homeListViewAdapter);

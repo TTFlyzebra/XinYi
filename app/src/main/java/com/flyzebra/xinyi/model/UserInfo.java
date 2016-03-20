@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.utils;
+package com.flyzebra.xinyi.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;

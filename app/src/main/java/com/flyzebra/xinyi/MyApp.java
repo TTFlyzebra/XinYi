@@ -2,8 +2,8 @@ package com.flyzebra.xinyi;
 
 import android.app.Application;
 
-import com.flyzebra.xinyi.model.VolleyUtils;
-import com.flyzebra.xinyi.openutils.UILImageUtils;
+import com.flyzebra.xinyi.model.HttpUpdata;
+import com.flyzebra.xinyi.utils.UILImageUtils;
 
 /**
  * APP
@@ -22,7 +22,7 @@ public class MyApp extends Application {
         //初始化UIL库
         UILImageUtils.initImageLoader(getApplicationContext());
         //初始化Volley
-        VolleyUtils.Init(getApplicationContext(), 50 * 1024 * 1024);
+        HttpUpdata.Init(getApplicationContext(), 50 * 1024 * 1024);
     }
 }
 

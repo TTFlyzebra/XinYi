@@ -10,8 +10,7 @@ import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.IHttpUpdata;
-import com.flyzebra.xinyi.model.VolleyUtils;
-import com.flyzebra.xinyi.utils.ImageUtils;
+import com.flyzebra.xinyi.model.HttpUpdata;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class HomeVPAdapter extends PagerAdapter {
     private List<Map<String, Object>> list;
     private Context context;
     private CountItemForViewPager countItemForViewPager;
-    private IHttpUpdata mHttpUpdata = VolleyUtils.getInstance();
+    private IHttpUpdata mHttpUpdata = HttpUpdata.getInstance();
 
     public HomeVPAdapter(Context context, List<Map<String, Object>> list, CountItemForViewPager countItemForViewPager) {
         this.context = context;
@@ -68,7 +67,7 @@ public class HomeVPAdapter extends PagerAdapter {
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         countItemForViewPager.setCurrentItem(position + 1);
-        HomeAcitivy.current_viewpager=position;
+        HomeFragment.current_viewpager=position;
         super.setPrimaryItem(container, position, object);
     }
 }

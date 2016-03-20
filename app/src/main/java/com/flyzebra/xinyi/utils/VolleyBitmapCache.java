@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.openutils;
+package com.flyzebra.xinyi.utils;
 
 import android.graphics.Bitmap;
 import android.util.LruCache;
@@ -8,15 +8,15 @@ import com.android.volley.toolbox.ImageLoader;
 /**
  * Created by FlyZebra on 2016/3/2.
  */
-public class BitmapCache implements ImageLoader.ImageCache{
+public class VolleyBitmapCache implements ImageLoader.ImageCache{
     private LruCache<String, Bitmap> mCache;
     private static final int maxSize = 10*1024*1024;
 
-    public BitmapCache(){
+    public VolleyBitmapCache(){
         this(maxSize);
     }
 
-    public BitmapCache(int maxSize) {
+    public VolleyBitmapCache(int maxSize) {
         mCache = new LruCache<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
@@ -26,12 +26,12 @@ public class BitmapCache implements ImageLoader.ImageCache{
     }
 
     @Override
-    public Bitmap getBitmap(String s) {
-        return mCache.get(s);
+    public Bitmap getBitmap(String key) {
+        return mCache.get(key);
     }
 
     @Override
-    public void putBitmap(String s, Bitmap bitmap) {
-        mCache.put(s, bitmap);
+    public void putBitmap(String key, Bitmap bitmap) {
+        mCache.put(key, bitmap);
     }
 }

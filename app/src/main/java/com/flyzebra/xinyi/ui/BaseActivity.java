@@ -89,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 base_tv_more.setTextColor(colorStateList);
                 base_bt_buy.setImageResource(R.drawable.ic_menu_buy);
                 base_tv_buy.setTextColor(colorStateList);
-                runActivity(HomeAcitivy.class);
+                runActivity(MainActitity.class);
                 break;
             case R.id.base_ll_poi:
                 base_bt_home.setImageResource(R.drawable.ic_menu_deal);
