@@ -18,7 +18,6 @@ import com.nineoldandroids.view.ViewHelper;
  */
 public class MainActitity extends AppCompatActivity {
     public static final String TAG = "com.flyzebra";
-
     private DrawerLayout mDrawerLayout;
 
 
