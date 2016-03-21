@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class TvIvAdapter extends BaseAdapter{
+    public static final String TAG = "com.flyzebra" ;
     private List<Map<String, Object>> list;
     private int idListview;
     private int tvid[];
@@ -23,14 +26,14 @@ public class TvIvAdapter extends BaseAdapter{
     private ItemClick mItemClick;
     private SetImageView mSetImageView;
     private Context context;
-    // 这义回调接口
-
+    private SimpleAdapter a;
     /**
-     * 自定义通用包含TextView ImageVIew的Adapter 支挂回调
+     * 自定义通用包含TextView ImageVIew的Adapter 支持回调
      *
      */
     public TvIvAdapter(Context context, List<Map<String, Object>> list, int idListview,
-                       int tvid[], String tvkey[], int ivid[], String ivkey[],ItemClick mItemClick,SetImageView setImageView) {
+                       int tvid[], String tvkey[], int ivid[], String ivkey[],
+                       ItemClick mItemClick,SetImageView setImageView) {
         this.context = context;
         this.list = list;
         this.idListview = idListview;
@@ -56,8 +59,8 @@ public class TvIvAdapter extends BaseAdapter{
     }
 
     private class ViewHolder {
-        public List<TextView> tv = new ArrayList<TextView>();
-        public List<ImageView> iv = new ArrayList<ImageView>();
+        public List<TextView> tv_list = new ArrayList<TextView>();
+        public List<ImageView> iv_list = new ArrayList<ImageView>();
     }
 
 
@@ -81,31 +84,35 @@ public class TvIvAdapter extends BaseAdapter{
         ViewHolder holder = new ViewHolder();
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(idListview, null);
+            holder.tv_list.clear();
             for (int i = 0; i < tvid.length; i++) {
-                holder.tv.add((TextView) convertView.findViewById(tvid[i]));
+                holder.tv_list.add((TextView) convertView.findViewById(tvid[i]));
             }
+            holder.iv_list.clear();
             for (int i = 0; i < ivid.length; i++) {
-                holder.iv.add((ImageView) convertView.findViewById(ivid[i]));
+                holder.iv_list.add((ImageView) convertView.findViewById(ivid[i]));
             }
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        for (int i = 0; i < holder.tv.size(); i++) {
-            holder.tv.get(i).setText(String.valueOf(list.get(position).get(tvkey[i])));
+
+        for (int i = 0; i < holder.tv_list.size(); i++) {
+            holder.tv_list.get(i).setText(String.valueOf(list.get(position).get(tvkey[i])));
         }
-        for (int i = 0; i < holder.iv.size(); i++) {
+        for (int i = 0; i < holder.iv_list.size(); i++) {
             if (mItemClick != null) {
-                holder.iv.get(i).setOnClickListener(new OnClickListener() {
+                holder.iv_list.get(i).setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mItemClick.mItemClick(v);
                     }
                 });
-                holder.iv.get(i).setTag(position);
+                holder.iv_list.get(i).setTag(position);
             }
             if(mSetImageView!=null){
-                mSetImageView.setImageView((String) list.get(position).get(ivkey[i]), holder.iv.get(i));
+                mSetImageView.setImageView((String) list.get(position).get(ivkey[i]), holder.iv_list.get(i));
+                Log.i(TAG, "upImageView name=" + list.get(position).get(tvkey[i]) + "url=" + list.get(position).get(ivkey[i]) + "-----iv=" + holder.iv_list.get(i)+"--"+holder.iv_list.size());
             }
         }
         return convertView;

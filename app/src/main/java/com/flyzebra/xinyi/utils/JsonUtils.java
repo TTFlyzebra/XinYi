@@ -26,7 +26,7 @@ public class JsonUtils {
 		return jsonObject.toString();
 	}
 	
-	public static void upListFromJsonObject(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey){
+	public static void getlistfromjsonobject(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey){
 		try {
 			JSONArray jsonArray = jsonObject.getJSONArray(jsonKey);
 			for(int i= 0;i<jsonArray.length();i++){

@@ -1,5 +1,6 @@
 package com.flyzebra.xinyi.model;
 
+import android.content.Context;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -13,5 +14,5 @@ import java.util.Map;
  */
 public interface IHttpUpdata {
     void upListView(String url, List<Map<String, Object>> list,String jsonKey,BaseAdapter adapter);
-    void upImageView(String url, ImageView iv);
+    void upImageView(Context context,String url, ImageView iv);
 }

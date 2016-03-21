@@ -12,4 +12,5 @@
     <string name="login_other">使用第三方授权登陆</string>
     <string name="hotsells">热销</string>
     <string name="newsells">新品</string>
+    <string name="test">测试用显示文字</string>
 </resources>

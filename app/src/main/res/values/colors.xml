@@ -11,4 +11,5 @@
     <color name="back03">#FFF</color>
     <color name="login_welcom">#f5a8a4</color>
     <color name="back04">#000</color>
+    <color name="left_menu_text">#fff</color>
 </resources>

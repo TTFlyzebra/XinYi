@@ -50,7 +50,7 @@ public class HomeVPAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater lf = LayoutInflater.from(context);
         ImageView iv = (ImageView) lf.inflate(R.layout.home_viewpager_img, null);
-        mHttpUpdata.upImageView((String) list.get(position).get("path"), iv);
+        mHttpUpdata.upImageView(context,(String) list.get(position).get("path"), iv);
         iv.setTag(position);
         iv.setOnClickListener(new View.OnClickListener() {
             @Override

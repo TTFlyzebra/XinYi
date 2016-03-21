@@ -22,11 +22,11 @@ public class HttpUtils {
 
     public static List<Map<String, Object>> getHotsellsList() {
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 1; i <= 2; i++) {
             Map<String, Object> map1 = new HashMap<String, Object>();
             map1.put("name", "超级计算机"+i);
-            map1.put("price", "8888.00元");
-            map1.put("imagepath", "http://192.168.1.88/ordermeal/images/compter.png");
+            map1.put("price", Math.round(Math.random()*10000));
+            map1.put("imagepath", "http://192.168.1.88/ordermeal/images/computer"+i+".png");
             list.add(map1);
         }
         return list;

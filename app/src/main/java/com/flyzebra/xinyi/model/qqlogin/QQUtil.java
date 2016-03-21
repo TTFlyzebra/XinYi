@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.qq;
+package com.flyzebra.xinyi.model.qqlogin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,7 +36,7 @@ import android.widget.Toast;
 
 public class QQUtil {
 
-    private static final String TAG = "SDK_Sample.QQUtil";
+    private static final String TAG = "SDK_Sample.QQ";
 
     private static Dialog mProgressDialog;
     private static Toast mToast;
@@ -416,7 +416,7 @@ public class QQUtil {
                                               String title) {
         if (msg == null) return;
         String rmsg = msg.replace(",", "\n");
-        Log.d("QQUtil", rmsg);
+        Log.d("QQ", rmsg);
         new AlertDialog.Builder(context).setTitle(title).setMessage(rmsg)
                 .setNegativeButton("知道了", null).create().show();
     }

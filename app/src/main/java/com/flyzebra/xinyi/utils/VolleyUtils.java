@@ -1,6 +1,7 @@
 package com.flyzebra.xinyi.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -19,9 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2016/3/20.
+ * Created by FlyZebra on 2016/3/20.
  */
 public class VolleyUtils {
+    private static final String TAG = "com.flyzebra";
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
 
@@ -43,13 +45,15 @@ public class VolleyUtils {
             public void onResponse(JSONObject jsonObject) {
                 if (list != null) {
                     list.clear();
-                    JsonUtils.upListFromJsonObject(list, jsonObject, jsonKey);
+                    JsonUtils.getlistfromjsonobject(list, jsonObject, jsonKey);
                 }
                 adapter.notifyDataSetChanged();
+                Log.i(TAG, "VolleyUtils--->upListView");
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                Log.i(TAG, "upListView--->onErrorResponse");
                 upListView(url, list, jsonKey, adapter);
             }
         });

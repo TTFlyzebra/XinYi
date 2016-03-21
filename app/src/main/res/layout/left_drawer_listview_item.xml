@@ -3,9 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
+
     <TextView
         android:id="@+id/tv_01"
         android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:gravity="left|center"
-        android:layout_height="30dp" />
+        android:text="@string/test"
+        android:textColor="@color/left_menu_text"
+        android:textSize="@dimen/left_menu_text" />
 </LinearLayout>
