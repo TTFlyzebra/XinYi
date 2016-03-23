@@ -3,102 +3,69 @@ package com.flyzebra.xinyi.model;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.flyzebra.xinyi.ui.LoginActivity;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
 /**
- *
  * Created by FlyZebra on 2016/3/21.
  */
 public class QQLogin implements ILogin {
-    private static final String TAG ="com.flyzebra" ;
+    private static final String TAG = "com.flyzebra";
     private static Tencent mTencent;
     private String QQ_APP_ID = "1105211644";
     private Context context;
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
-
-    public QQLogin(Context context,loginResult mLoginResult) {
-        this.context = context;
-        this.mLoginResult = mLoginResult;
-        if (mTencent == null) {
-            mTencent = Tencent.createInstance(QQ_APP_ID, context);
-        }
-    }
-
-    @Override
-    public void login() {
-        if (!mTencent.isSessionValid()) {
-            mTencent.login((Activity) context, "all", loginIUlistener);
-        } else {
-            mTencent.logout(context);
-        }
-    }
-
-    @Override
-    public void logout() {
-        mTencent.logout(context);
-    }
-
-    @Override
-    public void createUserInfo() {
-
-    }
-
-    @Override
-    public void onActivtyResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG,"mBaseIUlistener"+loginIUlistener);
-        Tencent.onActivityResultData(requestCode,resultCode,data,loginIUlistener);
-    }
+    //    private final Handler mHandler = new Handler(Looper.getMainLooper());
+    private com.tencent.connect.UserInfo QQUserInfo;
+    private UserInfo userInfo;
 
     private loginResult mLoginResult;
-
-    public interface loginResult {
-        void loginSuccees(Object response);
-
-        void loginFaild();
-
-        void loginCancel();
-    }
-
-    BaseIUlistener loginIUlistener = new BaseIUlistener(){
+    private IUiListener userInfoListener = new IUiListener() {
         @Override
-        public void doComplete(final JSONObject jsonObject) {
-            //登陆成功，写入TOKEN，跳转到主界面，存储用户信息
-            try {
-                String token = jsonObject.getString(Constants.PARAM_ACCESS_TOKEN);
-                String expires = jsonObject.getString(Constants.PARAM_EXPIRES_IN);
-                String openId = jsonObject.getString(Constants.PARAM_OPEN_ID);
-                if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(expires) && !TextUtils.isEmpty(openId)) {
-                    mTencent.setAccessToken(token, expires);
-                    mTencent.setOpenId(openId);
-                }
-            } catch (Exception e) {
-            }
-            mTencent.logout(context);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mLoginResult.loginSuccees(jsonObject);
-                }
-            });
+        public void onError(UiError e) {
         }
-    };
 
-    public class BaseIUlistener implements IUiListener {
         @Override
         public void onComplete(final Object response) {
-            Log.i(TAG,"QQLogin-->onComplete()");
+            Log.i(TAG, "loginIUlistener" + response.toString());
+            //获取QQ昵称
+            final JSONObject json = (JSONObject) response;
+            String name = null;
+            if (json.has("nickname")) {
+                try {
+                    name = json.getString("nickname");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            //获取QQ图像URL
+            String url = null;
+            if (json.has("figureurl")) {
+                try {
+                    url = json.getString("figureurl_qq_2");
+                } catch (JSONException e) {
+                }
+            }
+            userInfo.setUserName(name);
+            userInfo.setUserPhotoUrl(url);
+            createUserInfo(userInfo);
+        }
+
+        @Override
+        public void onCancel() {
+        }
+    };
+    private IUiListener loginIUlistener = new IUiListener() {
+        @Override
+        public void onComplete(final Object response) {
             if (null == response) {
 //                QQUtil.showResultDialog(LoginActivity.this, "返回为空", "登录失败");
                 mLoginResult.loginFaild();
@@ -110,22 +77,90 @@ public class QQLogin implements ILogin {
                 mLoginResult.loginFaild();
                 return;
             }
-            doComplete((JSONObject) response);
-        }
-
-        public void doComplete(JSONObject values) {
+            //登陆成功，写入TOKEN，跳转到主界面，存储用户信息
+            try {
+                String token = jsonResponse.getString(Constants.PARAM_ACCESS_TOKEN);
+                String expires = jsonResponse.getString(Constants.PARAM_EXPIRES_IN);
+                String openId = jsonResponse.getString(Constants.PARAM_OPEN_ID);
+                if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(expires) && !TextUtils.isEmpty(openId)) {
+                    mTencent.setAccessToken(token, expires);
+                    mTencent.setOpenId(openId);
+                }
+                userInfo.setUserOpenID(openId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+//            mTencent.logout(context);
+            Log.i(TAG, "loginIUlistener" + jsonResponse.toString());
+            getUserInfo();
         }
 
         @Override
         public void onError(UiError uiError) {
-            Log.i(TAG,"QQLogin-->onError()");
             mLoginResult.loginFaild();
         }
 
         @Override
         public void onCancel() {
-            Log.i(TAG,"QQLogin-->onCancel()");
             mLoginResult.loginCancel();
         }
+    };
+
+    public QQLogin(Context context, loginResult mLoginResult) {
+        this.context = context;
+        this.mLoginResult = mLoginResult;
+        if (mTencent == null) {
+            mTencent = Tencent.createInstance(QQ_APP_ID, context);
+        }
+        userInfo = new UserInfo();
     }
+
+    @Override
+    public void login() {
+        if (!mTencent.isSessionValid()) {
+            mTencent.login((Activity) context, "all", loginIUlistener);
+        } else {
+            getUserInfo();
+        }
+    }
+
+    @Override
+    public void logout() {
+        mTencent.logout(context);
+    }
+
+    @Override
+    public void createUserInfo(UserInfo userInfo) {
+
+        //创建用户成功后执行登陆成功的操作
+        mLoginResult.loginSuccees(userInfo);
+    }
+
+    @Override
+    public void onActivtyResult(int requestCode, int resultCode, Intent data) {
+        Tencent.onActivityResultData(requestCode, resultCode, data, loginIUlistener);
+    }
+
+    @Override
+    public boolean checkIsLogined() {
+        return false;
+    }
+
+    private void getUserInfo() {
+        Log.i(TAG, "getUserInfo()");
+        if (mTencent != null && mTencent.isSessionValid()) {
+            QQUserInfo = new com.tencent.connect.UserInfo(context, mTencent.getQQToken());
+            QQUserInfo.getUserInfo(userInfoListener);
+            Log.i(TAG, "QQUserInfo.getUserInfo(userInfoListener);");
+        }
+    }
+
+    public interface loginResult {
+        void loginSuccees(UserInfo userInfo);
+
+        void loginFaild();
+
+        void loginCancel();
+    }
+
 }

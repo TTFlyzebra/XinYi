@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.HttpUpdata;
-import com.flyzebra.xinyi.model.IHttpUpdata;
 import com.flyzebra.xinyi.universal.TvIvAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -31,14 +28,12 @@ import java.util.Map;
  */
 public class BuyFragment extends Fragment {
     private static final String TAG = "com.flyzebra";
-    private IHttpUpdata iHttpUpdata = HttpUpdata.getInstance();
 
     private MainActitity activity;
     private List<Map<String, Object>> list;
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
 
-    private Toolbar mToolbar;
 
     public BuyFragment() {
     }
@@ -47,7 +42,7 @@ public class BuyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActitity) getActivity();
-        setHasOptionsMenu(true);
+        activity.toolBar.setTitle("购物车");
     }
 
     @Nullable
@@ -60,12 +55,12 @@ public class BuyFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        // 标题的文字需在setSupportActionBar之前，不然会无效
-        mToolbar.setTitle("购物车");
-        mToolbar.setLogo(R.drawable.ic_love);
-        activity.setSupportActionBar(mToolbar);
-        activity.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+//        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+//        // 标题的文字需在setSupportActionBar之前，不然会无效
+//        mToolbar.setTitle("购物车");
+//        mToolbar.setLogo(R.drawable.ic_love);
+//        activity.setSupportActionBar(mToolbar);
+//        activity.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         listView = (PullToRefreshListView) view.findViewById(R.id.buy_lv_01);
 
@@ -108,7 +103,7 @@ public class BuyFragment extends Fragment {
                 null, new TvIvAdapter.SetImageView() {
             @Override
             public void setImageView(String url, ImageView iv) {
-                iHttpUpdata.upImageView(activity, "http://192.168.1.88/ordermeal" + url, iv);
+                activity.iHttpUpdata.upImageView(activity, "http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listView.setAdapter(adapter);
@@ -126,13 +121,13 @@ public class BuyFragment extends Fragment {
             }
         });
 
-        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter);
+        activity.iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        iHttpUpdata.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
+        activity.iHttpUpdata.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
     }
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {

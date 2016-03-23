@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.DisplayMetrics;
+import android.view.View;
+
+import com.nineoldandroids.view.ViewHelper;
 
 import java.lang.reflect.Field;
 
@@ -12,7 +15,7 @@ import java.lang.reflect.Field;
  */
 public class DrawerLayoutUtils {
     /**
-     * 设置边界响应弹出菜单的范围
+     * 设置响应弹出菜单的边界范围
      * @param activity
      * @param drawerLayout
      * @param displayWidthPercentage
@@ -36,6 +39,51 @@ public class DrawerLayoutUtils {
         } catch (NoSuchFieldException e) {
         } catch (IllegalArgumentException e) {
         } catch (IllegalAccessException e) {
+        }
+    }
+
+    /**
+     * 内容和左侧菜单一起移动
+     *
+     * @param drawerLayout
+     * @return
+     */
+    public leftDrawerListener getLeftDrawerListener(DrawerLayout drawerLayout) {
+        return new leftDrawerListener(drawerLayout);
+    }
+
+    /**
+     * 内容和左侧菜单一起移动
+     */
+    public class leftDrawerListener implements DrawerLayout.DrawerListener {
+        private DrawerLayout drawerLayout;
+
+        leftDrawerListener(DrawerLayout drawerLayout) {
+            this.drawerLayout = drawerLayout;
+        }
+
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+            int width = drawerView.getMeasuredWidth();
+            View contentView = drawerLayout.getChildAt(0);
+            ViewHelper.setTranslationX(contentView, width * slideOffset);
+            ViewHelper.setPivotX(contentView, 0);
+            contentView.invalidate();
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
         }
     }
 }

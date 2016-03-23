@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#EEFFFF</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="menu_select_on">#36B9AF</color>
@@ -12,4 +12,5 @@
     <color name="login_welcom">#f5a8a4</color>
     <color name="back04">#000</color>
     <color name="left_menu_text">#fff</color>
+    <color name="toolbar01">#EEFFFF</color>
 </resources>

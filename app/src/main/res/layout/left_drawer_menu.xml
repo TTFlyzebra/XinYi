@@ -2,27 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/drawer_bk2"
     android:orientation="vertical"
     android:weightSum="1">
+
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="0.3"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_height="0dp">
+        android:orientation="horizontal"
+        android:weightSum="3">
+
         <ImageView
             android:id="@+id/left_drawer_iv_01"
-            android:layout_width="60dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
-            android:src="@drawable/qqico01"/>
+            android:layout_weight="1"
+            android:src="@drawable/qqico01" />
+
+        <TextView
+            android:id="@+id/left_drawer_tv_01"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="left|center"
+            android:text="@string/test"
+            android:textColor="@color/back04"
+            android:textSize="18sp" />
 
     </LinearLayout>
-    <ListView android:id="@+id/left_drawer_lv_01"
+
+    <ListView
+        android:id="@+id/left_drawer_lv_01"
         android:layout_width="match_parent"
-        android:layout_weight="0.6"
         android:layout_height="0dp"
+        android:layout_weight="0.6"
         android:choiceMode="singleChoice"
-        android:background="#3FFFFFFF"
         android:divider="#000"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp" />
 </LinearLayout>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,7 +74,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActitity) getActivity();
-        setHasOptionsMenu(true);
+        activity.toolBar.setTitle("主页");
     }
 
     @Override
@@ -86,14 +85,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i(TAG,"onViewCreated");
         //toolbar
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        // 标题的文字需在setSupportActionBar之前，不然会无效
-        mToolbar.setTitle("主页");
-        mToolbar.setLogo(R.drawable.ic_love);
-        activity.setSupportActionBar(mToolbar);
-        activity.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+//        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+//        // 标题的文字需在setSupportActionBar之前，不然会无效
+//        mToolbar.setTitle("主页");
+//        mToolbar.setLogo(R.drawable.ic_love);
+//        activity.setSupportActionBar(mToolbar);
+//        activity.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         viewPager_list = HttpUtils.getViewPagerList(); //获取ViewPager显示的数据内容
         viewPager = (AutoSizeWithChildViewPager) view.findViewById(R.id.home_viewpager);

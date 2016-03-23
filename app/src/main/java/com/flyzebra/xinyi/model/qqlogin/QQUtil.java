@@ -1,20 +1,5 @@
 package com.flyzebra.xinyi.model.qqlogin;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
-
-import junit.framework.Assert;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -34,12 +19,34 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import junit.framework.Assert;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+
 public class QQUtil {
 
     private static final String TAG = "SDK_Sample.QQ";
-
+    private static final int MAX_DECODE_PICTURE_SIZE = 1920 * 1440;
+    private static final String PATH_DOCUMENT = "document";
+    public static String ACTION_OPEN_DOCUMENT = "android.intent.action.OPEN_DOCUMENT";
+    public static int Build_VERSION_KITKAT = 19;
     private static Dialog mProgressDialog;
     private static Toast mToast;
+    /*
+     * 16进制数字字符集
+     */
+    private static String hexString = "0123456789ABCDEF";
 
     /* Convert byte[] to hex string.这里我们可以将byte转换成int，然后利用Integer.toHexString(int)来转换成16进制字符串。
             * @param src byte[] data
@@ -91,11 +98,6 @@ public class QQUtil {
     private static byte charToByte(char c) {
         return (byte) "0123456789ABCDEF".indexOf(c);
     }
-
-    /*
-     * 16进制数字字符集
-     */
-    private static String hexString = "0123456789ABCDEF";
 
     /*
      * 将字符串编码成16进制数字,适用于所有字符（包括中文）
@@ -331,8 +333,6 @@ public class QQUtil {
         }
     }
 
-    private static final int MAX_DECODE_PICTURE_SIZE = 1920 * 1440;
-
     public static Bitmap extractThumbNail(final String path, final int height, final int width, final boolean crop) {
         Assert.assertTrue(path != null && !path.equals("") && height > 0 && width > 0);
 
@@ -481,6 +481,11 @@ public class QQUtil {
         });
     }
 
+    // =========
+    // =通过URI获取本地图片的path
+    // =兼容android 5.0
+    // ==========
+
     /**
      * 打印消息并且用Toast显示消息
      *
@@ -506,8 +511,7 @@ public class QQUtil {
         Bitmap bitmap = null;
         try {
             URL myFileUrl = new URL(imageUri);
-            HttpURLConnection conn = (HttpURLConnection) myFileUrl
-                    .openConnection();
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
             conn.setDoInput(true);
             conn.connect();
             InputStream is = conn.getInputStream();
@@ -530,14 +534,6 @@ public class QQUtil {
         mProgressDialog = null;
         mToast = null;
     }
-
-    // =========
-    // =通过URI获取本地图片的path
-    // =兼容android 5.0
-    // ==========
-
-    public static String ACTION_OPEN_DOCUMENT = "android.intent.action.OPEN_DOCUMENT";
-    public static int Build_VERSION_KITKAT = 19;
 
     public static String getPath(final Context context, final Uri uri) {
 
@@ -603,8 +599,6 @@ public class QQUtil {
         return null;
     }
 
-    private static final String PATH_DOCUMENT = "document";
-
     /**
      * Test if the given URI represents a {@link Document} backed by a
      * {@link DocumentsProvider}.
@@ -614,11 +608,8 @@ public class QQUtil {
         if (paths.size() < 2) {
             return false;
         }
-        if (!PATH_DOCUMENT.equals(paths.get(0))) {
-            return false;
-        }
+        return PATH_DOCUMENT.equals(paths.get(0));
 
-        return true;
     }
 
     private static String getDocumentId(Uri documentUri) {

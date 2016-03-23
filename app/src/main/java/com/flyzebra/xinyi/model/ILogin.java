@@ -8,6 +8,9 @@ import android.content.Intent;
 public interface ILogin {
     void login();
     void logout();
-    void createUserInfo();
+
+    void createUserInfo(UserInfo userInfo);
     void onActivtyResult(int requestCode, int resultCode, Intent data);
+
+    boolean checkIsLogined();
 }

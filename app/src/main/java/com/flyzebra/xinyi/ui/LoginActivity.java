@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.ILogin;
 import com.flyzebra.xinyi.model.QQLogin;
+import com.flyzebra.xinyi.model.UserInfo;
 import com.tencent.connect.common.Constants;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,22 +35,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lg_bt_lg = (Button) findViewById(R.id.lg_bt_lg);
         lg_bt_lg.setOnClickListener(this);
 
-        mQQLogin = new QQLogin(this, new QQLogin.loginResult() {
-            @Override
-            public void loginSuccees(Object response) {
-                StartMainActivity();
-            }
-            @Override
-            public void loginFaild() {
-            }
-            @Override
-            public void loginCancel() {
-            }
-        });
+
     }
 
-    private void StartMainActivity() {
+    private void StartMainActivity(UserInfo userInfo) {
         Intent intent = new Intent(LoginActivity.this, MainActitity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("UserInfo", userInfo);
+        intent.putExtras(bundle);
         startActivity(intent);
         finish();
     }
@@ -57,10 +50,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.lg_bt_lg:
-                StartMainActivity();
+                StartMainActivity(null);
                 break;
+
+            //QQ方式登陆
             case R.id.lg_iv_qq:
+                if (mQQLogin == null) {
+                    mQQLogin = new QQLogin(this, new QQLogin.loginResult() {
+                        @Override
+                        public void loginSuccees(UserInfo userInfo) {
+                            StartMainActivity(userInfo);
+                        }
+
+                        @Override
+                        public void loginFaild() {
+                        }
+
+                        @Override
+                        public void loginCancel() {
+                        }
+                    });
+                }
                 mQQLogin.login();
                 break;
         }
@@ -69,7 +81,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
-            mQQLogin.onActivtyResult(requestCode,resultCode,data);
+            if (mQQLogin != null) {
+                mQQLogin.onActivtyResult(requestCode, resultCode, data);
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

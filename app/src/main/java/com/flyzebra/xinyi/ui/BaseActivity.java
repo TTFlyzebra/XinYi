@@ -25,10 +25,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected TextView base_tv_poi;
     protected TextView base_tv_user;
     protected TextView base_tv_more;
-    protected ColorStateList colorStateList;
-    //购物车
     protected ImageView base_bt_buy;
     protected TextView base_tv_buy;
+    protected ColorStateList colorStateList;
     private LinearLayout base_ll_home;
     private LinearLayout base_ll_poi;
     private LinearLayout base_ll_user;
@@ -77,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.base_ll_home:
-                base_bt_home.setImageResource(R.drawable.ic_menu_deal_on);
+                base_bt_home.setImageResource(R.drawable.ic_menu_home_on);
                 base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
                 base_bt_user.setImageResource(R.drawable.ic_menu_user);
                 base_bt_more.setImageResource(R.drawable.ic_menu_more);
@@ -90,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 runActivity(MainActitity.class);
                 break;
             case R.id.base_ll_poi:
-                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_home.setImageResource(R.drawable.ic_menu_home);
                 base_bt_poi.setImageResource(R.drawable.ic_menu_poi_on);
                 base_bt_user.setImageResource(R.drawable.ic_menu_user);
                 base_bt_more.setImageResource(R.drawable.ic_menu_more);
@@ -103,7 +102,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 runActivity(PoiActivity.class);
                 break;
             case R.id.base_ll_user:
-                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_home.setImageResource(R.drawable.ic_menu_home);
                 base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
                 base_bt_user.setImageResource(R.drawable.ic_menu_user_on);
                 base_bt_more.setImageResource(R.drawable.ic_menu_more);
@@ -116,7 +115,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 runActivity(UserActivity.class);
                 break;
             case R.id.base_ll_more:
-                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_home.setImageResource(R.drawable.ic_menu_home);
                 base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
                 base_bt_user.setImageResource(R.drawable.ic_menu_user);
                 base_bt_more.setImageResource(R.drawable.ic_menu_more_on);
@@ -129,7 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 runActivity(MoreActivity.class);
                 break;
             case R.id.base_ll_buy:
-                base_bt_home.setImageResource(R.drawable.ic_menu_deal);
+                base_bt_home.setImageResource(R.drawable.ic_menu_home);
                 base_bt_poi.setImageResource(R.drawable.ic_menu_poi);
                 base_bt_user.setImageResource(R.drawable.ic_menu_user);
                 base_bt_more.setImageResource(R.drawable.ic_menu_more);
