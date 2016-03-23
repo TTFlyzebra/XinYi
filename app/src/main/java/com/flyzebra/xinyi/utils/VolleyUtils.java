@@ -1,10 +1,13 @@
 package com.flyzebra.xinyi.utils;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,8 +29,9 @@ public class VolleyUtils {
     private static final String TAG = "com.flyzebra";
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
+    private static Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public static RequestQueue Init(Context context,int maxDiskCacheBytes) {
+    public static RequestQueue Init(Context context, int maxDiskCacheBytes) {
         mRequestQueue = Volley.newRequestQueue(context, maxDiskCacheBytes);
         mImageLoader = new ImageLoader(mRequestQueue, new VolleyBitmapCache());
         return mRequestQueue;
@@ -53,15 +57,29 @@ public class VolleyUtils {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.i(TAG, "upListView--->onErrorResponse");
-                upListView(url, list, jsonKey, adapter);
+                Log.i(TAG, "upListView--->onErrorResponse-->" + volleyError);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (url != null && list != null && jsonKey != null && adapter != null) {
+                            upListView(url, list, jsonKey, adapter);
+                        }
+                    }
+                }, 5000);
             }
         });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
+        jsonObjectRequest.setTag(url);
         mRequestQueue.add(jsonObjectRequest);
     }
 
     public static void upImageView(String url, ImageView iv) {
         ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, R.drawable.image, R.drawable.image);
         mImageLoader.get(url, listener);
+    }
+
+    public static void cancelAll(Object url) {
+        Log.i(TAG, "VolleyUtils-->cancelAll(Object url)");
+        mRequestQueue.cancelAll(url);
     }
 }

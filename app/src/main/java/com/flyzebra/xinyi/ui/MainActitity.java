@@ -25,7 +25,8 @@ public class MainActitity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        ReplaceFragment("HomeFragment", R.id.main_fl_01);
+
+        ReplaceFragment("BuyFragment", R.id.main_fl_01);
         ReplaceFragment("LeftMenuFragment", R.id.left_drawer_menu);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_dl_01);

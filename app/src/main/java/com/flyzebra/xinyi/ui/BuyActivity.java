@@ -1,12 +1,10 @@
 package com.flyzebra.xinyi.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.HttpUpdata;
@@ -18,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2016/3/22.
+ * Created by FlyZebra on 2016/3/22.
  */
 
 public class BuyActivity extends BaseActivity{
@@ -34,9 +32,9 @@ public class BuyActivity extends BaseActivity{
     }
 
     @Override
-    protected void onCreateAndaddView(LinearLayout root) {
+    protected void onCreateAndaddView(RelativeLayout root) {
         LayoutInflater lf = LayoutInflater.from(this);
-        LinearLayout view = (LinearLayout) lf.inflate(R.layout.buy_view, null);
+        RelativeLayout view = (RelativeLayout) lf.inflate(R.layout.buy_fragment, null);
         root.addView(view);
         listView = (ListView) findViewById(R.id.buy_lv_01);
         if(list==null){
@@ -56,6 +54,13 @@ public class BuyActivity extends BaseActivity{
             }
         });
         listView.setAdapter(adapter);
-        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo",adapter);
+        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        iHttpUpdata.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
+    }
+
 }

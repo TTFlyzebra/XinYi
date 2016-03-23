@@ -3,8 +3,6 @@ package com.flyzebra.xinyi.model;
 import android.content.Context;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import java.util.List;
 import java.util.Map;
@@ -15,4 +13,6 @@ import java.util.Map;
 public interface IHttpUpdata {
     void upListView(String url, List<Map<String, Object>> list,String jsonKey,BaseAdapter adapter);
     void upImageView(Context context,String url, ImageView iv);
+
+    void cancelAll(Object tag);
 }

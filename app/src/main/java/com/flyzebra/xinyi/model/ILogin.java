@@ -1,6 +1,5 @@
 package com.flyzebra.xinyi.model;
 
-import android.app.Activity;
 import android.content.Intent;
 
 /**

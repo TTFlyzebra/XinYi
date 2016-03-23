@@ -19,7 +19,6 @@ package com.android.volley.toolbox;
 import android.os.SystemClock;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
 import com.android.volley.Cache.Entry;
 import com.android.volley.Network;
 import com.android.volley.NetworkError;
@@ -82,6 +81,37 @@ public class BasicNetwork implements Network {
         mPool = pool;
     }
 
+    /**
+     * Attempts to prepare the request for a retry. If there are no more attempts remaining in the
+     * request's retry policy, a timeout exception is thrown.
+     * @param request The request to use.
+     */
+    private static void attemptRetryOnException(String logPrefix, Request<?> request,
+            VolleyError exception) throws VolleyError {
+        RetryPolicy retryPolicy = request.getRetryPolicy();
+        int oldTimeout = request.getTimeoutMs();
+
+        try {
+            retryPolicy.retry(exception);
+        } catch (VolleyError e) {
+            request.addMarker(
+                    String.format("%s-timeout-giveup [timeout=%s]", logPrefix, oldTimeout));
+            throw e;
+        }
+        request.addMarker(String.format("%s-retry [timeout=%s]", logPrefix, oldTimeout));
+    }
+
+    /**
+     * Converts Headers[] to Map<String, String>.
+     */
+    protected static Map<String, String> convertHeaders(Header[] headers) {
+        Map<String, String> result = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        for (int i = 0; i < headers.length; i++) {
+            result.put(headers[i].getName(), headers[i].getValue());
+        }
+        return result;
+    }
+
     @Override
     public NetworkResponse performRequest(Request<?> request) throws VolleyError {
         long requestStart = SystemClock.elapsedRealtime();
@@ -103,7 +133,9 @@ public class BasicNetwork implements Network {
 
                     Entry entry = request.getCacheEntry();
                     if (entry == null) {
-                        return new NetworkResponse(HttpStatus.SC_NOT_MODIFIED, null, responseHeaders, true, SystemClock.elapsedRealtime() - requestStart);
+                        return new NetworkResponse(HttpStatus.SC_NOT_MODIFIED, null,
+                                responseHeaders, true,
+                                SystemClock.elapsedRealtime() - requestStart);
                     }
 
                     // A HTTP 304 response does not have all header fields. We
@@ -111,9 +143,11 @@ public class BasicNetwork implements Network {
                     // the new ones from the response.
                     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.5
                     entry.responseHeaders.putAll(responseHeaders);
-                    return new NetworkResponse(HttpStatus.SC_NOT_MODIFIED, entry.data, entry.responseHeaders, true, SystemClock.elapsedRealtime() - requestStart);
+                    return new NetworkResponse(HttpStatus.SC_NOT_MODIFIED, entry.data,
+                            entry.responseHeaders, true,
+                            SystemClock.elapsedRealtime() - requestStart);
                 }
-                
+
                 // Handle moved resources
                 if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY || statusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
                 	String newUrl = responseHeaders.get("Location");
@@ -152,7 +186,7 @@ public class BasicNetwork implements Network {
                 } else {
                     throw new NoConnectionError(e);
                 }
-                if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY || 
+                if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY ||
                 		statusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
                 	VolleyLog.e("Request at %s has been redirected to %s", request.getOriginUrl(), request.getUrl());
                 } else {
@@ -165,7 +199,7 @@ public class BasicNetwork implements Network {
                             statusCode == HttpStatus.SC_FORBIDDEN) {
                         attemptRetryOnException("auth",
                                 request, new AuthFailureError(networkResponse));
-                    } else if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY || 
+                    } else if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY ||
                     			statusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
                         attemptRetryOnException("redirect",
                                 request, new AuthFailureError(networkResponse));
@@ -187,33 +221,13 @@ public class BasicNetwork implements Network {
             byte[] responseContents, StatusLine statusLine) {
         if (DEBUG || requestLifetime > SLOW_REQUEST_THRESHOLD_MS) {
             VolleyLog.d("HTTP response for request=<%s> [lifetime=%d], [size=%s], " +
-                    "[rc=%d], [retryCount=%s]", request, requestLifetime,
+                            "[rc=%d], [retryCount=%s]", request, requestLifetime,
                     responseContents != null ? responseContents.length : "null",
                     statusLine.getStatusCode(), request.getRetryPolicy().getCurrentRetryCount());
         }
     }
 
-    /**
-     * Attempts to prepare the request for a retry. If there are no more attempts remaining in the
-     * request's retry policy, a timeout exception is thrown.
-     * @param request The request to use.
-     */
-    private static void attemptRetryOnException(String logPrefix, Request<?> request,
-            VolleyError exception) throws VolleyError {
-        RetryPolicy retryPolicy = request.getRetryPolicy();
-        int oldTimeout = request.getTimeoutMs();
-
-        try {
-            retryPolicy.retry(exception);
-        } catch (VolleyError e) {
-            request.addMarker(
-                    String.format("%s-timeout-giveup [timeout=%s]", logPrefix, oldTimeout));
-            throw e;
-        }
-        request.addMarker(String.format("%s-retry [timeout=%s]", logPrefix, oldTimeout));
-    }
-
-    private void addCacheHeaders(Map<String, String> headers, Cache.Entry entry) {
+    private void addCacheHeaders(Map<String, String> headers, Entry entry) {
         // If there's no cache entry, we're done.
         if (entry == null) {
             return;
@@ -262,16 +276,5 @@ public class BasicNetwork implements Network {
             mPool.returnBuf(buffer);
             bytes.close();
         }
-    }
-
-    /**
-     * Converts Headers[] to Map<String, String>.
-     */
-    protected static Map<String, String> convertHeaders(Header[] headers) {
-        Map<String, String> result = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
-        for (int i = 0; i < headers.length; i++) {
-            result.put(headers[i].getName(), headers[i].getValue());
-        }
-        return result;
     }
 }

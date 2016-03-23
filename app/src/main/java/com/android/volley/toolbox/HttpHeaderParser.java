@@ -16,8 +16,6 @@
 
 package com.android.volley.toolbox;
 
-import android.util.Log;
-
 import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 
@@ -115,7 +113,7 @@ public class HttpHeaderParser {
         entry.serverDate = serverDate;
         entry.lastModified = lastModified;
         entry.responseHeaders = headers;
-//        Log.i("com.flyzebra","entry->lastModified,etag"+entry.lastModified+","+entry.etag);
+
         return entry;
     }
 
@@ -135,7 +133,7 @@ public class HttpHeaderParser {
     /**
      * Retrieve a charset from headers
      *
-     * @param headers An {@link java.util.Map} of headers
+     * @param headers An {@link Map} of headers
      * @param defaultCharset Charset to return if none can be found
      * @return Returns the charset specified in the Content-Type of this header,
      * or the defaultCharset if none can be found.

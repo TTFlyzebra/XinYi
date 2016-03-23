@@ -1,15 +1,10 @@
 package com.flyzebra.xinyi.model;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.utils.UILImageUtils;
 import com.flyzebra.xinyi.utils.VolleyUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Map;
@@ -26,15 +21,12 @@ public class HttpUpdata implements IHttpUpdata {
     public static HttpUpdata getInstance(){
         return VolleyUtilsHolder.sInstance;
     }
-    private static class VolleyUtilsHolder{
-        public static final HttpUpdata sInstance = new HttpUpdata();
-    }
-    //<---单例模式-----
 
     @Override
     public void upListView(final String url, final List<Map<String, Object>> list, final String jsonKey, final BaseAdapter adapter) {
         VolleyUtils.upListView(url, list, jsonKey, adapter);
     }
+    //<---单例模式-----
 
     @Override
     public void upImageView(Context context,String url, ImageView iv) {
@@ -42,5 +34,14 @@ public class HttpUpdata implements IHttpUpdata {
 //        ImageLoader.getInstance().displayImage(url, iv, UILImageUtils.getDisplayImageOptions(R.drawable.image, R.drawable.image, R.drawable.image));
         //Picasso方式显示图片
 //        Picasso.with(context).load(url).placeholder(R.drawable.image).error(R.drawable.image).into(iv);
+    }
+
+    @Override
+    public void cancelAll(Object tag) {
+        VolleyUtils.cancelAll(tag);
+    }
+
+    private static class VolleyUtilsHolder {
+        public static final HttpUpdata sInstance = new HttpUpdata();
     }
 }

@@ -53,7 +53,8 @@ public abstract class JsonRequest<T> extends Request<T> {
         this(Method.DEPRECATED_GET_OR_POST, url, requestBody, listener, errorListener);
     }
 
-    public JsonRequest(int method, String url, String requestBody, Listener<T> listener,ErrorListener errorListener) {
+    public JsonRequest(int method, String url, String requestBody, Listener<T> listener,
+                       ErrorListener errorListener) {
         super(method, url, errorListener);
         mListener = listener;
         mRequestBody = requestBody;

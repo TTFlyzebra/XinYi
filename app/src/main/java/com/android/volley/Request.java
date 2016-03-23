@@ -41,22 +41,10 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * Default encoding for POST or PUT parameters. See {@link #getParamsEncoding()}.
      */
     private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
-
     /**
-     * Supported request methods.
+     * Threshold at which we should log the request (even when debug logging is not enabled).
      */
-    public interface Method {
-        int DEPRECATED_GET_OR_POST = -1;
-        int GET = 0;
-        int POST = 1;
-        int PUT = 2;
-        int DELETE = 3;
-        int HEAD = 4;
-        int OPTIONS = 5;
-        int TRACE = 6;
-        int PATCH = 7;
-    }
-
+    private static final long SLOW_REQUEST_THRESHOLD_MS = 3000;
     /** An event log tracing the lifetime of this request; for debugging. */
     private final MarkerLog mEventLog = MarkerLog.ENABLED ? new MarkerLog() : null;
 
@@ -68,16 +56,14 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     /** URL of this request. */
     private final String mUrl;
-    
-    /** The redirect url to use for 3xx http responses */
-    private String mRedirectUrl;
-
     /** Default tag for {@link TrafficStats}. */
     private final int mDefaultTrafficStatsTag;
-
     /** Listener interface for errors. */
     private final Response.ErrorListener mErrorListener;
-
+    /**
+     * The redirect url to use for 3xx http responses
+     */
+    private String mRedirectUrl;
     /** Sequence number of this request, used to enforce FIFO ordering. */
     private Integer mSequence;
 
@@ -95,20 +81,14 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     // A cheap variant of request tracing used to dump slow requests.
     private long mRequestBirthTime = 0;
-
-    /** Threshold at which we should log the request (even when debug logging is not enabled). */
-    private static final long SLOW_REQUEST_THRESHOLD_MS = 3000;
-
     /** The retry policy for this request. */
     private RetryPolicy mRetryPolicy;
-
     /**
      * When a request can be retrieved from cache but must be refreshed from
      * the network, the cache entry will be stored here so that in the event of
      * a "Not Modified" response, we can be sure it hasn't been evicted from cache.
      */
     private Cache.Entry mCacheEntry = null;
-
     /** An opaque token tagging this request; used for bulk cancellation. */
     private Object mTag;
 
@@ -118,7 +98,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * is provided by subclasses, who have a better idea of how to deliver an
      * already-parsed response.
      *
-     * @deprecated Use {@link #Request(int, String, com.android.volley.Response.ErrorListener)}.
+     * @deprecated Use {@link #Request(int, String, Response.ErrorListener)}.
      */
     @Deprecated
     public Request(String url, Response.ErrorListener listener) {
@@ -131,54 +111,13 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      * delivery of responses is provided by subclasses, who have a better idea of how to deliver
      * an already-parsed response.
      */
-    public
-    Request(int method, String url, Response.ErrorListener listener) {
+    public Request(int method, String url, Response.ErrorListener listener) {
         mMethod = method;
         mUrl = url;
         mErrorListener = listener;
         setRetryPolicy(new DefaultRetryPolicy());
 
         mDefaultTrafficStatsTag = findDefaultTrafficStatsTag(url);
-    }
-
-    /**
-     * Return the method for this request.  Can be one of the values in {@link Method}.
-     */
-    public int getMethod() {
-        return mMethod;
-    }
-
-    /**
-     * Set a tag on this request. Can be used to cancel all requests with this
-     * tag by {@link RequestQueue#cancelAll(Object)}.
-     *
-     * @return This Request object to allow for chaining.
-     */
-    public Request<?> setTag(Object tag) {
-        mTag = tag;
-        return this;
-    }
-
-    /**
-     * Returns this request's tag.
-     * @see Request#setTag(Object)
-     */
-    public Object getTag() {
-        return mTag;
-    }
-
-    /**
-     * @return this request's {@link com.android.volley.Response.ErrorListener}.
-     */
-    public Response.ErrorListener getErrorListener() {
-        return mErrorListener;
-    }
-
-    /**
-     * @return A tag for use with {@link TrafficStats#setThreadStatsTag(int)}
-     */
-    public int getTrafficStatsTag() {
-        return mDefaultTrafficStatsTag;
     }
 
     /**
@@ -198,13 +137,44 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * Sets the retry policy for this request.
+     * Return the method for this request.  Can be one of the values in {@link Method}.
+     */
+    public int getMethod() {
+        return mMethod;
+    }
+
+    /**
+     * Returns this request's tag.
+     *
+     * @see Request#setTag(Object)
+     */
+    public Object getTag() {
+        return mTag;
+    }
+
+    /**
+     * Set a tag on this request. Can be used to cancel all requests with this
+     * tag by {@link RequestQueue#cancelAll(Object)}.
      *
      * @return This Request object to allow for chaining.
      */
-    public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
-        mRetryPolicy = retryPolicy;
+    public Request<?> setTag(Object tag) {
+        mTag = tag;
         return this;
+    }
+
+    /**
+     * @return this request's {@link Response.ErrorListener}.
+     */
+    public Response.ErrorListener getErrorListener() {
+        return mErrorListener;
+    }
+
+    /**
+     * @return A tag for use with {@link TrafficStats#setThreadStatsTag(int)}
+     */
+    public int getTrafficStatsTag() {
+        return mDefaultTrafficStatsTag;
     }
 
     /**
@@ -265,16 +235,6 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * Sets the sequence number of this request.  Used by {@link RequestQueue}.
-     *
-     * @return This Request object to allow for chaining.
-     */
-    public final Request<?> setSequence(int sequence) {
-        mSequence = sequence;
-        return this;
-    }
-
-    /**
      * Returns the sequence number of this request.
      */
     public final int getSequence() {
@@ -285,19 +245,29 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
+     * Sets the sequence number of this request.  Used by {@link RequestQueue}.
+     *
+     * @return This Request object to allow for chaining.
+     */
+    public final Request<?> setSequence(int sequence) {
+        mSequence = sequence;
+        return this;
+    }
+
+    /**
      * Returns the URL of this request.
      */
     public String getUrl() {
         return (mRedirectUrl != null) ? mRedirectUrl : mUrl;
     }
-    
+
     /**
      * Returns the URL of the request before any redirects have occurred.
      */
     public String getOriginUrl() {
     	return mUrl;
     }
-    
+
     /**
      * Sets the redirect url to handle 3xx http responses.
      */
@@ -313,6 +283,13 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
+     * Returns the annotated cache entry, or null if there isn't one.
+     */
+    public Cache.Entry getCacheEntry() {
+        return mCacheEntry;
+    }
+
+    /**
      * Annotates this request with an entry retrieved for it from cache.
      * Used for cache coherency support.
      *
@@ -321,13 +298,6 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     public Request<?> setCacheEntry(Cache.Entry entry) {
         mCacheEntry = entry;
         return this;
-    }
-
-    /**
-     * Returns the annotated cache entry, or null if there isn't one.
-     */
-    public Cache.Entry getCacheEntry() {
-        return mCacheEntry;
     }
 
     /**
@@ -505,17 +475,6 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
-     * Priority values.  Requests will be processed from higher priorities to
-     * lower priorities, in FIFO order.
-     */
-    public enum Priority {
-        LOW,
-        NORMAL,
-        HIGH,
-        IMMEDIATE
-    }
-
-    /**
      * Returns the {@link Priority} of this request; {@link Priority#NORMAL} by default.
      */
     public Priority getPriority() {
@@ -536,6 +495,16 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      */
     public RetryPolicy getRetryPolicy() {
         return mRetryPolicy;
+    }
+
+    /**
+     * Sets the retry policy for this request.
+     *
+     * @return This Request object to allow for chaining.
+     */
+    public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
+        mRetryPolicy = retryPolicy;
+        return this;
     }
 
     /**
@@ -607,7 +576,9 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
         // High-priority requests are "lesser" so they are sorted to the front.
         // Equal priorities are sorted by sequence number to provide FIFO ordering.
-        return left == right ? this.mSequence - other.mSequence : right.ordinal() - left.ordinal();
+        return left == right ?
+                this.mSequence - other.mSequence :
+                right.ordinal() - left.ordinal();
     }
 
     @Override
@@ -615,5 +586,31 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         String trafficStatsTag = "0x" + Integer.toHexString(getTrafficStatsTag());
         return (mCanceled ? "[X] " : "[ ] ") + getUrl() + " " + trafficStatsTag + " "
                 + getPriority() + " " + mSequence;
+    }
+
+    /**
+     * Priority values.  Requests will be processed from higher priorities to
+     * lower priorities, in FIFO order.
+     */
+    public enum Priority {
+        LOW,
+        NORMAL,
+        HIGH,
+        IMMEDIATE
+    }
+
+    /**
+     * Supported request methods.
+     */
+    public interface Method {
+        int DEPRECATED_GET_OR_POST = -1;
+        int GET = 0;
+        int POST = 1;
+        int PUT = 2;
+        int DELETE = 3;
+        int HEAD = 4;
+        int OPTIONS = 5;
+        int TRACE = 6;
+        int PATCH = 7;
     }
 }

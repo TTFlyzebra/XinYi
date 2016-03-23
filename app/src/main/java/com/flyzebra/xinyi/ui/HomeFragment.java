@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.HttpUpdata;
 import com.flyzebra.xinyi.model.IHttpUpdata;
@@ -36,12 +35,14 @@ import java.util.Map;
  */
 public class HomeFragment extends Fragment {
     private static final String TAG ="com.flyzebra" ;
+    public static int current_viewpager = 0;//需要在HomeViewPagerAdapter中使用所在定义成静态
+    //ViewPager自动轮播
+    private final int delayMillis = 5000;
     private IHttpUpdata iHttpUpdata = HttpUpdata.getInstance();
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;
     private List<Map<String, Object>> listview_list;
-
     //控件定义
     private AutoSizeWithChildViewPager viewPager;
     private HomeVPAdapter mViewPagerAdapter;
@@ -53,10 +54,6 @@ public class HomeFragment extends Fragment {
     private ListViewForScrollView listview;
     private LinearLayout list_empty;
     private ImageView list_empty_iv;
-
-    //ViewPager自动轮播
-    private final int delayMillis = 5000;
-    public static int current_viewpager = 0;//需要在HomeViewPagerAdapter中使用所在定义成静态
     private Handler playsHander = new Handler();
     private Runnable playsTask = new Runnable() {
         @Override
@@ -83,7 +80,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_view, container, false);
+        return inflater.inflate(R.layout.home_fragment, container, false);
     }
 
     @Override
@@ -142,7 +139,7 @@ public class HomeFragment extends Fragment {
             }
         });
         listview.setAdapter(homeListViewAdapter);
-//        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo",homeListViewAdapter);
+        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter);
 
         //设置没有数据时ListView的显示
         list_empty = (LinearLayout) view.findViewById(R.id.empty_view);
@@ -156,15 +153,6 @@ public class HomeFragment extends Fragment {
                 animationDrawable.start();
             }
         });
-
-        //处理滚动条，默认会滚动到底部
-//        sv = (ScrollView) view.findViewById(R.id.home_sv_home);
-//        sv.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                sv.scrollTo(MyApp.home_sv_x, MyApp.home_sv_y);
-//            }
-//        });
     }
 
     @Override
@@ -177,9 +165,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        MyApp.home_sv_x = sv.getScrollX();
-        MyApp.home_sv_y = sv.getScrollY();
         playsHander.removeCallbacks(playsTask);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

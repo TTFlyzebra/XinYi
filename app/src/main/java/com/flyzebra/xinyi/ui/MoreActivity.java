@@ -1,7 +1,7 @@
 package com.flyzebra.xinyi.ui;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
 
@@ -17,7 +17,7 @@ public class MoreActivity extends BaseActivity{
     }
 
     @Override
-    protected void onCreateAndaddView(LinearLayout root) {
+    protected void onCreateAndaddView(RelativeLayout root) {
 
     }
 }

@@ -5,9 +5,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.MyApp;
 import com.flyzebra.xinyi.R;
@@ -29,9 +28,9 @@ public class PoiActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreateAndaddView(LinearLayout root) {
+    protected void onCreateAndaddView(RelativeLayout root) {
         LayoutInflater lf = LayoutInflater.from(this);
-        LinearLayout view = (LinearLayout) lf.inflate(R.layout.poi_view, null);
+        RelativeLayout view = (RelativeLayout) lf.inflate(R.layout.poi_view, null);
         root.addView(view);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.poi_rv01);

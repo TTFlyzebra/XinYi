@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
 
 /**
- * Created by Administrator on 2016/2/29.
+ * Created by FlyZebra on 2016/2/29.
  */
 public class UserActivity extends BaseActivity {
     private Button bt_clear_user;
@@ -23,9 +23,9 @@ public class UserActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreateAndaddView(LinearLayout root) {
+    protected void onCreateAndaddView(RelativeLayout root) {
         LayoutInflater lf = LayoutInflater.from(this);
-        LinearLayout ll = (LinearLayout) lf.inflate(R.layout.user_view, null);
+        RelativeLayout ll = (RelativeLayout) lf.inflate(R.layout.user_view, null);
         root.addView(ll);
         bt_clear_user = (Button) ll.findViewById(R.id.clear_user);
         bt_clear_user.setOnClickListener(new View.OnClickListener() {

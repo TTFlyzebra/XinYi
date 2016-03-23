@@ -1,8 +1,8 @@
 package com.flyzebra.xinyi.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setTitle(getResources().getString(R.string.login));
         setContentView(R.layout.login_activity);
+
         lg_ed_ps = (EditText) findViewById(R.id.lg_ed_ps);
         lg_ed_us = (EditText) findViewById(R.id.lg_ed_us);
         lg_iv_qq = (ImageView) findViewById(R.id.lg_iv_qq);
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void StartMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, BuyActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActitity.class);
         startActivity(intent);
         finish();
     }

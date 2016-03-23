@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
@@ -25,17 +26,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected TextView base_tv_user;
     protected TextView base_tv_more;
     protected ColorStateList colorStateList;
-
+    //购物车
+    protected ImageView base_bt_buy;
+    protected TextView base_tv_buy;
     private LinearLayout base_ll_home;
     private LinearLayout base_ll_poi;
     private LinearLayout base_ll_user;
     private LinearLayout base_ll_more;
-
-    private LinearLayout base_add_view;
-
-    //购物车
-    protected ImageView base_bt_buy;
-    protected TextView base_tv_buy;
+    private RelativeLayout base_add_view;
     private LinearLayout base_ll_buy;
 
     @Override
@@ -65,7 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         base_ll_buy = (LinearLayout) findViewById(R.id.base_ll_buy);
         base_ll_buy.setOnClickListener(this);
 
-        base_add_view = (LinearLayout) findViewById(R.id.base_add_view);
+        base_add_view = (RelativeLayout) findViewById(R.id.base_add_view);
         onCreateAndaddView(base_add_view);
     }
 
@@ -73,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * 在此函数中初始化控件
      * @param root
      */
-    protected abstract void onCreateAndaddView(LinearLayout root);
+    protected abstract void onCreateAndaddView(RelativeLayout root);
 
     @Override
     public void onClick(View v) {
