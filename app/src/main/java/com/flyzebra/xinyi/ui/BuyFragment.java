@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.universal.TvIvAdapter;
+import com.flyzebra.xinyi.fly.TvIvAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -103,7 +103,7 @@ public class BuyFragment extends Fragment {
                 null, new TvIvAdapter.SetImageView() {
             @Override
             public void setImageView(String url, ImageView iv) {
-                activity.iHttpUpdata.upImageView(activity, "http://192.168.1.88/ordermeal" + url, iv);
+                activity.iHttp.upImageView(activity, "http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listView.setAdapter(adapter);
@@ -121,13 +121,13 @@ public class BuyFragment extends Fragment {
             }
         });
 
-        activity.iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter);
+        activity.iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        activity.iHttpUpdata.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
+        activity.iHttp.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
     }
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {

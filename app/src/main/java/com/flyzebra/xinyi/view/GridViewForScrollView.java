@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.GridView;
 
 /**
- * 自定义适应ScrollView的GridView，需要在代码中设置ScrollView
+ * 自定义适应ScrollView的GridView，需要在代码中设置ScrollView，这控件垃圾的要死，性能低下
  * sv = (ScrollView) findViewById(R.id.act_solution_4_sv);
  * sv.smoothScrollTo(0, 0);
  * Created by FlyZebra on 2016/3/1.

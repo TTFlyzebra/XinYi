@@ -6,21 +6,22 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.HttpUpdata;
-import com.flyzebra.xinyi.model.IHttpUpdata;
-import com.flyzebra.xinyi.model.UserInfo;
+import com.flyzebra.xinyi.data.UserInfo;
+import com.flyzebra.xinyi.model.Http;
+import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
+import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,7 @@ import java.util.List;
  * Created by FlyZebra on 2016/3/17.
  */
 public class MainActitity extends AppCompatActivity implements View.OnClickListener {
-    public static final String TAG = "com.flyzebra";
-    public IHttpUpdata iHttpUpdata = HttpUpdata.getInstance();
+    public IHttp iHttp = Http.getInstance();
     public UserInfo userInfo;
 
     public Toolbar toolBar;
@@ -55,8 +55,8 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        textColer_Off = getResources().getColorStateList(R.color.color_select);
-        textColor_On = getResources().getColor(R.color.menu_select_on);
+        textColer_Off = ContextCompat.getColorStateList(this, R.color.color_select);
+        textColor_On = ContextCompat.getColor(this, R.color.menu_select_on);
         initView();
         //获取用户信息
         Intent intent = getIntent();
@@ -118,13 +118,13 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
             transaction1.commit();
             return true;
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, "ReplaceFragment->" + e.toString());
+            FlyLog.i("ReplaceFragment->" + e.toString());
             return false;
         } catch (InstantiationException e) {
-            Log.e(TAG, "ReplaceFragment->" + e.toString());
+            FlyLog.i("ReplaceFragment->" + e.toString());
             return false;
         } catch (IllegalAccessException e) {
-            Log.e(TAG, "ReplaceFragment->" + e.toString());
+            FlyLog.i("ReplaceFragment->" + e.toString());
             return false;
         }
     }

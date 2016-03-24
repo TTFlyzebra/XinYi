@@ -5,9 +5,9 @@ import android.test.ApplicationTestCase;
 import android.util.Log;
 
 import com.flyzebra.xinyi.data.User;
+import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +15,6 @@ import java.io.ObjectOutputStream;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -46,25 +45,16 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Log.i("com.flyzebra", user1.getUserId() + "," + user1.getPhoneNum() + "," + user1.getUserName() + "," + user1.getPassword());
     }
 
-    public class GetExample {
-        OkHttpClient client = new OkHttpClient();
-
-        public GetExample(OkHttpClient client) {
-            this.client = client;
-        }
-
-        String run(String url) throws IOException {
-            Request request = new Request.Builder()
-                    .url(url)
-
-                    .build();
-            Response response = client.newCall(request).execute();
-            return response.body().string();
-        }
+    public void testFinal() {
+        boolean flag = true;
+        FlyLog.i("testFinal=" + flag);
+        finalTest.testBoolean(flag);
+        flag = false;
+        FlyLog.i("testFinal=" + flag);
     }
 
     public void testOkHttp3() throws IOException {
-        Log.i(TAG, "Math.round(11.5)" + Math.round(11.5f));
+        FlyLog.i("Math.round(11.5)" + Math.round(11.5f));
         Log.i(TAG, "Math.round(11.5)" + Math.round(11.5d));
         Log.i(TAG, "Math.round(-11.5)" + Math.round(-11.5f));
         Log.i(TAG, "testOkHttp3-------------------------------------->");
@@ -107,5 +97,41 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 Log.i(TAG, "异步GET--->" + resultStr);
             }
         });
+    }
+
+    public static class finalTest {
+        public static synchronized void testBoolean(final boolean fb) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FlyLog.i("Final Boolean=" + fb);
+                    while (true) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        FlyLog.i("Final Boolean=" + fb);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    public class GetExample {
+        OkHttpClient client = new OkHttpClient();
+
+        public GetExample(OkHttpClient client) {
+            this.client = client;
+        }
+
+        String run(String url) throws IOException {
+            Request request = new Request.Builder()
+                    .url(url)
+
+                    .build();
+            Response response = client.newCall(request).execute();
+            return response.body().string();
+        }
     }
 }

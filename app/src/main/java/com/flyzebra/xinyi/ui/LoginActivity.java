@@ -9,13 +9,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.ILogin;
 import com.flyzebra.xinyi.model.QQLogin;
-import com.flyzebra.xinyi.model.UserInfo;
 import com.tencent.connect.common.Constants;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final String TAG = "com.flyzebra";
     private ILogin mQQLogin;
     private EditText lg_ed_us;
     private EditText lg_ed_ps;

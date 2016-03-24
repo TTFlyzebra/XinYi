@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.flyzebra.xinyi.data.UserInfo;
+import com.flyzebra.xinyi.utils.FlyLog;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -19,7 +20,6 @@ import org.json.JSONObject;
  * Created by FlyZebra on 2016/3/21.
  */
 public class QQLogin implements ILogin {
-    private static final String TAG = "com.flyzebra";
     private static Tencent mTencent;
     private String QQ_APP_ID = "1105211644";
     private Context context;
@@ -35,7 +35,7 @@ public class QQLogin implements ILogin {
 
         @Override
         public void onComplete(final Object response) {
-            Log.i(TAG, "loginIUlistener" + response.toString());
+            FlyLog.i("loginIUlistener" + response.toString());
             //获取QQ昵称
             final JSONObject json = (JSONObject) response;
             String name = null;
@@ -91,7 +91,7 @@ public class QQLogin implements ILogin {
                 e.printStackTrace();
             }
 //            mTencent.logout(context);
-            Log.i(TAG, "loginIUlistener" + jsonResponse.toString());
+            FlyLog.i("loginIUlistener" + jsonResponse.toString());
             getUserInfo();
         }
 
@@ -147,11 +147,9 @@ public class QQLogin implements ILogin {
     }
 
     private void getUserInfo() {
-        Log.i(TAG, "getUserInfo()");
         if (mTencent != null && mTencent.isSessionValid()) {
             QQUserInfo = new com.tencent.connect.UserInfo(context, mTencent.getQQToken());
             QQUserInfo.getUserInfo(userInfoListener);
-            Log.i(TAG, "QQUserInfo.getUserInfo(userInfoListener);");
         }
     }
 

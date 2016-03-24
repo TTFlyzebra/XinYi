@@ -1,8 +1,4 @@
-package com.flyzebra.xinyi.universal;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+package com.flyzebra.xinyi.fly;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,6 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TvIvAdapter extends BaseAdapter{
     public static final String TAG = "com.flyzebra" ;
@@ -49,20 +49,6 @@ public class TvIvAdapter extends BaseAdapter{
         this.mItemClick = mItemClick;
         this.mSetImageView=setImageView;
     }
-
-    public interface ItemClick {
-        public void mItemClick(View v);
-    }
-
-    public interface SetImageView {
-        public void setImageView(String url,ImageView iv);
-    }
-
-    private class ViewHolder {
-        public List<TextView> tv_list = new ArrayList<TextView>();
-        public List<ImageView> iv_list = new ArrayList<ImageView>();
-    }
-
 
     @Override
     public int getCount() {
@@ -116,6 +102,19 @@ public class TvIvAdapter extends BaseAdapter{
             }
         }
         return convertView;
+    }
+
+    public interface ItemClick {
+        void mItemClick(View v);
+    }
+
+    public interface SetImageView {
+        void setImageView(String url, ImageView iv);
+    }
+
+    private class ViewHolder {
+        public List<TextView> tv_list = new ArrayList<TextView>();
+        public List<ImageView> iv_list = new ArrayList<ImageView>();
     }
 
 }

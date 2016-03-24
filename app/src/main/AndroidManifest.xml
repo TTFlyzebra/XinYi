@@ -68,10 +68,6 @@
             android:name=".ui.MoreActivity"
             android:label="@string/more"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.BuyActivity"
-            android:label="@string/buy"
-            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.IHttpUpdata;
-import com.flyzebra.xinyi.model.HttpUpdata;
+import com.flyzebra.xinyi.model.Http;
+import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class HomeVPAdapter extends PagerAdapter {
     private List<Map<String, Object>> list;
     private Context context;
     private CountItemForViewPager countItemForViewPager;
-    private IHttpUpdata mHttpUpdata = HttpUpdata.getInstance();
+    private IHttp mHttpUpdata = Http.getInstance();
 
     public HomeVPAdapter(Context context, List<Map<String, Object>> list, CountItemForViewPager countItemForViewPager) {
         this.context = context;

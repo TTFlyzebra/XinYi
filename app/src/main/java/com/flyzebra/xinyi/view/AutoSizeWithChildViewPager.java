@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * 自定义控件，根据了了控件的宽度，按比例缩放自身的高度 *
+ * 自定义控件，根据子控件的宽度，按比例缩放自身的高度 *
  * 如用于ViewPager图片轮播，请保持所有的图像尺寸大小一致
  * Created by FlyZebra on 2016/3/1.
  */
@@ -35,9 +35,11 @@ public class AutoSizeWithChildViewPager extends ViewPager{
                 c_width = w;
             int h = child.getMeasuredHeight();
             if (h > c_height) //采用最大的view的高度。
+            {
                 c_height = h;
+            }
         }
-//        Log.i(TAG, "AutoImageViewViewPager->onMeasure->p_width=" + p_width + ",p_height=" + p_height + ",c_width=" + c_width + ",c_height=" + c_height);
+        //根据宽度来设置高度
         if(p_width!=0&&c_width!=0){
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(c_height*p_width/c_width,MeasureSpec.EXACTLY);
         }

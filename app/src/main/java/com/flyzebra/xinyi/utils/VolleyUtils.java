@@ -3,7 +3,6 @@ package com.flyzebra.xinyi.utils;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -26,7 +25,6 @@ import java.util.Map;
  * Created by FlyZebra on 2016/3/20.
  */
 public class VolleyUtils {
-    private static final String TAG = "com.flyzebra";
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
     private static Handler mHandler = new Handler(Looper.getMainLooper());
@@ -52,20 +50,15 @@ public class VolleyUtils {
                     JsonUtils.getlistfromjsonobject(list, jsonObject, jsonKey);
                 }
                 adapter.notifyDataSetChanged();
-                Log.i(TAG, "VolleyUtils--->upListView");
+                FlyLog.i("VolleyUtils--->upListView");
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.i(TAG, "upListView--->onErrorResponse-->" + volleyError);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (url != null && list != null && jsonKey != null && adapter != null) {
-                            upListView(url, list, jsonKey, adapter);
-                        }
-                    }
-                }, 5000);
+                FlyLog.i("upListView--->onErrorResponse-->list" + list.size());
+                if (url != null && list != null && jsonKey != null && adapter != null) {
+                    upListView(url, list, jsonKey, adapter);
+                }
             }
         });
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
@@ -79,7 +72,7 @@ public class VolleyUtils {
     }
 
     public static void cancelAll(Object url) {
-        Log.i(TAG, "VolleyUtils-->cancelAll(Object url)");
+        FlyLog.i("VolleyUtils-->cancelAll()-->" + url);
         mRequestQueue.cancelAll(url);
     }
 }

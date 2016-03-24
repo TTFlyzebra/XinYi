@@ -7,9 +7,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.HttpUpdata;
-import com.flyzebra.xinyi.model.IHttpUpdata;
-import com.flyzebra.xinyi.universal.TvIvAdapter;
+import com.flyzebra.xinyi.fly.TvIvAdapter;
+import com.flyzebra.xinyi.model.Http;
+import com.flyzebra.xinyi.model.IHttp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 
 public class BuyActivity extends BaseActivity{
-    private IHttpUpdata iHttpUpdata = HttpUpdata.getInstance();
+    private IHttp iHttpUpdata = Http.getInstance();
     private List<Map<String,Object>> list;
     private ListView listView;
     private TvIvAdapter adapter;
