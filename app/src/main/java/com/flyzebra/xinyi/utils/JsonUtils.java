@@ -1,34 +1,29 @@
 package com.flyzebra.xinyi.utils;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class JsonUtils {
 	
 	public static String MapToJsonString(Map<?, ?> map) throws JSONException{
 		JSONObject jsonObject = new JSONObject(map);
-//		JSONArray jsonArray = new JSONArray(map);
-//		Iterator<?> keys = map.keySet().iterator();
-//		while (keys.hasNext()) {
-//			String k = (String) keys.next();
-//			Object value = map.get(k);
-//			jsonObject.put(k,value);
-//		}
-//		jsonObject= jsonArray.toJSONObject(jsonArray);
-//		jsonObject.put(jsonkey, jsonObject.toString());
 		return jsonObject.toString();
 	}
-	
-	public static void getlistfromjsonobject(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey){
+
+	public static void getList(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey) {
 		try {
-			JSONArray jsonArray = jsonObject.getJSONArray(jsonKey);
+			JSONArray jsonArray = null;
+			if (jsonKey == null) {
+				jsonArray = new JSONArray(jsonObject);
+			} else {
+				jsonArray = jsonObject.getJSONArray(jsonKey);
+			}
 			for(int i= 0;i<jsonArray.length();i++){
 				JSONObject jsonObject2 = jsonArray.getJSONObject(i);
 				Map<String,Object> map = new HashMap<String,Object>();
@@ -44,44 +39,32 @@ public class JsonUtils {
 				list.add(map);
 			}
 		} catch (JSONException e) {
+			FlyLog.i("JsonUtils->getList-->JSONException:" + e.toString());
 			e.printStackTrace();
 		}
 	}
-	
-//	public static Map<String, Object> getMap(String key, String jsonList) {
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		try {
-//			JSONObject jsonObject = new JSONObject(jsonList).getJSONObject(key);
-//			Iterator<String> iterator = jsonObject.keys();
-//			while (iterator.hasNext()) {
-//				String json_key = iterator.next();
-//				Integer json_value = jsonObject.getInt(json_key);
-//				if (json_value == null) {
-//					json_value = 0;
-//				}
-//				map.put(json_key, json_value);
-//			}
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//		return map;
-//	}
 
-	public static Map<String, Integer> getMap(String jsonBuymap) {
-		Map<String, Integer> map = null;
+	public static Map<String, Object> getMap(String jsonList, String jsonKey) {
+		Map<String, Object> map = null;
 		try {
-			JSONObject jsonObject = new JSONObject(jsonBuymap);
+			JSONObject jsonObject = null;
+			if (jsonKey == null) {
+				jsonObject = new JSONObject(jsonList);
+			} else {
+				jsonObject = new JSONObject(jsonList).getJSONObject(jsonKey);
+			}
 			Iterator<String> iterator = jsonObject.keys();
-			map = new HashMap<String, Integer>();
-			while(iterator.hasNext()){
+			map = new HashMap<String, Object>();
+			while (iterator.hasNext()) {
 				String json_key = iterator.next();
-				Object json_value = jsonObject.get(json_key);
-				if(json_value==null){
-					json_value="";
+				Object json_value = jsonObject.getInt(json_key);
+				if (json_value == null) {
+					json_value = "";
 				}
-				map.put(json_key, (Integer) json_value);
+				map.put(json_key, json_value);
 			}
 		} catch (JSONException e) {
+			FlyLog.i("JsonUtils->getMap-->JSONException:" + e.toString());
 			e.printStackTrace();
 		}
 		return map;

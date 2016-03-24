@@ -18,7 +18,6 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.fly.TvIvAdapter;
 import com.flyzebra.xinyi.model.Http;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.HttpUtils;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
@@ -34,11 +33,11 @@ import java.util.Map;
  * Created by FlyZebra on 2016/2/29.
  */
 public class HomeFragment extends Fragment {
-    private static final String TAG ="com.flyzebra" ;
     public static int current_viewpager = 0;//需要在HomeViewPagerAdapter中使用所在定义成静态
     //ViewPager自动轮播
     private final int delayMillis = 5000;
     private IHttp iHttp = Http.getInstance();
+    private String HTTPTAG = "Fragment" + Math.random();
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;
@@ -139,7 +138,7 @@ public class HomeFragment extends Fragment {
         });
         listview.setAdapter(homeListViewAdapter);
         listview_list.clear();
-        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter);
+        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter, HTTPTAG);
         //设置没有数据时ListView的显示
         list_empty = (LinearLayout) view.findViewById(R.id.empty_view);
         listview.setEmptyView(list_empty);
@@ -156,21 +155,20 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onStart() {
-        super.onStart();
         //开启ViewPager轮播
         playsHander.postDelayed(playsTask, delayMillis);
+        super.onStart();
     }
 
     @Override
     public void onStop() {
-        iHttp.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
-        FlyLog.i("listview_list = " + listview_list.size());
-        super.onStop();
         playsHander.removeCallbacks(playsTask);
+        super.onStop();
     }
 
     @Override
     public void onDestroy() {
+        iHttp.cancelAll(HTTPTAG);
         super.onDestroy();
     }
 

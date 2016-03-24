@@ -13,7 +13,6 @@ import java.util.Map;
  * Created by Administrator on 2016/3/20.
  */
 public class Http implements IHttp {
-    //---单例模式---->
     private Http() {
     }
 
@@ -22,11 +21,14 @@ public class Http implements IHttp {
     }
 
     @Override
-    public void upListView(final String url, final List<Map<String, Object>> list, final String jsonKey, final BaseAdapter adapter) {
-        VolleyUtils.upListView(url, list, jsonKey, adapter);
+    public void upListView(final String url, final List<Map<String, Object>> list, final String jsonKey, final BaseAdapter adapter, Object tag) {
+        VolleyUtils.upListView(url, list, jsonKey, adapter, tag);
     }
 
-    //<---单例模式-----
+    @Override
+    public void upListView(String url, Result result) {
+        VolleyUtils.upListView(url, result);
+    }
 
     @Override
     public void upImageView(Context context, String url, ImageView iv) {

@@ -1,7 +1,6 @@
 package com.flyzebra.xinyi.fly;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.flyzebra.xinyi.utils.FlyLog;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class TvIvAdapter extends BaseAdapter{
-    public static final String TAG = "com.flyzebra" ;
     private List<Map<String, Object>> list;
     private int idListview;
     private int tvid[];
@@ -98,7 +98,7 @@ public class TvIvAdapter extends BaseAdapter{
             }
             if(mSetImageView!=null){
                 mSetImageView.setImageView((String) list.get(position).get(ivkey[i]), holder.iv_list.get(i));
-                Log.i(TAG, "upImageView name=" + list.get(position).get(tvkey[i]) + "url=" + list.get(position).get(ivkey[i]) + "-----iv=" + holder.iv_list.get(i)+"--"+holder.iv_list.size());
+                FlyLog.i("upImageView name=" + list.get(position).get(tvkey[i]) + "url=" + list.get(position).get(ivkey[i]) + "-----iv=" + holder.iv_list.get(i) + "--" + holder.iv_list.size());
             }
         }
         return convertView;

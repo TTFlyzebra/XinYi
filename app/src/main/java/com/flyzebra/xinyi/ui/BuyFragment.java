@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.fly.TvIvAdapter;
+import com.flyzebra.xinyi.model.Http;
+import com.flyzebra.xinyi.model.IHttp;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -24,16 +25,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2016/3/22.
+ * Created by FlyZebra on 2016/3/22.
  */
 public class BuyFragment extends Fragment {
-    private static final String TAG = "com.flyzebra";
-
+    private String HTTPTAG = "BuyFragment" + Math.random();
     private MainActitity activity;
     private List<Map<String, Object>> list;
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
-
+    private IHttp iHttp = Http.getInstance();
 
     public BuyFragment() {
     }
@@ -71,13 +71,11 @@ public class BuyFragment extends Fragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 new GetDataTask().execute();
-                Log.i(TAG, "onPullDownToRefresh");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 new GetDataTask().execute();
-                Log.i(TAG, "onPullUpToRefresh");
             }
         });
 
@@ -103,7 +101,7 @@ public class BuyFragment extends Fragment {
                 null, new TvIvAdapter.SetImageView() {
             @Override
             public void setImageView(String url, ImageView iv) {
-                activity.iHttp.upImageView(activity, "http://192.168.1.88/ordermeal" + url, iv);
+                iHttp.upImageView(activity, "http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listView.setAdapter(adapter);
@@ -120,14 +118,13 @@ public class BuyFragment extends Fragment {
                 animationDrawable.start();
             }
         });
-
-        activity.iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter);
+        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter, HTTPTAG);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        activity.iHttp.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
+    public void onDestroy() {
+        iHttp.cancelAll(HTTPTAG);
+        super.onDestroy();
     }
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {

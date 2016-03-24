@@ -137,7 +137,7 @@ public class HomeView extends Fragment {
             }
         });
         listview.setAdapter(homeListViewAdapter);
-        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter);
+        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter, "HomeView");
 
         //设置没有数据时ListView的显示
         list_empty = (LinearLayout) view.findViewById(R.id.empty_view);
@@ -168,6 +168,7 @@ public class HomeView extends Fragment {
 
     @Override
     public void onDestroy() {
+        iHttp.cancelAll("HomeView");
         super.onDestroy();
     }
 

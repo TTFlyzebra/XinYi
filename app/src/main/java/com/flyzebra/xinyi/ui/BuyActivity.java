@@ -19,11 +19,12 @@ import java.util.Map;
  * Created by FlyZebra on 2016/3/22.
  */
 
-public class BuyActivity extends BaseActivity{
-    private IHttp iHttpUpdata = Http.getInstance();
-    private List<Map<String,Object>> list;
+public class BuyActivity extends BaseActivity {
+    private IHttp iHttp = Http.getInstance();
+    private List<Map<String, Object>> list;
     private ListView listView;
     private TvIvAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +38,9 @@ public class BuyActivity extends BaseActivity{
         RelativeLayout view = (RelativeLayout) lf.inflate(R.layout.buy_fragment, null);
         root.addView(view);
         listView = (ListView) findViewById(R.id.buy_lv_01);
-        if(list==null){
-            list = new ArrayList<Map<String,Object>>();
-        }else{
+        if (list == null) {
+            list = new ArrayList<Map<String, Object>>();
+        } else {
             list.clear();
         }
         adapter = new TvIvAdapter(this, list, R.layout.home_listview,
@@ -50,17 +51,16 @@ public class BuyActivity extends BaseActivity{
                 null, new TvIvAdapter.SetImageView() {
             @Override
             public void setImageView(String url, ImageView iv) {
-                iHttpUpdata.upImageView(BuyActivity.this,"http://192.168.1.88/ordermeal" + url, iv);
+                iHttp.upImageView(BuyActivity.this, "http://192.168.1.88/ordermeal" + url, iv);
             }
         });
         listView.setAdapter(adapter);
-        iHttpUpdata.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter);
+        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter, "BuyActivity");
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        iHttpUpdata.cancelAll("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo");
+    protected void onDestroy() {
+        iHttp.cancelAll("BuyActivity");
+        super.onDestroy();
     }
-
 }
