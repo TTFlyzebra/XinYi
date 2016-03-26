@@ -12,10 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.fly.IChildView;
 import com.flyzebra.xinyi.model.Http;
 import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.utils.HttpUtils;
+import com.flyzebra.xinyi.view.IChildView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 

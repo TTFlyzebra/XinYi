@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.fly;
+package com.flyzebra.xinyi.view;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import com.flyzebra.xinyi.fly.FlyLog;
 
 import java.util.ArrayList;
 import java.util.List;

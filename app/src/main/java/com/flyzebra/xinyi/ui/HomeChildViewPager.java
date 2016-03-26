@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.fly.ChildView;
 import com.flyzebra.xinyi.fly.FlyLog;
 import com.flyzebra.xinyi.utils.HttpUtils;
 import com.flyzebra.xinyi.utils.ResourceUtils;
 import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
+import com.flyzebra.xinyi.view.ChildView;
 import com.flyzebra.xinyi.view.CountItemForViewPager;
 
 import java.util.List;

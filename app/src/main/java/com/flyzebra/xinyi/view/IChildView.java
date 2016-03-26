@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.fly;
+package com.flyzebra.xinyi.view;
 
 import java.util.List;
 import java.util.Map;
