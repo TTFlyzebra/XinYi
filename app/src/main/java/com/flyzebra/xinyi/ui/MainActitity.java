@@ -2,11 +2,9 @@ package com.flyzebra.xinyi.ui;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,10 +16,11 @@ import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
+import com.flyzebra.xinyi.fly.FlyLog;
 import com.flyzebra.xinyi.model.Http;
 import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
-import com.flyzebra.xinyi.utils.FlyLog;
+import com.flyzebra.xinyi.utils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +54,8 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        textColer_Off = ContextCompat.getColorStateList(this, R.color.color_select);
-        textColor_On = ContextCompat.getColor(this, R.color.menu_select_on);
+        textColer_Off = ResourceUtils.getColorStateList(this, R.color.color_select);
+        textColor_On = ResourceUtils.getColor(this, R.color.menu_select_on);
         initView();
         //获取用户信息
         Intent intent = getIntent();
@@ -66,7 +65,7 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
 
         //DrawerLayout
         DrawerLayoutUtils.setDrawerLeftEdgeSize(this, mDrawerLayout, 0.1f);
-        mDrawerLayout.setScrimColor(Color.TRANSPARENT);
+        mDrawerLayout.setScrimColor(ResourceUtils.getColor(this, R.color.drawerscrimColor));
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolBar, R.string.abc_action_bar_home_description, R.string.abc_action_bar_home_description_format);
         mDrawerToggle.syncState();

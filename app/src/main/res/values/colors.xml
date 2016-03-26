@@ -13,4 +13,6 @@
     <color name="back04">#000</color>
     <color name="left_menu_text">#fff</color>
     <color name="toolbar01">#EEFFFF</color>
+    <color name="usericon">#EE8800</color>
+    <color name="drawerscrimColor">#99000000</color>
 </resources>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/drawer_bk2"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -14,12 +14,15 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
-        <ImageView
+        <com.flyzebra.xinyi.view.CircleImageView
             android:id="@+id/left_drawer_iv_01"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
-            android:src="@drawable/qqico01" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/qqico01"
+            custom:borderColor="@color/usericon"
+            custom:borderWidth="2dp" />
 
         <TextView
             android:id="@+id/left_drawer_tv_01"
@@ -28,7 +31,7 @@
             android:layout_weight="2"
             android:gravity="left|center"
             android:text="@string/test"
-            android:textColor="@color/back04"
+            android:textColor="@color/left_menu_text"
             android:textSize="18sp" />
 
     </LinearLayout>

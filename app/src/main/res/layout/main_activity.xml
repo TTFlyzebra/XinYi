@@ -3,7 +3,7 @@
     android:id="@+id/main_dl_01"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/drawer_bk2">
+    android:background="@drawable/drawer_bk1">
 
     <RelativeLayout
         android:layout_width="match_parent"

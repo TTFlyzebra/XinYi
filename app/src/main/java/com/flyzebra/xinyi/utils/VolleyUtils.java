@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.fly.FlyLog;
 import com.flyzebra.xinyi.model.IHttp;
 
 import org.json.JSONObject;
@@ -32,11 +33,11 @@ public class VolleyUtils {
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
     private static Handler mHandler = new Handler(Looper.getMainLooper());
-    private static long RETRY_TIME = 5000;
+    private static long RETRY_TIME = 2500;
 
     public static RequestQueue Init(Context context, int maxDiskCacheBytes) {
         mRequestQueue = Volley.newRequestQueue(context, maxDiskCacheBytes);
-        mImageLoader = new ImageLoader(mRequestQueue, new VolleyBitmapCache());
+        mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
         return mRequestQueue;
     }
 
@@ -46,10 +47,16 @@ public class VolleyUtils {
         iv.setImageUrl(url, mImageLoader);
     }
 
+    public static void upImageView(String url, ImageView iv) {
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, R.drawable.image, R.drawable.image);
+        FlyLog.i("<VolleyUtils>url=" + url + "[ImageView:" + iv + "]");
+        mImageLoader.get(url, listener);
+    }
+
     public static void upListView(final String url, final List<Map<String, Object>> list, final String jsonKey, final BaseAdapter adapter, final Object tag) {
         //判断任务是否已取消
         set_upListView.add(tag);
-        FlyLog.i("url=" + url + ",list=" + list + ",jsonKey=" + jsonKey + ",adapter=" + adapter);
+        FlyLog.i("<VolleyUtils>upListView:url=" + url + "[list=" + list + ",jsonKey=" + jsonKey + ",adapter=" + adapter + "]");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -58,12 +65,12 @@ public class VolleyUtils {
                     JsonUtils.getList(list, jsonObject, jsonKey);
                 }
                 adapter.notifyDataSetChanged();
-                FlyLog.i("VolleyUtils--->upListView--->onResponse-->TAG" + tag);
+                FlyLog.i("<VolleyUtils>upListView->onResponse:tag=" + tag);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                FlyLog.i("VolleyUtils--->upListView--->onErrorResponse-->TAG" + tag);
+                FlyLog.i("<VolleyUtils>upListView->onErrorResponse:tag=" + tag);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -71,7 +78,7 @@ public class VolleyUtils {
                             upListView(url, list, jsonKey, adapter, tag);
                         }
                     }
-                }, 1000);
+                }, RETRY_TIME);
             }
         });
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
@@ -94,16 +101,10 @@ public class VolleyUtils {
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
         jsonObjectRequest.setTag(url);
         mRequestQueue.add(jsonObjectRequest);
-
-    }
-
-    public static void upImageView(String url, ImageView iv) {
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, R.drawable.image, R.drawable.image);
-        mImageLoader.get(url, listener);
     }
 
     public static void cancelAll(Object tag) {
-        FlyLog.i("VolleyUtils-->cancelAll()-->" + tag);
+        FlyLog.i("<VolleyUtils>cancelAll:tag=" + tag);
         set_upListView.remove(tag);
         mRequestQueue.cancelAll(tag);
     }

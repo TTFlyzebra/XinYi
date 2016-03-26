@@ -44,7 +44,7 @@ public class HomeView extends Fragment {
     private List<Map<String, Object>> listview_list;
     //控件定义
     private AutoSizeWithChildViewPager viewPager;
-    private HomeVPAdapter mViewPagerAdapter;
+    private ViewPagerAdapter mViewPagerAdapter;
     private CountItemForViewPager countItemForViewPager;
     private GridViewForScrollView gridview;
     private TvIvAdapter homeGridViewAdapter;
@@ -99,7 +99,7 @@ public class HomeView extends Fragment {
         countItemForViewPager = (CountItemForViewPager) view.findViewById(R.id.home_civp);
         countItemForViewPager.setSumItem(viewPager_list.size());
 
-        mViewPagerAdapter = new HomeVPAdapter(activity, viewPager_list, countItemForViewPager);
+        mViewPagerAdapter = new ViewPagerAdapter(activity, viewPager_list, countItemForViewPager);
         viewPager.setAdapter(mViewPagerAdapter);
 
         //--GirdView处理部分

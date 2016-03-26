@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-//import android.util.Log;
 import android.view.View;
+
 
 /**
  * ViewPager轮播用的导航条用来指示ViewPager当前显示的页面ViewPager
@@ -64,11 +64,11 @@ public class CountItemForViewPager extends View {
         float c_size = height/2.0f;
         float x = c_size+(width-height*(sumItem*2-1))/2;
         float y = height/2.0f;
-        for(int i=1;i<=sumItem;i++){
+        for (int i = 0; i < sumItem; i++) {
             if(i==currentItem){
-                canvas.drawCircle(x+(i-1)*height*2, y, c_size-3, select_paint);
+                canvas.drawCircle(x + i * height * 2, y, c_size - 3, select_paint);
             }else{
-                canvas.drawCircle(x+(i-1)*height*2, y, c_size-3, un_select_paint);
+                canvas.drawCircle(x + i * height * 2, y, c_size - 3, un_select_paint);
             }
         }
 

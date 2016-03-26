@@ -8,15 +8,15 @@ import com.android.volley.toolbox.ImageLoader;
 /**
  * Created by FlyZebra on 2016/3/2.
  */
-public class VolleyBitmapCache implements ImageLoader.ImageCache{
-    private LruCache<String, Bitmap> mCache;
+public class BitmapCache implements ImageLoader.ImageCache {
     private static final int maxSize = 10*1024*1024;
+    private LruCache<String, Bitmap> mCache;
 
-    public VolleyBitmapCache(){
+    public BitmapCache() {
         this(maxSize);
     }
 
-    public VolleyBitmapCache(int maxSize) {
+    public BitmapCache(int maxSize) {
         mCache = new LruCache<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {

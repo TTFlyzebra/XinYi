@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.flyzebra.xinyi.utils.FlyLog;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +96,6 @@ public class TvIvAdapter extends BaseAdapter{
             }
             if(mSetImageView!=null){
                 mSetImageView.setImageView((String) list.get(position).get(ivkey[i]), holder.iv_list.get(i));
-                FlyLog.i("upImageView name=" + list.get(position).get(tvkey[i]) + "url=" + list.get(position).get(ivkey[i]) + "-----iv=" + holder.iv_list.get(i) + "--" + holder.iv_list.size());
             }
         }
         return convertView;

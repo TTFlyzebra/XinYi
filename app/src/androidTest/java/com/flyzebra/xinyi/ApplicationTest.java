@@ -5,7 +5,7 @@ import android.test.ApplicationTestCase;
 import android.util.Log;
 
 import com.flyzebra.xinyi.data.User;
-import com.flyzebra.xinyi.utils.FlyLog;
+import com.flyzebra.xinyi.fly.FlyLog;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
