@@ -16,10 +16,10 @@ import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
-import com.flyzebra.xinyi.fly.FlyLog;
-import com.flyzebra.xinyi.model.Http;
 import com.flyzebra.xinyi.model.IHttp;
+import com.flyzebra.xinyi.model.MyHttp;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
+import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResourceUtils;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
  * Created by FlyZebra on 2016/3/17.
  */
 public class MainActitity extends AppCompatActivity implements View.OnClickListener {
-    public IHttp iHttp = Http.getInstance();
+    public IHttp iHttp = MyHttp.getInstance();
     public UserInfo userInfo;
 
     public Toolbar toolBar;
@@ -44,7 +44,7 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
     private ColorStateList textColer_Off;
     private int textColor_On;
 
-    private String[] fragmentName = {"HomeFragment", "BuyFragment", "BuyFragment", "BuyFragment", "BuyFragment"};
+    private String[] fragmentName = {"HomeFragment", "PoiFragment", "BuyFragment", "HomeFragment", "BuyFragment"};
 
     private List<ImageView> iv_list = new ArrayList<>();
     private List<TextView> tv_list = new ArrayList<>();

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.flyzebra.xinyi.data.UserInfo;
-import com.flyzebra.xinyi.fly.FlyLog;
+import com.flyzebra.xinyi.utils.FlyLog;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -19,7 +19,7 @@ import org.json.JSONObject;
 /**
  * Created by FlyZebra on 2016/3/21.
  */
-public class QQLogin implements ILogin {
+public class MyLoginQQ implements ILogin {
     private static Tencent mTencent;
     private String QQ_APP_ID = "1105211644";
     private Context context;
@@ -106,7 +106,7 @@ public class QQLogin implements ILogin {
         }
     };
 
-    public QQLogin(Context context, loginResult mLoginResult) {
+    public MyLoginQQ(Context context, loginResult mLoginResult) {
         this.context = context;
         this.mLoginResult = mLoginResult;
         if (mTencent == null) {

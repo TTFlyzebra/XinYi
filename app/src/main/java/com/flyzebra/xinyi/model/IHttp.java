@@ -1,6 +1,7 @@
 package com.flyzebra.xinyi.model;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -19,6 +20,8 @@ public interface IHttp {
      * @param tag     用来执行取消网络请求
      */
     void upListView(String url, List<Map<String, Object>> list, String jsonKey, BaseAdapter adapter, Object tag);
+
+    void upListView(String url, List<Map<String, Object>> list, String jsonKey, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter, Object tag);
 
     void upListView(String url, Result result);
 

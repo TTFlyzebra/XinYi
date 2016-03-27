@@ -19,5 +19,5 @@ public interface IChildView {
 
     void setData(List<Map<String, Object>> list);
 
-    void addData(List<Map<String, Object>> list);
+    List<Map<String, Object>> addData(List<Map<String, Object>> list);
 }

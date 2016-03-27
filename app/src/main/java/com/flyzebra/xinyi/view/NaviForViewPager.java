@@ -12,7 +12,7 @@ import android.view.View;
  * ViewPager轮播用的导航条用来指示ViewPager当前显示的页面ViewPager
  * Created by FlyZebra on 2016/3/1.
  */
-public class CountItemForViewPager extends View {
+public class NaviForViewPager extends View {
 //    private final String TAG = "com.flyzebra";
     private Paint select_paint;
     private Paint un_select_paint;
@@ -23,15 +23,15 @@ public class CountItemForViewPager extends View {
     //当前页
     private int currentItem = 5;
 
-    public CountItemForViewPager(Context context) {
+    public NaviForViewPager(Context context) {
         super(context);
     }
 
-    public CountItemForViewPager(Context context, AttributeSet attrs) {
+    public NaviForViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CountItemForViewPager(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NaviForViewPager(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -48,6 +48,11 @@ public class CountItemForViewPager extends View {
     }
 
     public void setSumItem(int sumItem) {
+        if (sumItem > 0) {
+            setVisibility(VISIBLE);
+        } else {
+            setVisibility(GONE);
+        }
         this.sumItem = sumItem;
         postInvalidate();
     }

@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.fly;
+package com.flyzebra.xinyi.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;

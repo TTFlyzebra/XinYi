@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.ILogin;
-import com.flyzebra.xinyi.model.QQLogin;
+import com.flyzebra.xinyi.model.MyLoginQQ;
 import com.tencent.connect.common.Constants;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //QQ方式登陆
             case R.id.lg_iv_qq:
                 if (mQQLogin == null) {
-                    mQQLogin = new QQLogin(this, new QQLogin.loginResult() {
+                    mQQLogin = new MyLoginQQ(this, new MyLoginQQ.loginResult() {
                         @Override
                         public void loginSuccees(UserInfo userInfo) {
                             StartMainActivity(userInfo);

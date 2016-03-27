@@ -4,14 +4,20 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
+import com.flyzebra.xinyi.data.ListMapTest;
 import com.flyzebra.xinyi.data.User;
-import com.flyzebra.xinyi.fly.FlyLog;
+import com.flyzebra.xinyi.model.TestHttp;
+import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,6 +36,35 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
 
     public void testName() throws Exception {
+        ListMapTest listMapTest = new ListMapTest();
+        List<Map<String, Object>> parentlist = new ArrayList<>();
+        List<Map<String, Object>> childList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("LIST", TestHttp.getViewPagerList2());
+            parentlist.add(map);
+        }
+        childList = (List<Map<String, Object>>) parentlist.get(0).get("LIST");
+        FlyLog.i("parentlist.get(0).get(LIST))=childList:" + (parentlist.get(0).get("LIST")).equals(childList));
+        Map<String, Object> m1 = new HashMap<>();
+        m1.put("CHILDMAP", 1);
+        childList.add(m1);
+        FlyLog.i("parentlist.get(1).get(LIST))=childList:" + (parentlist.get(1).get("LIST")).equals(childList));
+        for (int i = 0; i < 5; i++) {
+            FlyLog.i(i + "-paretlist.list" + (parentlist.get(i).get("LIST")).toString() + "------childList=" + childList.toString());
+        }
+        Map<String, Object> m2 = new HashMap<>();
+        m2.put("CHILDMAP", 200);
+        childList.add(m2);
+        for (int i = 0; i < 5; i++) {
+            FlyLog.i(i + "-paretlist.list" + (parentlist.get(i).get("LIST")).toString() + "-----childList=" + childList.toString());
+        }
+        Map<String, Object> m3 = new HashMap<>();
+        m3.put("CHILDMAP", 300);
+        ((List<Map<String, Object>>) parentlist.get(0).get("LIST")).add(m3);
+        for (int i = 0; i < 5; i++) {
+            FlyLog.i(i + "-paretlist.list" + (parentlist.get(i).get("LIST")).toString() + "-----childList=" + childList.toString());
+        }
 
     }
 
@@ -134,4 +169,5 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
             return response.body().string();
         }
     }
+
 }

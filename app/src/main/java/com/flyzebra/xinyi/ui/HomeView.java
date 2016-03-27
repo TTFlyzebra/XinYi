@@ -2,7 +2,6 @@ package com.flyzebra.xinyi.ui;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -15,12 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.fly.TvIvAdapter;
-import com.flyzebra.xinyi.model.Http;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.utils.HttpUtils;
-import com.flyzebra.xinyi.view.AutoSizeWithChildViewPager;
-import com.flyzebra.xinyi.view.CountItemForViewPager;
+import com.flyzebra.xinyi.model.MyHttp;
+import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
 import com.flyzebra.xinyi.view.ListViewForScrollView;
 
@@ -37,15 +33,12 @@ public class HomeView extends Fragment {
     public static int current_viewpager = 0;//需要在HomeViewPagerAdapter中使用所在定义成静态
     //ViewPager自动轮播
     private final int delayMillis = 5000;
-    private IHttp iHttp = Http.getInstance();
+    private IHttp iHttp = MyHttp.getInstance();
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;
     private List<Map<String, Object>> listview_list;
     //控件定义
-    private AutoSizeWithChildViewPager viewPager;
-    private ViewPagerAdapter mViewPagerAdapter;
-    private CountItemForViewPager countItemForViewPager;
     private GridViewForScrollView gridview;
     private TvIvAdapter homeGridViewAdapter;
     private TvIvAdapter homeListViewAdapter;
@@ -53,19 +46,6 @@ public class HomeView extends Fragment {
     private ListViewForScrollView listview;
     private LinearLayout list_empty;
     private ImageView list_empty_iv;
-    private Handler playsHander = new Handler();
-    private Runnable playsTask = new Runnable() {
-        @Override
-        public void run() {
-            current_viewpager++;
-            if (current_viewpager >= viewPager_list.size()) {
-                current_viewpager = 0;
-            }
-            viewPager.setCurrentItem(current_viewpager);
-            playsHander.postDelayed(playsTask, delayMillis);
-        }
-    };
-
     //Toolbar
     private Toolbar mToolbar;
     private MainActitity activity;
@@ -93,17 +73,8 @@ public class HomeView extends Fragment {
 //        activity.setSupportActionBar(mToolbar);
 //        activity.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
-        viewPager_list = HttpUtils.getViewPagerList(); //获取ViewPager显示的数据内容
-        viewPager = (AutoSizeWithChildViewPager) view.findViewById(R.id.home_viewpager);
-        //自定义ViewPager导航条
-        countItemForViewPager = (CountItemForViewPager) view.findViewById(R.id.home_civp);
-        countItemForViewPager.setSumItem(viewPager_list.size());
-
-        mViewPagerAdapter = new ViewPagerAdapter(activity, viewPager_list, countItemForViewPager);
-        viewPager.setAdapter(mViewPagerAdapter);
-
         //--GirdView处理部分
-        gridview_list = HttpUtils.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
+        gridview_list = TestHttp.getHotsellsList(); //从HTTP服务器获取GridView显示的数据内容
         gridview = (GridViewForScrollView) view.findViewById(R.id.home_gv_home);
         homeGridViewAdapter = new TvIvAdapter(activity, gridview_list, R.layout.home_gridview,
                 new int[]{R.id.tv01, R.id.tv02},
@@ -125,7 +96,7 @@ public class HomeView extends Fragment {
             listview_list.clear();
         }
         listview = (ListViewForScrollView) view.findViewById(R.id.home_lv_home);
-        homeListViewAdapter = new TvIvAdapter(activity, listview_list, R.layout.home_listview,
+        homeListViewAdapter = new TvIvAdapter(activity, listview_list, R.layout.home_listview_item,
                 new int[]{R.id.tv01, R.id.tv02},
                 new String[]{"mealname", "mealprice"},
                 new int[]{R.id.iv01},
@@ -156,14 +127,11 @@ public class HomeView extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //开启ViewPager轮播
-        playsHander.postDelayed(playsTask, delayMillis);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        playsHander.removeCallbacks(playsTask);
     }
 
     @Override

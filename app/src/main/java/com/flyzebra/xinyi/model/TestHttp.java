@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.utils;
+package com.flyzebra.xinyi.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by FlyZebra on 2016/3/1.
  */
-public class HttpUtils {
+public class TestHttp {
     public static List<Map<String,Object>> getViewPagerList(){
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
         for(int i= 1;i<=4;i++){
@@ -25,7 +25,17 @@ public class HttpUtils {
         for (int i = 4; i >= 1; i--) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("name", String.valueOf(i));
-            map.put("path", "http://192.168.1.88/ordermeal/images/aa" + i + ".jpg");
+            map.put("path", "http://192.168.1.88/ordermeal/images/welcome" + i + ".jpg");
+            list.add(map);
+        }
+        return list;
+    }
+
+    public static List<Map<String, Object>> getViewPagerList2() {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (int i = 4; i >= 1; i--) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("name", String.valueOf(i));
             list.add(map);
         }
         return list;

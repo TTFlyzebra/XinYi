@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.fly;
+package com.flyzebra.xinyi.utils;
 
 import android.util.Log;
 
@@ -8,7 +8,7 @@ import android.util.Log;
  */
 public class FlyLog {
     public static final String TAG = "com.flyzebra";
-    public static String[] filter = {"<VolleyUtils>"};
+    public static String[] filter = {"<HomeChildViewPager>p", "<VolleyUtils>"};//"<VolleyUtils>""<HomeChildViewPager>"
     public static void i(String logString) {
         for (int i = 0; i < filter.length; i++) {
             if (logString.indexOf(filter[i]) == 0) {

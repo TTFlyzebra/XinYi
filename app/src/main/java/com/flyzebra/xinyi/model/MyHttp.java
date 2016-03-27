@@ -1,6 +1,7 @@
 package com.flyzebra.xinyi.model;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -12,16 +13,21 @@ import java.util.Map;
 /**
  * Created by Administrator on 2016/3/20.
  */
-public class Http implements IHttp {
-    private Http() {
+public class MyHttp implements IHttp {
+    private MyHttp() {
     }
 
-    public static Http getInstance() {
+    public static MyHttp getInstance() {
         return HttpHolder.sInstance;
     }
 
     @Override
     public void upListView(final String url, final List<Map<String, Object>> list, final String jsonKey, final BaseAdapter adapter, Object tag) {
+        VolleyUtils.upListView(url, list, jsonKey, adapter, tag);
+    }
+
+    @Override
+    public void upListView(String url, List<Map<String, Object>> list, String jsonKey, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter, Object tag) {
         VolleyUtils.upListView(url, list, jsonKey, adapter, tag);
     }
 
@@ -44,7 +50,7 @@ public class Http implements IHttp {
     }
 
     private static class HttpHolder {
-        public static final Http sInstance = new Http();
+        public static final MyHttp sInstance = new MyHttp();
     }
 
 

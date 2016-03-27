@@ -12,15 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.Http;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.utils.HttpUtils;
+import com.flyzebra.xinyi.model.MyHttp;
+import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.view.IChildView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +29,7 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
     //ViewPager自动轮播
     private final int delayMillis = 5000;
-    private IHttp iHttp = Http.getInstance();
+    private IHttp iHttp = MyHttp.getInstance();
     private String HTTPTAG = "Fragment" + Math.random();
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private Toolbar mToolbar;
@@ -39,6 +38,7 @@ public class HomeFragment extends Fragment {
     private PullToRefreshScrollView view;
     private LinearLayout childParent;
     private IChildView childViewPager;
+    private IChildView childViewPager1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,20 +55,24 @@ public class HomeFragment extends Fragment {
         view.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                childViewPager.addData(HttpUtils.getViewPagerList());
+                childViewPager.addData(TestHttp.getViewPagerList());
+                childViewPager1.addData(TestHttp.getViewPagerList());
                 view.onRefreshComplete();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-                childViewPager.setData(list);
+                childViewPager.setData(new ArrayList<Map<String, Object>>());
+                childViewPager1.setData(new ArrayList<Map<String, Object>>());
                 view.onRefreshComplete();
             }
         });
         childParent = (LinearLayout) view.findViewById(R.id.home_root);
         //添加子窗口View
-        childViewPager = new HomeChildViewPager(activity, childParent);
+        childViewPager = new ViewPagerChildView(activity);
+        childViewPager.setData(TestHttp.getViewPagerList());
+        childViewPager1 = (IChildView) view.findViewById(R.id.viewpager);
+        childViewPager1.setData(TestHttp.getViewPagerList());
         return view;
     }
 

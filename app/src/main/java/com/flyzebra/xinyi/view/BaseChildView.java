@@ -6,41 +6,47 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-import com.flyzebra.xinyi.fly.FlyLog;
+import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 自定义子控件基类
  * Created by FlyZebra on 2016/3/25.
  */
-public class ChildView extends FrameLayout implements IChildView {
+public class BaseChildView extends LinearLayout implements IChildView {
     protected Context context;
     protected List<Map<String, Object>> list;
+    protected int ResId = R.layout.play_viewpager_autoheight;
 
-    public ChildView(Context context) {
-        this(context, (AttributeSet) null);
+    public BaseChildView(Context context) {
+        this(context, null);
     }
 
-    public ChildView(Context context, AttributeSet attrs) {
+    public BaseChildView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ChildView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BaseChildView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
-    public ChildView(Context context, ViewGroup parent) {
+    public BaseChildView(Context context, ViewGroup parent, @LayoutRes int ResId) {
         super(context);
-        parent.addView(this);
+        if (parent != null) {
+            parent.addView(this);
+        }
+        this.ResId = ResId;
         init(context);
     }
 
-    public View setContentView(Context context, @LayoutRes int ResId) {
+    public View setContentView(@LayoutRes int ResId) {
         View view = LayoutInflater.from(context).inflate(ResId, null);
         this.addView(view);
         return view;
@@ -48,12 +54,7 @@ public class ChildView extends FrameLayout implements IChildView {
 
     private void init(Context context) {
         this.context = context;
-        SetLayoutParams();
         onCreate();
-    }
-
-    public void SetLayoutParams() {
-
     }
 
     @Override
@@ -73,7 +74,12 @@ public class ChildView extends FrameLayout implements IChildView {
 
     @Override
     public void onDestory() {
-
+        this.removeAllViews();
+        if (list != null) {
+            list.clear();
+            list = null;
+        }
+        FlyLog.i("<BaseChildView>onDestory");
     }
 
     @Override
@@ -84,26 +90,23 @@ public class ChildView extends FrameLayout implements IChildView {
     @Override
     public void setData(List<Map<String, Object>> data) {
         if (data == null) {
-            FlyLog.i("<ChildView>setData:data is null");
+            FlyLog.i("<BaseChildView>setData:data is null");
             return;
         }
-        if (list == null) {
-            list = new ArrayList<>();
-        }
-        list.clear();
-        list.addAll(data);
+        this.list = data;
     }
 
     @Override
-    public void addData(List<Map<String, Object>> data) {
+    public List<Map<String, Object>> addData(List<Map<String, Object>> data) {
         if (data == null) {
             FlyLog.i("<ChildView>setData:data is null");
-            return;
+            return null;
         }
         if (list == null) {
             list = new ArrayList<>();
         }
         list.addAll(data);
+        return list;
     }
 
     @Override

@@ -15,7 +15,7 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
 
 /**
- * Created by Administrator on 2016/3/18.
+ * Created by FlyZebra on 2016/3/18.
  */
 public class LeftMenuFragment extends Fragment{
     private String[] str_arrs;

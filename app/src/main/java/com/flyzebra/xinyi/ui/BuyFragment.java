@@ -14,9 +14,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.fly.TvIvAdapter;
-import com.flyzebra.xinyi.model.Http;
 import com.flyzebra.xinyi.model.IHttp;
+import com.flyzebra.xinyi.model.MyHttp;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -33,7 +32,7 @@ public class BuyFragment extends Fragment {
     private List<Map<String, Object>> list;
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
-    private IHttp iHttp = Http.getInstance();
+    private IHttp iHttp = MyHttp.getInstance();
 
     public BuyFragment() {
     }
@@ -93,7 +92,7 @@ public class BuyFragment extends Fragment {
         } else {
             list.clear();
         }
-        adapter = new TvIvAdapter(activity, list, R.layout.home_listview,
+        adapter = new TvIvAdapter(activity, list, R.layout.home_listview_item,
                 new int[]{R.id.tv01, R.id.tv02},
                 new String[]{"mealname", "mealprice"},
                 new int[]{R.id.iv01},
