@@ -32,7 +32,6 @@ public class WelcomeActivity extends AppCompatActivity {
             if (count >= list.size()) {
                 Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(intent);
-                overridePendingTransition(0, 0);
                 finish();
             }
             mHandler.postDelayed(this, delayMillis);

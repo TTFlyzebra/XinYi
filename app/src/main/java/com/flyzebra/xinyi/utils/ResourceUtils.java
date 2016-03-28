@@ -30,4 +30,8 @@ public class ResourceUtils {
     public static int getColor(Context context, int ResId) {
         return ContextCompat.getColor(context, ResId);
     }
+
+    public static String getString(Context context, int ResId) {
+        return context.getResources().getString(ResId);
+    }
 }

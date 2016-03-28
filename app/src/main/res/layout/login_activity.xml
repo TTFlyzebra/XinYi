@@ -16,20 +16,21 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:gravity="center"
                 android:background="@color/login_welcom"
-                android:textSize="20dp"
+                android:gravity="center"
+                android:text="帐号申请"
                 android:textColor="@color/back04"
-                android:text="帐号申请"/>
+                android:textSize="20dp" />
 
             <EditText
-                android:layout_marginTop="10dp"
                 android:id="@+id/lg_ed_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:hint="@string/login_user_mark" />
 
             <EditText
@@ -55,33 +56,69 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#888888"/>
+                android:background="#888888" />
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:padding="1dp"
                 android:text="@string/login_other"
                 android:textSize="16dp"
-                android:gravity="center"
-                android:id="@+id/textView"
                 tools:ignore="SpUsage" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="50dp"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/qq_login"
-                    android:scaleType="fitCenter"
-                    android:id="@+id/lg_iv_qq"
-                    android:contentDescription="@string/app_name" />
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/lg_iv_baidu"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/baidu_login"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/lg_iv_qq"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/qq_login"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/lg_iv_sina"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/sina_login"
+                        android:scaleType="fitXY" />
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

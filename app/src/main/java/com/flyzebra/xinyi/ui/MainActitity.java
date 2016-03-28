@@ -15,9 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.model.MyHttp;
+import com.flyzebra.xinyi.model.login.UserInfo;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResourceUtils;

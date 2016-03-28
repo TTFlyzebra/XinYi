@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.UserInfo;
+import com.flyzebra.xinyi.model.login.UserInfo;
 
 /**
  * Created by FlyZebra on 2016/3/18.
@@ -46,8 +46,14 @@ public class LeftMenuFragment extends Fragment{
 
         UserInfo userInfo = activity.userInfo;
         if (userInfo != null) {
-            activity.iHttp.upImageView(activity, userInfo.getUserPhotoUrl(), left_drawer_iv_01);
-            left_drawer_tv_01.setText(userInfo.getUserName());
+            String name = userInfo.getUserName();
+            String url = userInfo.getUserPhotoUrl();
+            if (name != null) {
+                left_drawer_tv_01.setText(userInfo.getUserName());
+            }
+            if (url != null) {
+                activity.iHttp.upImageView(activity, userInfo.getUserPhotoUrl(), left_drawer_iv_01);
+            }
         }
         str_arrs = getResources().getStringArray(R.array.left_drawer);
         listview = (ListView) view.findViewById(R.id.left_drawer_lv_01);

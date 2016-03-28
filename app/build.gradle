@@ -33,4 +33,7 @@ dependencies {
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile project(':pulltorefresh')
+    compile project(':volley')
+    compile files('libs/Baidu-Frontia-Android-2.0.6.jar')
+    compile files('libs/core-3.2.0.jar')
 }

@@ -1,14 +1,13 @@
 package com.flyzebra.xinyi;
 
-import android.app.Application;
-
+import com.baidu.frontia.FrontiaApplication;
 import com.flyzebra.xinyi.utils.VolleyUtils;
 
 /**
  * APP
  * Created by FlyZebra on 2016/2/29.
  */
-public class MyApp extends Application {
+public class MyApp extends FrontiaApplication {
 
     @Override
     public void onCreate() {
