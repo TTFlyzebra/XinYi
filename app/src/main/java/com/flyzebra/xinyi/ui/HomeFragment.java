@@ -13,7 +13,6 @@ import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.model.MyHttp;
 import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.view.IChildView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -93,6 +92,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        iHttp.cancelAll(HTTPTAG);
         super.onDestroy();
     }
 

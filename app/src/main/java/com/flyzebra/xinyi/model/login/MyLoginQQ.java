@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;

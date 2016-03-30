@@ -9,11 +9,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.login.ILogin;
 import com.flyzebra.xinyi.model.login.MyLoginBaidu;
 import com.flyzebra.xinyi.model.login.MyLoginQQ;
 import com.flyzebra.xinyi.model.login.MyLoginSina;
-import com.flyzebra.xinyi.model.login.UserInfo;
 import com.flyzebra.xinyi.utils.ResourceUtils;
 import com.tencent.connect.common.Constants;
 

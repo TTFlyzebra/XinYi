@@ -10,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.flyzebra.xinyi.model.IHttp;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TvIvAdapter extends BaseAdapter{
+public class TvIvAdapter extends BaseAdapter implements IHttp.HttpAdapter<List<Map<String, Object>>> {
     private List<Map<String, Object>> list;
     private int idListview;
     private int tvid[];
@@ -99,6 +101,11 @@ public class TvIvAdapter extends BaseAdapter{
             }
         }
         return convertView;
+    }
+
+    @Override
+    public List<Map<String, Object>> getList() {
+        return list;
     }
 
     public interface ItemClick {

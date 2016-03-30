@@ -7,6 +7,7 @@ import com.baidu.frontia.FrontiaUser;
 import com.baidu.frontia.api.FrontiaAuthorization;
 import com.baidu.frontia.api.FrontiaAuthorizationListener.AuthorizationListener;
 import com.baidu.frontia.api.FrontiaAuthorizationListener.UserInfoListener;
+import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 /**

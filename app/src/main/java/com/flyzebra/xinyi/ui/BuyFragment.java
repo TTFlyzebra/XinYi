@@ -14,12 +14,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.model.MyHttp;
+import com.flyzebra.xinyi.model.MyOkHttp;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class BuyFragment extends Fragment {
     private List<Map<String, Object>> list;
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
-    private IHttp iHttp = MyHttp.getInstance();
+    private IHttp iHttp = MyOkHttp.getInstance();
 
     public BuyFragment() {
     }
@@ -117,7 +119,9 @@ public class BuyFragment extends Fragment {
                 animationDrawable.start();
             }
         });
-        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", list, "mealinfo", adapter, HTTPTAG);
+        Map<String, String> params = new HashMap<>();
+        iHttp.execute(IHttp.Builder.getInstance().setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
+//        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
     }
 
     @Override

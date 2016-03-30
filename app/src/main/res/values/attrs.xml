@@ -4,4 +4,9 @@
         <attr name="borderWidth" format="dimension" />
         <attr name="borderColor" format="color" />
     </declare-styleable>
+    <declare-styleable name="NaviForViewPager">
+        <attr name="CircelWidth" format="dimension" />
+        <attr name="CircelColor1" format="color" />
+        <attr name="CircelColor2" format="color" />
+    </declare-styleable>
 </resources>

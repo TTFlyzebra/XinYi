@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.model.MyHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.view.BaseChildView;
 import com.flyzebra.xinyi.view.NaviForViewPager;

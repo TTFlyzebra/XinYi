@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.MyHttp;
+import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Created by FlyZebra on 2016/3/26.
  */
-public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> {
+public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements IHttp.HttpAdapter {
     private static final int TYPE_VIEWPAGER = 1;
     private static final int TYPE_LISTVIE = 2;
     private List<Map<String, Object>> list;
@@ -86,6 +86,11 @@ public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> {
         } else {
             return TYPE_LISTVIE;
         }
+    }
+
+    @Override
+    public List getList() {
+        return list;
     }
 
     public class ViewPageHolder extends ViewHolder {

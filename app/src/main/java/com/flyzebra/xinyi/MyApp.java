@@ -1,7 +1,7 @@
 package com.flyzebra.xinyi;
 
 import com.baidu.frontia.FrontiaApplication;
-import com.flyzebra.xinyi.utils.VolleyUtils;
+import com.flyzebra.xinyi.model.MyVolley;
 
 /**
  * APP
@@ -15,7 +15,7 @@ public class MyApp extends FrontiaApplication {
         //初始化UIL库
 //        UILImageUtils.initImageLoader(getApplicationContext());
         //初始化Volley
-        VolleyUtils.Init(getApplicationContext(), 50 * 1024 * 1024);
+        MyVolley.Init(getApplicationContext(), 50 * 1024 * 1024);
     }
 }
 

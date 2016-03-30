@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.login.UserInfo;
+import com.flyzebra.xinyi.data.UserInfo;
 
 /**
  * Created by FlyZebra on 2016/3/18.

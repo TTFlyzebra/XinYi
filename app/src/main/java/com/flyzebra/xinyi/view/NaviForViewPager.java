@@ -1,11 +1,13 @@
 package com.flyzebra.xinyi.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.flyzebra.xinyi.R;
 
 
 /**
@@ -13,7 +15,7 @@ import android.view.View;
  * Created by FlyZebra on 2016/3/1.
  */
 public class NaviForViewPager extends View {
-//    private final String TAG = "com.flyzebra";
+    //    private final String TAG = "com.flyzebra";
     private Paint select_paint;
     private Paint un_select_paint;
     private int width;
@@ -23,16 +25,25 @@ public class NaviForViewPager extends View {
     //当前页
     private int currentItem = 5;
 
+    private int circleWidth = 36;
+    private int circleColor1 = 0x70000000;
+    private int circleColor2 = 0xDFFF1100;
+
     public NaviForViewPager(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public NaviForViewPager(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public NaviForViewPager(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NaviForViewPager, defStyleAttr, 0);
+        circleWidth = typedArray.getDimensionPixelSize(R.styleable.NaviForViewPager_CircelWidth, 1);
+        circleColor1 = typedArray.getColor(R.styleable.NaviForViewPager_CircelColor1, 0x70000000);
+        circleColor2 = typedArray.getColor(R.styleable.NaviForViewPager_CircelColor2, 0xDFFF1100);
+        typedArray.recycle();
     }
 
     @Override
@@ -66,14 +77,14 @@ public class NaviForViewPager extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         initPaint();
-        float c_size = height/2.0f;
-        float x = c_size+(width-height*(sumItem*2-1))/2;
-        float y = height/2.0f;
-        for (int i = 0; i < sumItem; i++) {
-            if(i==currentItem){
-                canvas.drawCircle(x + i * height * 2, y, c_size - 3, select_paint);
-            }else{
-                canvas.drawCircle(x + i * height * 2, y, c_size - 3, un_select_paint);
+        if (sumItem > 0) {
+            float x = width / 2 - (sumItem * circleWidth * 2 - circleWidth) / 2 + circleWidth / 2;
+            for (int i = 0; i < sumItem; i++) {
+                if (i == currentItem) {
+                    canvas.drawCircle(x + i * circleWidth * 2, circleWidth, circleWidth / 2, select_paint);
+                } else {
+                    canvas.drawCircle(x + i * circleWidth * 2, circleWidth, circleWidth / 2, un_select_paint);
+                }
             }
         }
 
@@ -83,18 +94,14 @@ public class NaviForViewPager extends View {
         if (un_select_paint == null) {
             un_select_paint = new Paint();// 实例化Paint
             un_select_paint.setAntiAlias(true);
-            un_select_paint.setStrokeWidth(1);// 设置笔画粗细
-            un_select_paint.setColor(Color.BLACK);// 设置颜色
+            un_select_paint.setColor(circleColor1);// 设置颜色
             un_select_paint.setStyle(Paint.Style.FILL);// 设置样式
-            un_select_paint.setAlpha(100);
         }
         if (select_paint == null) {
             select_paint = new Paint();
             select_paint.setAntiAlias(true);
-            select_paint.setStrokeWidth(1);// 设置笔画粗细
+            select_paint.setColor(circleColor2);
             select_paint.setStyle(Paint.Style.FILL);
-            select_paint.setColor(Color.GREEN);
-            select_paint.setAlpha(255);
         }
     }
 }

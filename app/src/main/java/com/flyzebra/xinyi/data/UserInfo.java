@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.model.login;
+package com.flyzebra.xinyi.data;
 
 import android.graphics.Bitmap;
 

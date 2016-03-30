@@ -15,7 +15,6 @@ import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.model.MyHttp;
 import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
 import com.flyzebra.xinyi.view.ListViewForScrollView;
@@ -108,7 +107,7 @@ public class HomeView extends Fragment {
             }
         });
         listview.setAdapter(homeListViewAdapter);
-        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview_list, "mealinfo", homeListViewAdapter, "HomeView");
+        iHttp.upListView("http://192.168.1.88/ordermeal/table.jsp?get=mealinfo", listview, "mealinfo", "HomeView");
 
         //设置没有数据时ListView的显示
         list_empty = (LinearLayout) view.findViewById(R.id.empty_view);

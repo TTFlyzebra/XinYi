@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:customs="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FF0000">
+    android:background="#FFF"
+    android:padding="2dp">
 
     <com.flyzebra.xinyi.view.AutoHeightViewPager
         android:id="@+id/viewpager"
@@ -13,6 +15,9 @@
     <com.flyzebra.xinyi.view.NaviForViewPager
         android:id="@+id/count_vp"
         android:layout_width="match_parent"
-        android:layout_height="12dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        customs:CircelColor1="#6FFFFF00"
+        customs:CircelColor2="#BF22FF00"
+        customs:CircelWidth="12dp" />
 </RelativeLayout>

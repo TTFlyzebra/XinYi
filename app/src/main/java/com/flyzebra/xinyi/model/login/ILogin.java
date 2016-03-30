@@ -2,6 +2,8 @@ package com.flyzebra.xinyi.model.login;
 
 import android.content.Intent;
 
+import com.flyzebra.xinyi.data.UserInfo;
+
 /**
  * Created by FlyZebra on 2016/3/21.
  */

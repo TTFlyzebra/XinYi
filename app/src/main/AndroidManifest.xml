@@ -25,7 +25,7 @@
         android:icon="@mipmap/xinyi_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/BaseTheme"
         tools:ignore="AllowBackup">
 
         <!--第三方QQ登陆-->
@@ -50,9 +50,10 @@
         </activity>
 
         <activity
-            android:name=".ui.WelcomeActivity"
+            android:name=".ui.LoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -61,9 +62,10 @@
         <activity
             android:name=".ui.MainActitity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.WelcomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme" />

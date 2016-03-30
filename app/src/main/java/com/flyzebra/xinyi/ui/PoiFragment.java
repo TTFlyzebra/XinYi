@@ -10,12 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.model.MyHttp;
-import com.flyzebra.xinyi.model.TestHttp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,13 +52,8 @@ public class PoiFragment extends Fragment {
             list = new ArrayList<>();
         }
         adapter = new DifrenceAdapter(actitity, list);
-        for (int i = 0; i < 10; i++) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("TYPE", "VIEWPAGER");
-            map.put("LIST", TestHttp.getViewPagerList());
-            list.add(map);
-        }
         recyclerView.setAdapter(adapter);
+        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", recyclerView, "mealinfo", HTTPTAG);
     }
 
     @Override
