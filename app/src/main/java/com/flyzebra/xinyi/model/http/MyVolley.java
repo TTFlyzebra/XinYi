@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.model;
+package com.flyzebra.xinyi.model.http;
 
 import android.content.Context;
 import android.os.Handler;
@@ -45,7 +45,7 @@ public class MyVolley implements IHttp {
     private static long RETRY_TIME = 2500;
 
     public static MyVolley getInstance() {
-        return VolleyUtilsHolder.sInstance;
+        return MyVolleyHolder.sInstance;
     }
 
     public static void getString(final IHttp.Builder info, final Result result) {
@@ -59,6 +59,14 @@ public class MyVolley implements IHttp {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+//                if (error instanceof NetworkError) {
+//                } else if (error instanceof ClientError) {
+//                } else if (error instanceof ServerError) {
+//                } else if (error instanceof AuthFailureError) {
+//                } else if (error instanceof ParseError) {
+//                } else if (error instanceof NoConnectionError) {
+//                } else if (error instanceof TimeoutError) {
+//                }
                 FlyLog.i("<MyVolley>getString->onErrorResponse:error=" + error);
                 if (info.retry) {
                     mHandler.postDelayed(new Runnable() {
@@ -72,7 +80,6 @@ public class MyVolley implements IHttp {
                 }
             }
         }) {
-
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 return info.method == Method.POST ? info.params : super.getParams();
@@ -83,8 +90,8 @@ public class MyVolley implements IHttp {
         mRequestQueue.add(stringRequest);
     }
 
-    public static RequestQueue Init(Context context, int maxDiskCacheBytes) {
-        mRequestQueue = Volley.newRequestQueue(context, maxDiskCacheBytes);
+    public static RequestQueue Init(Context context) {
+        mRequestQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
         return mRequestQueue;
     }
@@ -166,7 +173,19 @@ public class MyVolley implements IHttp {
 
     @Override
     public void execute(Builder builder) {
-
+        if (builder.view instanceof ListView) {
+            ListView listView = (ListView) builder.view;
+            HttpAdapter adapter = (HttpAdapter) listView.getAdapter();
+            getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+        } else if (builder.view instanceof PullToRefreshListView) {
+            PullToRefreshListView pullToRefreshListView = (PullToRefreshListView) builder.view;
+            HttpAdapter adapter = (HttpAdapter) (pullToRefreshListView.getAdapter());
+            getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+        } else if (builder.view instanceof RecyclerView) {
+            RecyclerView recyclerView = (RecyclerView) builder.view;
+            HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
+            getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+        }
     }
 
     private void upListView(final String url, final HttpAdapter adapter, final List list, final String jsonKey, final Object tag) {
@@ -207,7 +226,7 @@ public class MyVolley implements IHttp {
         mRequestQueue.cancelAll(tag);
     }
 
-    private static class VolleyUtilsHolder {
+    private static class MyVolleyHolder {
         public static final MyVolley sInstance = new MyVolley();
     }
 

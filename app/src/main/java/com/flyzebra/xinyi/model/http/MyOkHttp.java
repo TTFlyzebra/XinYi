@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.model;
+package com.flyzebra.xinyi.model.http;
 
 import android.content.Context;
 import android.os.Handler;
@@ -38,12 +38,12 @@ public class MyOkHttp implements IHttp {
     }
 
     public static MyOkHttp getInstance() {
-        return HttpHolder.sInstance;
+        return MyOkHttpHolder.sInstance;
     }
 
     public static OkHttpClient getHttpClient() {
         if (mOkHttpClient == null) {
-            synchronized (FlyHttp.class) {
+            synchronized (MyOkHttp.class) {
                 OkHttpClient.Builder builder = new OkHttpClient.Builder();
                 builder.connectTimeout(12, TimeUnit.SECONDS).readTimeout(12, TimeUnit.SECONDS);
                 mOkHttpClient = builder.build();
@@ -85,7 +85,6 @@ public class MyOkHttp implements IHttp {
                     builder.result.faild(e);
                 }
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String res = response.body().string();
@@ -96,53 +95,36 @@ public class MyOkHttp implements IHttp {
                     if (builder.view instanceof ListView) {
                         final ListView listView = (ListView) builder.view;
                         final HttpAdapter adapter = (HttpAdapter) listView.getAdapter();
-                        try {
-                            JsonUtils.getList(adapter.getList(), new JSONObject(res), builder.jsonKey);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
+                        notifyListView(adapter, res, builder.jsonKey);
                     } else if (builder.view instanceof PullToRefreshListView) {
                         final PullToRefreshListView pullToRefreshListView = (PullToRefreshListView) builder.view;
                         final HttpAdapter adapter = (HttpAdapter) (pullToRefreshListView.getAdapter());
-                        try {
-                            JsonUtils.getList(adapter.getList(), new JSONObject(res), builder.jsonKey);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-
+                        notifyListView(adapter, res, builder.jsonKey);
                     } else if (builder.view instanceof RecyclerView) {
                         final RecyclerView recyclerView = (RecyclerView) builder.view;
                         final HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
-                        try {
-                            JsonUtils.getList(adapter.getList(), new JSONObject(res), builder.jsonKey);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
+                        notifyListView(adapter, res, builder.jsonKey);
                     }
                 }
             }
         });
     }
 
-    private static class HttpHolder {
+    private void notifyListView(final HttpAdapter adapter, final String res, final String jsonKey) {
+        try {
+            JsonUtils.getList(adapter.getList(), new JSONObject(res), jsonKey);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private static class MyOkHttpHolder {
         public static final MyOkHttp sInstance = new MyOkHttp();
     }
 

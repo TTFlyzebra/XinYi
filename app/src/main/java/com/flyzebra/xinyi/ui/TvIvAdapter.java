@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.flyzebra.xinyi.model.IHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
 
 import java.util.ArrayList;
 import java.util.List;

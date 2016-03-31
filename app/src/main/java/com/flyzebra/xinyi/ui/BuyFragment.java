@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
-import com.flyzebra.xinyi.model.IHttp;
-import com.flyzebra.xinyi.model.MyOkHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -34,7 +34,7 @@ public class BuyFragment extends Fragment {
     private List<Map<String, Object>> list;
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
-    private IHttp iHttp = MyOkHttp.getInstance();
+    private IHttp iHttp = MyVolley.getInstance();
 
     public BuyFragment() {
     }
@@ -120,8 +120,8 @@ public class BuyFragment extends Fragment {
             }
         });
         Map<String, String> params = new HashMap<>();
-        iHttp.execute(IHttp.Builder.getInstance().setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
-//        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
+//        iHttp.execute(IHttp.Builder.getInstance().setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
+        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
     }
 
     @Override

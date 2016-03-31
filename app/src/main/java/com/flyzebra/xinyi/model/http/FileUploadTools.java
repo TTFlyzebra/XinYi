@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.model;
+package com.flyzebra.xinyi.model.http;
 
 import java.io.BufferedReader;
 import java.io.File;

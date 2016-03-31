@@ -12,14 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.model.TestHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.view.IChildView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * 主页
@@ -28,7 +26,7 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
     //ViewPager自动轮播
     private final int delayMillis = 5000;
-    private IHttp iHttp = MyHttp.getInstance();
+    private IHttp iHttp = MyVolley.getInstance();
     private String HTTPTAG = "Fragment" + Math.random();
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private Toolbar mToolbar;
@@ -37,41 +35,28 @@ public class HomeFragment extends Fragment {
     private PullToRefreshScrollView view;
     private LinearLayout childParent;
     private IChildView childViewPager;
-    private IChildView childViewPager1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActitity) getActivity();
-        activity.toolBar.setTitle("主页");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = (PullToRefreshScrollView) inflater.inflate(R.layout.home_fragment, container, false);
         //上拉刷新
-        view.setMode(PullToRefreshBase.Mode.BOTH);
-        view.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+        view.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        view.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                childViewPager.addData(TestHttp.getViewPagerList());
-                childViewPager1.addData(TestHttp.getViewPagerList());
-                view.onRefreshComplete();
-            }
+            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
 
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                childViewPager.setData(new ArrayList<Map<String, Object>>());
-                childViewPager1.setData(new ArrayList<Map<String, Object>>());
-                view.onRefreshComplete();
             }
         });
         childParent = (LinearLayout) view.findViewById(R.id.home_root);
         //添加子窗口View
-        childViewPager = new ViewPagerChildView(activity);
+        childViewPager = new ViewPagerChildView(activity, childParent, R.layout.play_viewpager_autoheight);
         childViewPager.setData(TestHttp.getViewPagerList());
-        childViewPager1 = (IChildView) view.findViewById(R.id.viewpager);
-        childViewPager1.setData(TestHttp.getViewPagerList());
         return view;
     }
 

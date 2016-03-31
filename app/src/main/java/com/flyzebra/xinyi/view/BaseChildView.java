@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.Map;
 public class BaseChildView extends LinearLayout implements IChildView {
     protected Context context;
     protected List<Map<String, Object>> list;
-    protected int ResId = R.layout.play_viewpager_autoheight;
+    protected int ResId;
 
     public BaseChildView(Context context) {
         this(context, null);

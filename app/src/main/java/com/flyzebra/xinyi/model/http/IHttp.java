@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.model;
+package com.flyzebra.xinyi.model.http;
 
 import android.content.Context;
 import android.view.View;

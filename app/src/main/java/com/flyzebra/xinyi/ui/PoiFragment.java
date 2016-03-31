@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
-import com.flyzebra.xinyi.model.IHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class PoiFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<Map<String, Object>> list;
     private DifrenceAdapter adapter;
-    private IHttp iHttp = MyHttp.getInstance();
+    private IHttp iHttp = MyVolley.getInstance();
 
     public PoiFragment() {
     }

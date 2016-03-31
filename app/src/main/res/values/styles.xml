@@ -24,6 +24,13 @@
         <item name="android:background">@drawable/edittxte</item>
     </style>
 
+    <style name="ToolbarItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+
 
     <style name="ActionButton">
         <item name="android:layout_height">wrap_content</item>
@@ -34,6 +41,12 @@
         <item name="android:shadowDy">1.2</item>
         <item name="android:shadowDx">1.2</item>
         <item name="android:shadowRadius">1</item>
+    </style>
+
+    <style name="linera_mw_h">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">horizontal</item>
     </style>
 
 </resources>

@@ -10,7 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.IHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements
     private static final int TYPE_LISTVIE = 2;
     private List<Map<String, Object>> list;
     private Context context;
+    private IHttp iHttp = MyVolley.getInstance();
 
     public DifrenceAdapter(Context context, List<Map<String, Object>> list) {
         this.list = list;
@@ -61,7 +63,7 @@ public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements
         if (holder instanceof ListViewHolder) {
             ((ListViewHolder) holder).tv01.setText(String.valueOf(list.get(position).get("mealname")));
             ((ListViewHolder) holder).tv02.setText(String.valueOf(list.get(position).get("mealprice")));
-            MyHttp.getInstance().upImageView(context, "http://192.168.1.88/ordermeal" + list.get(position).get("mealimage"), ((ListViewHolder) holder).iv01);
+            iHttp.upImageView(context, "http://192.168.1.88/ordermeal" + list.get(position).get("mealimage"), ((ListViewHolder) holder).iv01);
             holder.itemView.setTag(position);
         } else {
             ViewPagerChildView view = ((ViewPagerChildView) holder.itemView);

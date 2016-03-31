@@ -9,11 +9,10 @@ import com.android.volley.toolbox.ImageLoader;
  * Created by FlyZebra on 2016/3/2.
  */
 public class BitmapCache implements ImageLoader.ImageCache {
-    private static final int maxSize = 10*1024*1024;
     private LruCache<String, Bitmap> mCache;
 
     public BitmapCache() {
-        this(maxSize);
+        this((int) (Runtime.getRuntime().maxMemory() / 4));
     }
 
     public BitmapCache(int maxSize) {

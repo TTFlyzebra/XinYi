@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,7 +17,8 @@ import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
-import com.flyzebra.xinyi.model.IHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResourceUtils;
@@ -28,7 +30,7 @@ import java.util.List;
  * Created by FlyZebra on 2016/3/17.
  */
 public class MainActitity extends AppCompatActivity implements View.OnClickListener {
-    public IHttp iHttp = MyHttp.getInstance();
+    public IHttp iHttp = MyVolley.getInstance();
     public UserInfo userInfo;
 
     public Toolbar toolBar;
@@ -65,8 +67,7 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
         //DrawerLayout
         DrawerLayoutUtils.setDrawerLeftEdgeSize(this, mDrawerLayout, 0.1f);
         mDrawerLayout.setScrimColor(ResourceUtils.getColor(this, R.color.drawerscrimColor));
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                toolBar, R.string.abc_action_bar_home_description, R.string.abc_action_bar_home_description_format);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolBar, R.string.abc_action_bar_home_description, R.string.abc_action_bar_home_description_format);
         mDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerLayout.addDrawerListener(new DrawerLayoutUtils().getLeftDrawerListener(mDrawerLayout));
@@ -77,6 +78,10 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_dl_01);
         toolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
+
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //底部导航栏
         for (int ResId : textViewResID) {
             tv_list.add((TextView) findViewById(ResId));
@@ -127,4 +132,9 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 }

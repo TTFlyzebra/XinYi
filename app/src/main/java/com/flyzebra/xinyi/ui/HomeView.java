@@ -14,8 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.IHttp;
 import com.flyzebra.xinyi.model.TestHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.view.GridViewForScrollView;
 import com.flyzebra.xinyi.view.ListViewForScrollView;
 
@@ -32,7 +33,7 @@ public class HomeView extends Fragment {
     public static int current_viewpager = 0;//需要在HomeViewPagerAdapter中使用所在定义成静态
     //ViewPager自动轮播
     private final int delayMillis = 5000;
-    private IHttp iHttp = MyHttp.getInstance();
+    private IHttp iHttp = MyVolley.getInstance();
     //ViewPage List;Key字包含图片名字=name，图片路径=path
     private List<Map<String, Object>> viewPager_list;
     private List<Map<String, Object>> gridview_list;

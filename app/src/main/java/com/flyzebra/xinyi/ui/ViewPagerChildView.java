@@ -14,7 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.IHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.view.BaseChildView;
 import com.flyzebra.xinyi.view.NaviForViewPager;
@@ -26,8 +27,9 @@ import java.util.Map;
  * Created by FlyZebra on 2016/3/25.
  */
 public class ViewPagerChildView extends BaseChildView {
+
     private int current_item = 0;
-    private IHttp iHttp = MyHttp.getInstance();
+    private IHttp iHttp = MyVolley.getInstance();
     private long delayMillis = 5000;
     private ViewPager viewPager;
     private NaviForViewPager countVP;
@@ -47,19 +49,15 @@ public class ViewPagerChildView extends BaseChildView {
             FlyLog.i("<ViewPagerChildView>playsTask running.currentItem=" + current_item);
         }
     };
-
     public ViewPagerChildView(Context context) {
         this(context, null);
     }
-
     public ViewPagerChildView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
     public ViewPagerChildView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
     public ViewPagerChildView(Context context, ViewGroup parent, @LayoutRes int ResId) {
         super(context, parent, ResId);
     }
@@ -71,6 +69,9 @@ public class ViewPagerChildView extends BaseChildView {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (ResId == 0) {
+            ResId = R.layout.play_viewpager_autoheight;
+        }
         View view = setContentView(ResId);
 //        int padding = (int) ResourceUtils.getDimension(context, R.dimen.childpadding);
 //        setPadding(padding, padding, padding, padding);
@@ -147,13 +148,13 @@ public class ViewPagerChildView extends BaseChildView {
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int i = (int) v.getTag();
-                    //从list中判断点击的图片名称，执行相应动作，执行相应动作，下面为测试，从列表中删除点击的图片
-//                    list.get(i).put("path", "http://192.168.1.88/ordermeal/images/aa4.jpg");
-                    list.remove(i);
-                    countVP.setSumItem(list.size());
-                    notifyDataSetChanged();
-                    FlyLog.i("<ViewPagerChildView><PlaysAdapter>instantiateItem->onClick:i=" + i + ",list.size()=" + list.size());
+//                    int i = (int) v.getTag();
+//                    //从list中判断点击的图片名称，执行相应动作，执行相应动作，下面为测试，从列表中删除点击的图片
+////                    list.get(i).put("path", "http://192.168.1.88/ordermeal/images/aa4.jpg");
+//                    list.remove(i);
+//                    countVP.setSumItem(list.size());
+//                    notifyDataSetChanged();
+//                    FlyLog.i("<ViewPagerChildView><PlaysAdapter>instantiateItem->onClick:i=" + i + ",list.size()=" + list.size());
                 }
             });
             container.addView(iv);
