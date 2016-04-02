@@ -73,8 +73,6 @@ public class ViewPagerChildView extends BaseChildView {
             ResId = R.layout.play_viewpager_autoheight;
         }
         View view = setContentView(ResId);
-//        int padding = (int) ResourceUtils.getDimension(context, R.dimen.childpadding);
-//        setPadding(padding, padding, padding, padding);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         countVP = (NaviForViewPager) view.findViewById(R.id.count_vp);
         countVP.setSumItem(list == null ? 0 : list.size());

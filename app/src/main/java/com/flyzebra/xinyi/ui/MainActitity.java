@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +22,7 @@ import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
-import com.flyzebra.xinyi.utils.ResourceUtils;
+import com.flyzebra.xinyi.utils.ResUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +51,14 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
     private List<ImageView> iv_list = new ArrayList<>();
     private List<TextView> tv_list = new ArrayList<>();
     private List<LinearLayout> ll_list = new ArrayList<>();
+    private ActivityOnTounEvent activityOnTounEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        textColer_Off = ResourceUtils.getColorStateList(this, R.color.color_select);
-        textColor_On = ResourceUtils.getColor(this, R.color.menu_select_on);
+        textColer_Off = ResUtils.getColorStateList(this, R.color.color_select);
+        textColor_On = ResUtils.getColor(this, R.color.menu_select_on);
         initView();
         //获取用户信息
         Intent intent = getIntent();
@@ -66,13 +68,29 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
 
         //DrawerLayout
         DrawerLayoutUtils.setDrawerLeftEdgeSize(this, mDrawerLayout, 0.1f);
-        mDrawerLayout.setScrimColor(ResourceUtils.getColor(this, R.color.drawerscrimColor));
+        mDrawerLayout.setScrimColor(ResUtils.getColor(this, R.color.drawerscrimColor));
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolBar, R.string.abc_action_bar_home_description, R.string.abc_action_bar_home_description_format);
         mDrawerToggle.syncState();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerLayout.addDrawerListener(new DrawerLayoutUtils().getLeftDrawerListener(mDrawerLayout));
         ReplaceFragment("LeftMenuFragment", R.id.left_drawer_menu);
         ReplaceFragment(fragmentName[0], R.id.main_fl_01);
+    }
+
+    public void setActivityOnTounEvent(ActivityOnTounEvent activityOnTounEvent) {
+        this.activityOnTounEvent = activityOnTounEvent;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+//                FlyLog.i("<dispatchTouchEvent ACTION_MOVE");
+                break;
+        }
+//        activityOnTounEvent.onTount(ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     private void initView() {
@@ -136,5 +154,9 @@ public class MainActitity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public interface ActivityOnTounEvent {
+        void onTount(MotionEvent ev);
     }
 }

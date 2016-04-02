@@ -13,7 +13,6 @@ import java.util.Map;
  */
 public interface IHttp {
     void upImageView(Context context, String url, ImageView iv);
-
     /**
      * 使用须知，跟控件view适配的Adapter必须实现HttpAdapter接口
      *
@@ -33,6 +32,8 @@ public interface IHttp {
      * @param <T>
      */
     <T extends View> void upListView(String url, T view, String jsonKey, Object tag);
+
+    <T extends View> void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag);
 
     void execute(Builder builder);
 
@@ -67,7 +68,7 @@ public interface IHttp {
         public Map<String, String> params;
         public Object tag;
         public List list;
-        public Object adapter;
+        public HttpAdapter adapter;
         public View view;
         public boolean retry = true;
         public int method = Method.GET;
@@ -102,7 +103,7 @@ public interface IHttp {
             return this;
         }
 
-        public Builder setAdapter(Object adapter) {
+        public Builder setAdapter(HttpAdapter adapter) {
             this.adapter = adapter;
             return this;
         }

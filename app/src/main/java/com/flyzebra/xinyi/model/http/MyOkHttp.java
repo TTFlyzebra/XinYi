@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
+import com.flyzebra.xinyi.view.RefreshRecycleryView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.squareup.picasso.Picasso;
 
@@ -70,10 +72,17 @@ public class MyOkHttp implements IHttp {
     }
 
     @Override
+    public <T extends View> void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag) {
+        Builder builder = new Builder().setUrl(url).setAdapter(adapter).setJsonKey(jsonKey).setTag(tag);
+        execute(builder);
+    }
+
+    @Override
     public void cancelAll(Object tag) {
     }
 
     public void execute(final Builder builder) {
+        FlyLog.i("<MyOkHttp>-->execute:url=" + builder.url);
         final okhttp3.Request request = new okhttp3.Request.Builder()
                 .tag(builder.tag)
                 .url(builder.url)
@@ -84,6 +93,8 @@ public class MyOkHttp implements IHttp {
                 if (builder.result != null) {
                     builder.result.faild(e);
                 }
+                execute(builder);
+                FlyLog.i("<MyOkHttp>-->execute:url=" + builder.url);
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -104,7 +115,13 @@ public class MyOkHttp implements IHttp {
                         final RecyclerView recyclerView = (RecyclerView) builder.view;
                         final HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
+                    } else if (builder.view instanceof RefreshRecycleryView) {
+                        final RefreshRecycleryView recyclerView = (RefreshRecycleryView) builder.view;
+                        final HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
+                        notifyListView(adapter, res, builder.jsonKey);
                     }
+                } else if (builder.adapter != null) {
+                    notifyListView(builder.adapter, res, builder.jsonKey);
                 }
             }
         });

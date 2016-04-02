@@ -3,11 +3,9 @@ package com.flyzebra.xinyi.model.http;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -24,11 +22,11 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.utils.BitmapCache;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +101,7 @@ public class MyVolley implements IHttp {
     }
 
     public static void upImageView(String url, ImageView iv) {
+        FlyLog.i("<MyVolley>upImageView->url=" + url + ",iv=" + iv.getId());
         ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, R.drawable.image, R.drawable.image);
         mImageLoader.get(url, listener);
     }
@@ -151,41 +150,95 @@ public class MyVolley implements IHttp {
         upImageView(url, iv);
     }
 
+    @Override
     public <T extends View> void upListView(String url, T view, Object tag) {
         upListView(url, view, null, tag);
     }
 
+    @Override
     public <T extends View> void upListView(String url, T view, String jsonKey, Object tag) {
-        if (view instanceof ListView) {
-            ListView listView = (ListView) view;
-            HttpAdapter adapter = (HttpAdapter) listView.getAdapter();
-            getInstance().upListView(url, adapter, adapter.getList(), jsonKey, tag);
-        } else if (view instanceof PullToRefreshListView) {
-            PullToRefreshListView pullToRefreshListView = (PullToRefreshListView) view;
-            HttpAdapter adapter = (HttpAdapter) (pullToRefreshListView.getAdapter());
-            getInstance().upListView(url, adapter, adapter.getList(), jsonKey, tag);
-        } else if (view instanceof RecyclerView) {
-            RecyclerView recyclerView = (RecyclerView) view;
-            HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
+        //反射
+        HttpAdapter adapter = null;
+        try {
+            Field field = view.getClass().getDeclaredField("mAdapter");
+            field.setAccessible(true);
+            field.setAccessible(true);
+            adapter = (HttpAdapter) field.get(view);
+            FlyLog.i("<MyVolley>upListView->adapter=" + adapter);
+        } catch (NoSuchFieldException e) {
+            FlyLog.i("<MyVolley>upListView->NoSuchFieldException");
+        } catch (IllegalAccessException e) {
+            FlyLog.i("<MyVolley>upListView->IllegalAccessException");
+        }
+        if (adapter != null) {
             getInstance().upListView(url, adapter, adapter.getList(), jsonKey, tag);
         }
     }
 
     @Override
+    public <T extends View> void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag) {
+        getInstance().upListView(url, adapter, adapter.getList(), jsonKey, tag);
+    }
+
+    @Override
     public void execute(Builder builder) {
-        if (builder.view instanceof ListView) {
-            ListView listView = (ListView) builder.view;
-            HttpAdapter adapter = (HttpAdapter) listView.getAdapter();
-            getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
-        } else if (builder.view instanceof PullToRefreshListView) {
-            PullToRefreshListView pullToRefreshListView = (PullToRefreshListView) builder.view;
-            HttpAdapter adapter = (HttpAdapter) (pullToRefreshListView.getAdapter());
-            getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
-        } else if (builder.view instanceof RecyclerView) {
-            RecyclerView recyclerView = (RecyclerView) builder.view;
-            HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
-            getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+        HttpAdapter adapter = null;
+        try {
+            Field field = builder.view.getClass().getDeclaredField("mAdapter");
+            field.setAccessible(true);
+            field.setAccessible(true);
+            adapter = (HttpAdapter) field.get(builder.view);
+        } catch (NoSuchFieldException e) {
+            FlyLog.i("<MyVolley>upListView->NoSuchFieldException");
+        } catch (IllegalAccessException e) {
+            FlyLog.i("<MyVolley>upListView->IllegalAccessException");
         }
+        if (adapter != null) {
+            if (builder.result != null) {
+                getInstance().upListView(builder.result, builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+            } else {
+                getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+            }
+        }
+    }
+
+    private void upListView(final Result result, final String url, final HttpAdapter adapter, final List list, final String jsonKey, final Object tag) {
+        //判断任务是否已取消
+        set_upListView.add(tag);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                if (list != null) {
+                    list.clear();
+                    JsonUtils.getList(list, jsonObject, jsonKey);
+                }
+                adapter.notifyDataSetChanged();
+                if (result != null) {
+                    result.succeed(jsonObject);
+                }
+                FlyLog.i("<MyVolley>upListView->onResponse:tag=" + tag);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (result != null) {
+                    result.faild(volleyError);
+                } else {
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (set_upListView.contains(tag)) {
+                                upListView(url, adapter, list, jsonKey, tag);
+                            }
+                        }
+                    }, RETRY_TIME);
+                    FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
+                }
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
+        jsonObjectRequest.setTag(tag);
+        mRequestQueue.add(jsonObjectRequest);
     }
 
     private void upListView(final String url, final HttpAdapter adapter, final List list, final String jsonKey, final Object tag) {

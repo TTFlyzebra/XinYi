@@ -14,7 +14,7 @@ import com.flyzebra.xinyi.model.login.ILogin;
 import com.flyzebra.xinyi.model.login.MyLoginBaidu;
 import com.flyzebra.xinyi.model.login.MyLoginQQ;
 import com.flyzebra.xinyi.model.login.MyLoginSina;
-import com.flyzebra.xinyi.utils.ResourceUtils;
+import com.flyzebra.xinyi.utils.ResUtils;
 import com.tencent.connect.common.Constants;
 
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(ResourceUtils.getString(this, R.string.login));
+        setTitle(ResUtils.getString(this, R.string.login));
         setContentView(R.layout.login_activity);
 
         lg_ed_ps = (EditText) findViewById(R.id.lg_ed_ps);

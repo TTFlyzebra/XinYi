@@ -36,6 +36,7 @@ public class BuyFragment extends Fragment {
     private TvIvAdapter adapter;
     private IHttp iHttp = MyVolley.getInstance();
 
+
     public BuyFragment() {
     }
 
@@ -72,6 +73,7 @@ public class BuyFragment extends Fragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 new GetDataTask().execute();
+                iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
             }
 
             @Override
@@ -121,7 +123,7 @@ public class BuyFragment extends Fragment {
         });
         Map<String, String> params = new HashMap<>();
 //        iHttp.execute(IHttp.Builder.getInstance().setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
-        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
+//        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
     }
 
     @Override

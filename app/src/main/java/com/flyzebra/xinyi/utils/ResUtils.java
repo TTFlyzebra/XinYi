@@ -8,7 +8,7 @@ import android.util.TypedValue;
 /**
  * Created by FlyZebra on 2016/3/25.
  */
-public class ResourceUtils {
+public class ResUtils {
     private static TypedValue mTmpValue = new TypedValue();
 
     public static int getXmlDef(Context context, int ResId) {
@@ -33,5 +33,9 @@ public class ResourceUtils {
 
     public static String getString(Context context, int ResId) {
         return context.getResources().getString(ResId);
+    }
+
+    public static String[] getStringArray(Context context, int ResID) {
+        return context.getResources().getStringArray(ResID);
     }
 }

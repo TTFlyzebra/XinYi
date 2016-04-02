@@ -48,9 +48,8 @@ public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements
                     @Override
                     public void onClick(View v) {
                         int position = (int) v.getTag();
-                        list.remove(position);
-                        FlyLog.i("<DifrenceAdapter>onCreateViewHolder->onClick:position=" + position);
-                        notifyDataSetChanged();
+//                        list.remove(position);
+                        FlyLog.i("<DifrenceAdapter>onCreateViewHolder->onClick:position=" + position + "," + list.get(position).get("mealname"));
                     }
                 });
                 break;
