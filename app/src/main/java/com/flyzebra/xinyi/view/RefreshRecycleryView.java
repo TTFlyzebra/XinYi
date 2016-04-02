@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by FlyZebra on 2016/4/1.
@@ -38,7 +39,15 @@ public class RefreshRecycleryView extends ViewGroup {
     private int PULLVIEW = PullView.NORMAL;
     private float down_y;
     private float mv_x, mv_y;
+    private boolean TOP_MODE = true;
+    private boolean BOT_MODE = false;
     private ExecutorService mExecutorService = Executors.newFixedThreadPool(1);
+    private boolean isAttach;
+
+    private AtomicBoolean isNeedRefresh = new AtomicBoolean(false);
+    private ListenerTopRefresh listenerTopRefresh;
+    private ListenerBottomRefresh listenerBottomRefresh;
+    private ListenerLastItem listenerLastItem;
 
     public RefreshRecycleryView(Context context) {
         this(context, null);
@@ -56,7 +65,7 @@ public class RefreshRecycleryView extends ViewGroup {
 
         topView = new TextView(context);
         topView.setText("下拉刷新");
-        topView.setTextSize(40);
+        topView.setTextSize(30);
         topView.setGravity(Gravity.CENTER);
         topView.setTextColor(0xFF000000);
 
@@ -65,6 +74,7 @@ public class RefreshRecycleryView extends ViewGroup {
 
         botView = new TextView(context);
         botView.setText("上拉添加");
+        botView.setTextSize(30);
         botView.setGravity(Gravity.CENTER);
         botView.setTextColor(0xFF000000);
 
@@ -100,6 +110,10 @@ public class RefreshRecycleryView extends ViewGroup {
         }
     }
 
+    public Adapter getAdapter() {
+        return mAdapter;
+    }
+
     public void setAdapter(Adapter adapter) {
         this.mAdapter = adapter;
         mRecyclerView.setAdapter(adapter);
@@ -107,7 +121,16 @@ public class RefreshRecycleryView extends ViewGroup {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        listenerMianViewState();
+        if (TOP_MODE || BOT_MODE) {
+            listenerMianViewState();
+            if (listenerPull(ev)) {
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private boolean listenerPull(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 PULLVIEW = PullView.NORMAL;
@@ -115,122 +138,97 @@ public class RefreshRecycleryView extends ViewGroup {
                 mv_y = ev.getY();
                 down_y = mv_x;
                 break;
-        }
-        if (listenerBottom(ev)) {
-            return true;
-        }
-        if (listenerTop(ev)) {
-            return true;
-        }
-        return super.dispatchTouchEvent(ev);
-    }
-
-    private boolean listenerTop(MotionEvent ev) {
-        switch (ev.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 //down_y==0 肯定不是本界面发起的消息，如果不是在本界面收到的DWON消息,可以处理跟其它控件的冲突
                 if (down_y == 0) {
                     break;
                 }
-                if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y)) {
-                    //横向的划动
+                ////横向的划动冲突解决
+                if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y) && (TOP_MODE || BOT_MODE)) {
                     if (PULLVIEW == PullView.TOP) {
                         PULLVIEW = PullView.NORMAL;
                         mRecyclerView.scrollToPosition(0);
                     }
+                    if (PULLVIEW == PullView.BOT) {
+                        PULLVIEW = PullView.NORMAL;
+                        mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
+                    }
                     scrollTo(0, 0);
                 }
-                if (PULLVIEW == PullView.TOP) {
-                    if (getScrollY() < (-pull_Height * 1.2f)) {
+
+                //TOP处理
+                if (PULLVIEW == PullView.TOP && TOP_MODE) {
+                    if (getScrollY() < (-pull_Height)) {
                         topView.setText("松手刷新");
-                        //准备启动刷新任务
+                        isNeedRefresh.set(true);
+                        //准备启动动画
                     } else {
-                        scrollBy(0, (int) (down_y - ev.getY()));
-                        down_y = ev.getY();
                         topView.setText("下拉刷新");
+                        //准备变更动画
                     }
+                    scrollBy(0, (int) (down_y - ev.getY()));
+                    down_y = ev.getY();
                     if (getScrollY() >= 0) {
                         scrollTo(0, 0);
                         PULLVIEW = PullView.NORMAL;
                         mRecyclerView.scrollToPosition(0);
                     }
-//                    FlyLog.i("1111111111111111111111111111111111111");
                     return true;
                 }
-                if (MAINVIEW == MainView.TOP && ev.getY() > down_y) {
+                if ((MAINVIEW == MainView.TOP || mLayout.getItemCount() == 0) && (ev.getY() > down_y) && TOP_MODE) {
+                    isNeedRefresh.set(false);
                     PULLVIEW = PullView.TOP;
                     down_y = ev.getY();
                     mRecyclerView.scrollToPosition(0);
-//                    FlyLog.i("222222222222222222222222222222222222222");
                     return true;
                 }
-                down_y = ev.getY();
-                break;
-            case MotionEvent.ACTION_UP:
-                if (getScrollY() != 0) {
-                    mRecyclerView.scrollToPosition(0);
-                    topView.setText("正在刷新");
-                    //执行刷新任务
-
-                    //刷新完成扫行以下动作
-                    animScrollTo(0, getScrollY(), 0, 0, 300);
-//                    scrollTo(0, 0);
-                    return true;
-                }
-//                mRecyclerView.setEnabled(true);
-                break;
-        }
-        return false;
-    }
-
-    private boolean listenerBottom(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_MOVE:
-                //down_y==0 肯定不是本界面发起的消息，如果不是在本界面收到的DWON消息,可以处理跟其它控件的冲突
-                if (down_y == 0) {
-                    break;
-                }
-                if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y)) {
-                    //横向的划动
-                    if (PULLVIEW == PullView.BOT) {
-                        PULLVIEW = PullView.NORMAL;
-                        mRecyclerView.scrollToPosition(0);
-                    }
-                    scrollTo(0, 0);
-                }
-                if (PULLVIEW == PullView.BOT) {
-                    if (getScrollY() > (pull_Height * 1.2f)) {
-                        topView.setText("松手刷新");
+                //BOT处理
+                if (PULLVIEW == PullView.BOT && BOT_MODE) {
+                    if (getScrollY() > (pull_Height)) {
+                        botView.setText("松手加截");
+                        isNeedRefresh.set(true);
                         //准备启动刷新任务
                     } else {
-                        scrollBy(0, (int) (down_y - ev.getY()));
-                        down_y = ev.getY();
-                        topView.setText("下拉刷新");
+                        botView.setText("上拉加截");
                     }
-                    if (getScrollY() >= 0) {
+                    scrollBy(0, (int) (down_y - ev.getY()));
+                    down_y = ev.getY();
+                    if (getScrollY() <= 0) {
                         scrollTo(0, 0);
                         PULLVIEW = PullView.NORMAL;
-                        mRecyclerView.scrollToPosition(0);
+                        mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
                     }
                     return true;
                 }
-                if (MAINVIEW == MainView.BOT && ev.getY() < down_y) {
+                if (MAINVIEW == MainView.BOT && (ev.getY() < down_y) && BOT_MODE) {
+                    isNeedRefresh.set(false);
                     PULLVIEW = PullView.BOT;
                     down_y = ev.getY();
-                    mRecyclerView.scrollToPosition(0);
+                    mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
                     return true;
                 }
                 down_y = ev.getY();
                 break;
             case MotionEvent.ACTION_UP:
                 if (getScrollY() != 0) {
-                    mRecyclerView.scrollToPosition(0);
-                    topView.setText("正在刷新");
-                    //执行刷新任务
-
-                    //刷新完成扫行以下动作
+                    if (PULLVIEW == PullView.TOP && TOP_MODE) {
+                        mRecyclerView.scrollToPosition(0);
+                        topView.setText("正在刷新");
+                        //执行刷新任务
+                        if (listenerTopRefresh != null && isNeedRefresh.get()) {
+                            listenerTopRefresh.onRefrsh(topView);
+                        }
+                    }
+                    if (PULLVIEW == PullView.BOT && BOT_MODE) {
+                        mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
+                        botView.setText("正在加载");
+                        //执行刷新任务
+                        if (listenerBottomRefresh != null && isNeedRefresh.get()) {
+                            listenerBottomRefresh.onRefrsh(topView);
+                        }
+                    }
+                    //刷新完成执行以下动作
                     animScrollTo(0, getScrollY(), 0, 0, 300);
-//                    scrollTo(0, 0);
                     return true;
                 }
                 break;
@@ -254,16 +252,19 @@ public class RefreshRecycleryView extends ViewGroup {
             first = (int) findFirst.invoke(mLayout);
             last = (int) findLast.invoke(mLayout);
             if (first == 0 && findView.invoke(mLayout, first) != null && ((View) findView.invoke(mLayout, first)).getTop() == 0) {
-//                FlyLog.i("<RefreshRecyclerView>-->dispatchTouchEvent->滚动到了顶部" + ((View) findView.invoke(mLayout, first)).getTop());
+                FlyLog.i("<RefreshRecyclerView>-->dispatchTouchEvent->滚动到了顶部" + ((View) findView.invoke(mLayout, first)).getTop());
                 MAINVIEW = MainView.TOP;
             } else if (last == mLayout.getItemCount() - 1 && findView.invoke(mLayout, last) != null && ((View) findView.invoke(mLayout, last)).getBottom() == getHeight()) {
                 FlyLog.i("<RefreshRecyclerView>-->dispatchTouchEvent->滚动到了底部");
                 MAINVIEW = MainView.BOT;
             } else if (last > mLayout.getItemCount() - 2) {
-//                FlyLog.i("<RefreshRecyclerView>-->dispatchTouchEvent->滚动到最后一行");
+                FlyLog.i("<RefreshRecyclerView>-->dispatchTouchEvent->滚动到最后一行");
+                if (listenerLastItem != null) {
+                    listenerLastItem.onLastItem();
+                }
                 MAINVIEW = MainView.LASTITEM;
             } else {
-//                FlyLog.i("<RefreshRecyclerView>-->dispatchTouchEvent->没有状态发生");
+                FlyLog.i("<RefreshRecyclerView>-->dispatchTouchEvent->没有状态发生");
                 MAINVIEW = MainView.NORMAL;
             }
         } catch (NoSuchMethodException e) {
@@ -276,27 +277,81 @@ public class RefreshRecycleryView extends ViewGroup {
     }
 
     private void animScrollTo(final int sx, final int sy, final int dx, final int dy, final int times) {
+        final int height = pull_Height;
         mExecutorService.submit(new Runnable() {
             @Override
             public void run() {
                 int num = times / 10;
-                int my = (dy - sy) / num;
                 int mx = (dx - sx) / num;
-                for (int i = 1; i < num; i++) {
-//                    FlyLog.i("<RefreshRecycleryView>animScrollTo");
+                int my = (dy - sy) / num;
+                for (; ; ) {
+                    //当弹出界面等于自身身高时停止滚动并等待更新任务完成
+                    while ((Math.abs(getScrollY()) < height) && isNeedRefresh.get() && isAttach) {
+                        try {
+                            FlyLog.i("<RefreshRecycleryView>animScrollTo-->while");
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (Math.abs(getScrollY()) <= Math.abs(my)) {
+                        break;
+                    }
                     scrollBy(mx, my);
-                    postInvalidate();
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                scrollTo(dx, dy);
+                scrollTo(0, 0);
                 PULLVIEW = PullView.NORMAL;
                 postInvalidate();
             }
         });
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        isAttach = true;
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        isNeedRefresh.set(false);
+        isAttach = false;
+        super.onDetachedFromWindow();
+    }
+
+    public void refreshFinish() {
+        isNeedRefresh.set(false);
+    }
+
+    public void setListenerLastItem(ListenerLastItem listenerLastItem) {
+        this.listenerLastItem = listenerLastItem;
+    }
+
+    public void setListenerBottomRefresh(ListenerBottomRefresh listenerBottomRefresh) {
+        this.listenerBottomRefresh = listenerBottomRefresh;
+    }
+
+    public void setListenerTopRefresh(ListenerTopRefresh listenerTopRefresh) {
+        this.listenerTopRefresh = listenerTopRefresh;
+    }
+
+    public interface ListenerTopRefresh {
+        void onRefrsh(View view);
+
+    }
+
+    public interface ListenerBottomRefresh {
+        void onRefrsh(View view);
+
+    }
+
+    public interface ListenerLastItem {
+        void onLastItem();
     }
 
     public static class MainView {
@@ -312,4 +367,6 @@ public class RefreshRecycleryView extends ViewGroup {
         public static int NORMAL = 3;
 
     }
+
+
 }
