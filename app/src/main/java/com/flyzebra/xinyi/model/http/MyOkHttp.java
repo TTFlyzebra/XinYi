@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
-import com.flyzebra.xinyi.view.RefreshRecycleryView;
+import com.flyzebra.xinyi.view.RefreshRecyclerView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.squareup.picasso.Picasso;
 
@@ -115,8 +115,8 @@ public class MyOkHttp implements IHttp {
                         final RecyclerView recyclerView = (RecyclerView) builder.view;
                         final HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
-                    } else if (builder.view instanceof RefreshRecycleryView) {
-                        final RefreshRecycleryView recyclerView = (RefreshRecycleryView) builder.view;
+                    } else if (builder.view instanceof RefreshRecyclerView) {
+                        final RefreshRecyclerView recyclerView = (RefreshRecyclerView) builder.view;
                         final HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
                     }

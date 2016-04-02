@@ -6,7 +6,7 @@
     android:background="@color/back01"
     android:orientation="vertical">
 
-    <com.flyzebra.xinyi.view.RefreshRecycleryView
+    <com.flyzebra.xinyi.view.RefreshRecyclerView
         android:id="@+id/home_lv_01"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

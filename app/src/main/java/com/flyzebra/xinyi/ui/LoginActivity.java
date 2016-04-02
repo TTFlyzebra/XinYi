@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void startMainActivity(UserInfo userInfo) {
-        Intent intent = new Intent(LoginActivity.this, MainActitity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("UserInfo", userInfo);
         intent.putExtras(bundle);

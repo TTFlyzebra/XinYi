@@ -3,16 +3,16 @@ package com.flyzebra.xinyi.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.view.RefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +26,9 @@ public class PoiFragment_type extends Fragment {
     private String HTTPTAG_TYPE = "PoiFragment_type" + Math.random();
     private IHttp iHttp = MyVolley.getInstance();
     private MainActivity activity;
-    private ListView listView;
+    private RefreshRecyclerView mRecyclerView;
     private List list;
-    private TvIvAdapter mAdapter;
+    private DifrenceAdapter mAdapter;
     private View view;
 
     public PoiFragment_type() {
@@ -55,39 +55,42 @@ public class PoiFragment_type extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = LayoutInflater.from(activity).inflate(R.layout.poi_fragment_type, container, false);
-        listView = (ListView) view.findViewById(R.id.poi_type_rv_01);
+        mRecyclerView = (RefreshRecyclerView) view.findViewById(R.id.poi_type_rv_01);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
         if (list == null) {
             list = new ArrayList();
         }
-        mAdapter = new TvIvAdapter(activity, list, R.layout.home_listview_item,
-                new int[]{R.id.tv01, R.id.tv02},
-                new String[]{"mealname", "mealprice"},
-                new int[]{R.id.iv01},
-                new String[]{"mealimage"},
-                null, new TvIvAdapter.SetImageView() {
+        mAdapter = new DifrenceAdapter(activity, list);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setRefrshTop(true);
+        mRecyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
-            public void setImageView(String url, ImageView iv) {
-                iHttp.upImageView(activity, "http://192.168.1.88/ordermeal" + url, iv);
+            public void onRefrsh(View view) {
+                iHttp.execute(new IHttp.Builder().setTag(HTTPTAG_TYPE).setUrl(Constant.URL_TABLE_1).setView(mRecyclerView).setJsonKey("mealinfo").setResult(new IHttp.Result() {
+                    @Override
+                    public void succeed(Object object) {
+                        mRecyclerView.refreshFinish();
+                    }
+
+                    @Override
+                    public void faild(Object object) {
+                        mRecyclerView.refreshFinish();
+                    }
+                }));
             }
         });
-        listView.setAdapter(mAdapter);
-        iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG_TYPE);
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        iHttp.upListView(Constant.URL_TABLE_1, mRecyclerView, "mealinfo", HTTPTAG_TYPE);
     }
 
     @Override
     public void onStop() {
         iHttp.cancelAll(HTTPTAG_TYPE);
         super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

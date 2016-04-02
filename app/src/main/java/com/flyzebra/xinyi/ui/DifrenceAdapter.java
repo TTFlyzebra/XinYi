@@ -21,8 +21,8 @@ import java.util.Map;
  * Created by FlyZebra on 2016/3/26.
  */
 public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements IHttp.HttpAdapter {
-    private static final int TYPE_VIEWPAGER = 1;
-    private static final int TYPE_LISTVIE = 2;
+    private final int TYPE_VIEWPAGER = 1;
+    private final int TYPE_LISTVIE = 2;
     private List<Map<String, Object>> list;
     private Context context;
     private IHttp iHttp = MyVolley.getInstance();
@@ -42,7 +42,7 @@ public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements
                 hodler = new ViewPageHolder(childViewPager);
                 break;
             case TYPE_LISTVIE:
-                View view = LayoutInflater.from(context).inflate(R.layout.home_listview_item, parent, false);
+                View view = LayoutInflater.from(context).inflate(R.layout.product_item_01, parent, false);
                 hodler = new ListViewHolder(view);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -107,9 +107,9 @@ public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements
 
         public ListViewHolder(View itemView) {
             super(itemView);
-            tv01 = (TextView) itemView.findViewById(R.id.tv01);
-            tv02 = (TextView) itemView.findViewById(R.id.tv02);
-            iv01 = (ImageView) itemView.findViewById(R.id.iv01);
+            tv01 = (TextView) itemView.findViewById(R.id.p_item_01_tv_01);
+            tv02 = (TextView) itemView.findViewById(R.id.p_item_01_tv_02);
+            iv01 = (ImageView) itemView.findViewById(R.id.p_item_01_iv_01);
         }
     }
 }

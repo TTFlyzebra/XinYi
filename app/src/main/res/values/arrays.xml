@@ -12,6 +12,7 @@
         <item>主板</item>
         <item>显示器</item>
         <item>网络产品</item>
-        <item>耗材</item>
+        <item>办公耗材</item>
+        <item>其它</item>
     </string-array>
 </resources>

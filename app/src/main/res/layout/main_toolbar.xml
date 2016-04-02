@@ -9,31 +9,67 @@
     android:background="?attr/colorPrimary"
     android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/toobar_tv_01"
-        style="@style/ToolbarItem"
-        android:gravity="center"
-        android:text="@string/deal"
-        android:textColor="@color/color_select"
-        android:textSize="20sp" />
-
     <LinearLayout
+        android:id="@+id/toolbar_home_ll_01"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:gravity="right"
-        android:orientation="horizontal">
+        android:gravity="left"
+        android:orientation="horizontal"
+        android:weightSum="5">
 
-        <Button
-            android:id="@+id/toolbar_et_01"
-            style="@style/ToolbarItem"
-            android:background="@drawable/toolbar_searth" />
+        <TextView
+            android:id="@+id/toobar_tv_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:text="@string/home"
+            android:textColor="@color/back04"
+            android:textSize="18sp" />
 
-        <ImageView
-            android:id="@+id/toolbar_iv_01"
-            style="@style/ToolbarItem"
-            android:layout_width="30dp"
-            android:src="@drawable/qq_ico01"
-            android:visibility="visible" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4">
+
+                <EditText
+                    android:id="@+id/toolbar_et_searth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/toolbar_searth"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="left|center"
+                    android:hint="@string/searth"
+                    android:textColor="@color/back01"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="3dp"
+                    android:padding="6dp"
+                    android:src="@drawable/tooblar_icon_searth" />
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/toolbar_iv_scan"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/toolbar_icon_scan" />
+        </LinearLayout>
+
     </LinearLayout>
 </android.support.v7.widget.Toolbar>
 

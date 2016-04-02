@@ -12,7 +12,7 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
-import com.flyzebra.xinyi.view.RefreshRecycleryView;
+import com.flyzebra.xinyi.view.RefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,34 +28,36 @@ public class HomeFragment extends Fragment {
     private String HTTPTAG = "Fragment" + Math.random();
 
     //ViewPage List;Key字包含图片名字=name，图片路径=path
-    private MainActitity activity;
+    private MainActivity activity;
 
     private View view;
-    private RefreshRecycleryView recyclerView;
+    private RefreshRecyclerView recyclerView;
     private DifrenceAdapter adapter;
     private List<Map<String, Object>> list;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActitity) getActivity();
+        activity = (MainActivity) getActivity();
+        activity.setToolbar(0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.home_fragment, container, false);
-        recyclerView = (RefreshRecycleryView) view.findViewById(R.id.home_lv_01);
+        recyclerView = (RefreshRecyclerView) view.findViewById(R.id.home_lv_01);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         if (list == null) {
             list = new ArrayList<Map<String, Object>>();
         }
         adapter = new DifrenceAdapter(activity, list);
         recyclerView.setAdapter(adapter);
-//        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", recyclerView, "mealinfo", HTTPTAG);
-        recyclerView.setListenerTopRefresh(new RefreshRecycleryView.ListenerTopRefresh() {
+        recyclerView.setRefrshTop(true);
+        iHttp.upListView(Constant.URL_TABLE_1, recyclerView, "mealinfo", HTTPTAG);
+        recyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
-                iHttp.execute(new IHttp.Builder().setTag(HTTPTAG).setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(recyclerView).setJsonKey("mealinfo").setResult(new IHttp.Result() {
+                iHttp.execute(new IHttp.Builder().setTag(HTTPTAG).setUrl(Constant.URL_TABLE_1).setView(recyclerView).setJsonKey("mealinfo").setResult(new IHttp.Result() {
                     @Override
                     public void succeed(Object object) {
                         recyclerView.refreshFinish();
@@ -70,7 +72,7 @@ public class HomeFragment extends Fragment {
         });
 
         recyclerView.setRefrshBottom(false);
-        recyclerView.setListenerBottomRefresh(new RefreshRecycleryView.ListenerBottomRefresh() {
+        recyclerView.setListenerBottomRefresh(new RefreshRecyclerView.ListenerBottomRefresh() {
             @Override
             public void onRefrsh(View view) {
                 list.addAll(list);
@@ -79,7 +81,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        recyclerView.setListenerLastItem(new RefreshRecycleryView.ListenerLastItem() {
+        recyclerView.setListenerLastItem(new RefreshRecyclerView.ListenerLastItem() {
             @Override
             public void onLastItem() {
                 list.addAll(list);

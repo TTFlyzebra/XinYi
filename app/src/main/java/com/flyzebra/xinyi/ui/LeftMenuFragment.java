@@ -21,7 +21,7 @@ import com.flyzebra.xinyi.utils.ResUtils;
 public class LeftMenuFragment extends Fragment{
     private String[] menuarr;
     private ListView listview;
-    private MainActitity activity;
+    private MainActivity activity;
     private ImageView left_drawer_iv_01;
     private TextView left_drawer_tv_01;
     public LeftMenuFragment(){
@@ -30,7 +30,7 @@ public class LeftMenuFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActitity) getActivity();
+        activity = (MainActivity) getActivity();
     }
 
     @Override

@@ -5,4 +5,5 @@ package com.flyzebra.xinyi.data;
  */
 public class Constant {
     public static final String URL_TABLE = "http://192.168.1.88/ordermeal/table.jsp";
+    public static final String URL_TABLE_1 = "http://192.168.1.88/ordermeal/table.jsp?get=mealinfo";
 }

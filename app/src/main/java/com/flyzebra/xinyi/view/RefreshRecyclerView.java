@@ -1,6 +1,7 @@
 package com.flyzebra.xinyi.view;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by FlyZebra on 2016/4/1.
  */
-public class RefreshRecycleryView extends ViewGroup {
+public class RefreshRecyclerView extends ViewGroup {
     private final int pull_Height = 200;
     private final int animScoller_time = 500;
     private final int mTouchSlop;
@@ -39,7 +40,7 @@ public class RefreshRecycleryView extends ViewGroup {
     private int PULLVIEW = PullView.PULL_NOMARL;
     private float down_y;
     private float mv_x, mv_y;
-    private boolean TOP_MODE = true;
+    private boolean TOP_MODE = false;
     private boolean BOT_MODE = false;
     private ExecutorService mExecutorService = Executors.newFixedThreadPool(1);
     private boolean isAttach;
@@ -49,15 +50,15 @@ public class RefreshRecycleryView extends ViewGroup {
     private ListenerBottomRefresh listenerBottomRefresh;
     private ListenerLastItem listenerLastItem;
 
-    public RefreshRecycleryView(Context context) {
+    public RefreshRecyclerView(Context context) {
         this(context, null);
     }
 
-    public RefreshRecycleryView(Context context, AttributeSet attrs) {
+    public RefreshRecyclerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RefreshRecycleryView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RefreshRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         final ViewConfiguration vc = ViewConfiguration.get(context);
         mTouchSlop = vc.getScaledTouchSlop();
@@ -255,6 +256,21 @@ public class RefreshRecycleryView extends ViewGroup {
         return false;
     }
 
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return super.onSaveInstanceState();
+    }
+
+    protected void onRestoreInstanceState(Parcelable state) {
+        try {
+            super.onRestoreInstanceState(state);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     private void listenerMianViewState() {
         GridLayoutManager layoutManager;
         int first = -1;
@@ -400,17 +416,17 @@ public class RefreshRecycleryView extends ViewGroup {
         void onLastItem();
     }
 
-    public static class MainView {
-        public static int VIEW_TOP = 1;
-        public static int VIEW_BOTTOM = 2;
-        public static int VIEW_LAST = 3;
-        public static int VIEW_NORMAL = 4;
+    public interface MainView {
+        int VIEW_TOP = 1;
+        int VIEW_BOTTOM = 2;
+        int VIEW_LAST = 3;
+        int VIEW_NORMAL = 4;
     }
 
-    public static class PullView {
-        public static int PULL_TOP = 1;
-        public static int PULL_BOTTOM = 2;
-        public static int PULL_NOMARL = 3;
+    public interface PullView {
+        int PULL_TOP = 1;
+        int PULL_BOTTOM = 2;
+        int PULL_NOMARL = 3;
     }
 
 }
