@@ -1,8 +1,10 @@
 package com.flyzebra.xinyi.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 /**
@@ -38,4 +40,12 @@ public class ResUtils {
     public static String[] getStringArray(Context context, int ResID) {
         return context.getResources().getStringArray(ResID);
     }
+
+    public static DisplayMetrics getMetrices(Activity activity) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        return dm;
+    }
+
+
 }

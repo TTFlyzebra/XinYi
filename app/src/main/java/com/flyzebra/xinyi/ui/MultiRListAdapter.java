@@ -20,14 +20,14 @@ import java.util.Map;
 /**
  * Created by FlyZebra on 2016/3/26.
  */
-public class HomeRListAdapter extends RecyclerView.Adapter<ViewHolder> implements HttpAdapter {
+public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implements HttpAdapter {
     private List<Map<String, Object>> list;
     private Context context;
     private IHttp iHttp = MyVolley.getInstance();
     private OnItemClick onItemClick;
 
 
-    public HomeRListAdapter(Context context, List<Map<String, Object>> list) {
+    public MultiRListAdapter(Context context, List<Map<String, Object>> list) {
         this.list = list;
         this.context = context;
     }

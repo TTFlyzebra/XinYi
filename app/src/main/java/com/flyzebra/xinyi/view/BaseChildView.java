@@ -28,7 +28,8 @@ public class BaseChildView extends LinearLayout implements IChildView {
     }
 
     public BaseChildView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init(context);
     }
 
     public BaseChildView(Context context, AttributeSet attrs, int defStyleAttr) {

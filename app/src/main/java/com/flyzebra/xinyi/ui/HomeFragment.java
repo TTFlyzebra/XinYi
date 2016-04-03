@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment {
 
     private View view;
     private RefreshRecyclerView recyclerView;
-    private HomeRListAdapter mAdapter;
+    private MultiRListAdapter mAdapter;
     private List<Map<String, Object>> list;
 
     @Override
@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
         if (list == null) {
             list = new ArrayList<Map<String, Object>>();
         }
-        mAdapter = new HomeRListAdapter(activity, list);
+        mAdapter = new MultiRListAdapter(activity, list);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setHasFixedSize(true);
         //下拉刷新
@@ -67,9 +67,16 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void faild(Object object) {
-                        recyclerView.refreshFinish();
+//                        recyclerView.refreshFinish();
                     }
                 }));
+            }
+        });
+
+        recyclerView.setListenerBottomRefresh(new RefreshRecyclerView.ListenerBottomRefresh() {
+            @Override
+            public void onRefrsh(View view) {
+                recyclerView.refreshFinish();
             }
         });
 

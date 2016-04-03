@@ -20,7 +20,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.HttpAdapter;
-import com.flyzebra.xinyi.utils.BitmapCache;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
 

@@ -12,7 +12,6 @@ import com.flyzebra.xinyi.data.HttpAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -107,10 +106,6 @@ public class MyOkHttp implements IHttp {
                     if (builder.view instanceof ListView) {
                         final ListView listView = (ListView) builder.view;
                         final HttpAdapter adapter = (HttpAdapter) listView.getAdapter();
-                        notifyListView(adapter, res, builder.jsonKey);
-                    } else if (builder.view instanceof PullToRefreshListView) {
-                        final PullToRefreshListView pullToRefreshListView = (PullToRefreshListView) builder.view;
-                        final HttpAdapter adapter = (HttpAdapter) (pullToRefreshListView.getAdapter());
                         notifyListView(adapter, res, builder.jsonKey);
                     } else if (builder.view instanceof RecyclerView) {
                         final RecyclerView recyclerView = (RecyclerView) builder.view;
