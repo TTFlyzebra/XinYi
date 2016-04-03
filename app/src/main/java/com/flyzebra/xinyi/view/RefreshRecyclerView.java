@@ -59,6 +59,20 @@ public class RefreshRecyclerView extends ViewGroup {
             executors.submit(new SetMainViewState());
         }
     };
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+//            FlyLog.i("<RefreshRecycleryView>handleMessage:what=" + msg.what + ",x=" + msg.arg1 + ",y" + msg.arg2);
+            switch (msg.what) {
+                case 1:
+                    scrollBy(msg.arg1, msg.arg2);
+                    break;
+                case 2:
+                    scrollTo(msg.arg1, msg.arg2);
+                    break;
+            }
+        }
+    };
 
     public RefreshRecyclerView(Context context) {
         super(context);
@@ -98,7 +112,6 @@ public class RefreshRecyclerView extends ViewGroup {
         topView.setTextColor(0xFF000000);
         return topView;
     }
-
 
     public void setLayoutManager(LayoutManager layout) {
         mLayout = layout;
@@ -184,68 +197,12 @@ public class RefreshRecyclerView extends ViewGroup {
                 }
                 //BOT弹出处理
                 cancleSmooth.set(true);
-
                 if (checkTopBottomState(ev)) return true;
-
                 //TOP弹出处理
                 if (checkTopPullState(ev)) return true;
-
-
                 down_y = ev.getY();
                 break;
             case MotionEvent.ACTION_UP:
-                down_y = 0;
-                if (getScrollY() != 0) {
-                    if (PULLVIEW == PullView.PULL_TOP && TOP_MODE) {
-                        mRecyclerView.scrollToPosition(0);
-                        perfromRefreshTop();
-                    } else if (PULLVIEW == PullView.PULL_BOTTOM && BOT_MODE) {
-                        mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
-                        perfromRefreshBottom();
-                    }
-                    return true;
-                }
-                break;
-        }
-        return PULLVIEW == PullView.PULL_TOP || PULLVIEW == PullView.PULL_BOTTOM;
-    }
-
-    private boolean PerfromPullView(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mv_x = ev.getX();
-                mv_y = down_y = ev.getY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                //down_y==0 肯定不是本界面发起的消息，如果不是在本界面收到的DWON消息,可以处理跟其它控件的冲突
-                if (down_y == 0) {
-                    break;
-                }
-                ////横向的划动冲突解决
-                if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y) && (TOP_MODE || BOT_MODE)) {
-                    if (PULLVIEW == PullView.PULL_TOP) {
-                        mRecyclerView.scrollToPosition(0);
-                    }
-                    if (PULLVIEW == PullView.PULL_BOTTOM) {
-                        mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
-                    }
-                    if (PULLVIEW != PullView.PULL_TOP && PULLVIEW != PullView.PULL_BOTTOM) {
-                        scrollTo(0, 0);
-                    }
-                }
-                //BOT弹出处理
-                cancleSmooth.set(true);
-
-                if (checkTopBottomState(ev)) return true;
-
-                //TOP弹出处理
-                if (checkTopPullState(ev)) return true;
-
-
-                down_y = ev.getY();
-                break;
-            case MotionEvent.ACTION_UP:
-                down_y = 0;
                 if (getScrollY() != 0) {
                     if (PULLVIEW == PullView.PULL_TOP && TOP_MODE) {
                         mRecyclerView.scrollToPosition(0);
@@ -371,21 +328,6 @@ public class RefreshRecyclerView extends ViewGroup {
         executors.submit(new SmoothScroll(sy, dy, times));
     }
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-//            FlyLog.i("<RefreshRecycleryView>handleMessage:what=" + msg.what + ",x=" + msg.arg1 + ",y" + msg.arg2);
-            switch (msg.what) {
-                case 1:
-                    scrollBy(msg.arg1, msg.arg2);
-                    break;
-                case 2:
-                    scrollTo(msg.arg1, msg.arg2);
-                    break;
-            }
-        }
-    };
-
     @Override
     protected void onAttachedToWindow() {
         isAttach = true;
@@ -474,13 +416,9 @@ public class RefreshRecyclerView extends ViewGroup {
     private class SetMainViewState implements Runnable {
         @Override
         public void run() {
-            int first = -8;
-            int last = -8;
-            View firstView = null;
-            View lastView = null;
-            Method findFirst;
-            Method findLast;
-            Method findView;
+            int first = -8, last = -8;
+            View firstView = null, lastView = null;
+            Method findFirst, findLast, findView;
             try {
                 Class cls = mLayout.getClass();
                 findFirst = cls.getDeclaredMethod("findFirstVisibleItemPosition");
@@ -508,13 +446,10 @@ public class RefreshRecyclerView extends ViewGroup {
                 }
             } catch (NoSuchMethodException e) {
                 FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->NoSuchMethodException");
-                e.printStackTrace();
             } catch (InvocationTargetException e) {
                 FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->InvocationTargetException");
-                e.printStackTrace();
             } catch (IllegalAccessException e) {
                 FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->IllegalAccessException");
-                e.printStackTrace();
             }
         }
     }
