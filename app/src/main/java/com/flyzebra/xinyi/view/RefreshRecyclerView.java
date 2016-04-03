@@ -70,7 +70,6 @@ public class RefreshRecyclerView extends ViewGroup {
         topView.setTextColor(0xFF000000);
 
         mRecyclerView = new RecyclerView(context, attrs);
-        mRecyclerView.setVisibility(VISIBLE);
         mRecyclerView.setOnScrollChangeListener(new OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -269,8 +268,6 @@ public class RefreshRecyclerView extends ViewGroup {
         }
     }
 
-
-
     private void listenerMianViewState() {
         GridLayoutManager layoutManager;
         int first = -1;
@@ -375,10 +372,12 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     public void setListenerBottomRefresh(ListenerBottomRefresh listenerBottomRefresh) {
+        BOT_MODE = true;
         this.listenerBottomRefresh = listenerBottomRefresh;
     }
 
     public void setListenerTopRefresh(ListenerTopRefresh listenerTopRefresh) {
+        TOP_MODE = true;
         this.listenerTopRefresh = listenerTopRefresh;
     }
 

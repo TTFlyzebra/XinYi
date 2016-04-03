@@ -4,11 +4,10 @@
     android:background="@color/back01"
     android:orientation="vertical">
 
-    <com.flyzebra.googleui.SlidingTabLayout
+    <!--com.flyzebra.googleui.SlidingTabLayout
         android:id="@+id/poi_stl_01"
         style="@style/hwwm"
-        android:background="@color/colorPrimary"
-        android:paddingTop="24dp" />
+        android:background="@color/colorPrimary"/-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/poi_vp_01"

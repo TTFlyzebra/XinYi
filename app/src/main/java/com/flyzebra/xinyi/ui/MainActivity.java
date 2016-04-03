@@ -14,8 +14,10 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.flyzebra.googleui.SlidingTabLayout;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.http.IHttp;
@@ -33,12 +35,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public IHttp iHttp = MyVolley.getInstance();
     public UserInfo userInfo;
-
-    public Toolbar toolBar;
-    public TextView toolBar_title;
-    public ImageView toolBar_scan;
+    public SlidingTabLayout toolBar_stl;
     public String[] fragmentName = {"HomeFragment", "PoiFragment", "BuyFragment", "HomeFragment", "BuyFragment"};
     public String[] fragmentTitle = {"首页", "商城", "订单", "我的", "设置"};
+    private Toolbar toolBar;
+    private TextView toolBar_title;
+    private ImageView toolBar_scan;
+    private RelativeLayout toolBar_searth;
     private DrawerLayout mDrawerLayout;
     private int[] imageViewResID = {R.id.main_iv_home, R.id.main_iv_poi, R.id.main_iv_buy, R.id.main_iv_user, R.id.main_iv_more};
     private int[] textViewResID = {R.id.main_tv_home, R.id.main_tv_poi, R.id.main_tv_buy, R.id.main_tv_user, R.id.main_tv_more};
@@ -51,14 +54,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<TextView> tv_list = new ArrayList<>();
     private List<LinearLayout> ll_list = new ArrayList<>();
 
+    private int cerrent_fragment = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+
         textColer_Off = ResUtils.getColorStateList(this, R.color.color_select);
         textColor_On = ResUtils.getColor(this, R.color.menu_select_on);
+
         initToolbar(this);
         initView(this);
+
+        //恢复保存的状态，保存的数据为当前打开的是那个页面(fragment)，按钮选中状态
+        if (savedInstanceState != null) {
+            cerrent_fragment = savedInstanceState.getInt("cerrent_fragment");
+            for (int i = 0; i < ll_list.size(); i++) {
+                if (cerrent_fragment == i) {
+                    iv_list.get(i).setImageResource(imageViewSrcResID_On[i]);
+                    tv_list.get(i).setTextColor(textColor_On);
+                } else {
+                    iv_list.get(i).setImageResource(imageViewSrcResID_Off[i]);
+                    tv_list.get(i).setTextColor(textColer_Off);
+                }
+            }
+        }
+
         //获取用户信息
         Intent intent = getIntent();
         if (intent != null) {
@@ -73,13 +96,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerLayout.addDrawerListener(new DrawerLayoutUtils().getLeftDrawerListener(mDrawerLayout));
         ReplaceFragment("LeftMenuFragment", R.id.left_drawer_menu);
-        ReplaceFragment(fragmentName[0], R.id.main_fl_01);
+        ReplaceFragment(fragmentName[cerrent_fragment], R.id.main_fl_01);
     }
 
     private void initToolbar(Context context) {
         toolBar = (Toolbar) findViewById(R.id.toolbar);
-        toolBar_title = (TextView) toolBar.findViewById(R.id.toobar_tv_title);
         setSupportActionBar(toolBar);
+        toolBar_title = (TextView) toolBar.findViewById(R.id.toobar_tv_title);
+        toolBar_searth = (RelativeLayout) findViewById(R.id.toolbar_rl_searth);
+        toolBar_stl = (SlidingTabLayout) findViewById(R.id.toolbar_stl_01);
         toolBar_scan = (ImageView) findViewById(R.id.toolbar_iv_scan);
         toolBar_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("cerrent_fragment", cerrent_fragment);
+        super.onSaveInstanceState(outState);
+    }
 
     private void initView(Context context) {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.main_dl_01);
@@ -115,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (ResId == linearLayoutResID[i]) {
                 iv_list.get(i).setImageResource(imageViewSrcResID_On[i]);
                 tv_list.get(i).setTextColor(textColor_On);
+                cerrent_fragment = i;
                 ReplaceFragment(fragmentName[i], R.id.main_fl_01);
             } else {
                 iv_list.get(i).setImageResource(imageViewSrcResID_Off[i]);
@@ -128,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
             Class<?> c = Class.forName(MainActivity.class.getPackage().getName() + "." + classname);
             Fragment fragment = (Fragment) c.newInstance();
-            transaction1.replace(resId, fragment);
+            transaction1.replace(resId, fragment, classname);
             transaction1.commit();
             return true;
         } catch (ClassNotFoundException e) {
@@ -154,13 +185,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolBar_title.setText(fragmentTitle[index]);
         switch (index) {
             case 0:
-                toolBar.setVisibility(View.VISIBLE);
+                toolBar_stl.setVisibility(View.GONE);
+                toolBar_searth.setVisibility(View.VISIBLE);
+                toolBar_title.setVisibility(View.VISIBLE);
+                toolBar_scan.setVisibility(View.VISIBLE);
                 break;
             case 1:
-                toolBar.setVisibility(View.GONE);
+                toolBar_stl.setVisibility(View.VISIBLE);
+                toolBar_searth.setVisibility(View.GONE);
+                toolBar_title.setVisibility(View.GONE);
+                toolBar_scan.setVisibility(View.GONE);
                 break;
             case 2:
-                toolBar.setVisibility(View.VISIBLE);
+                toolBar_stl.setVisibility(View.GONE);
+                toolBar_searth.setVisibility(View.GONE);
+                toolBar_title.setVisibility(View.VISIBLE);
+                toolBar_scan.setVisibility(View.GONE);
                 break;
         }
     }

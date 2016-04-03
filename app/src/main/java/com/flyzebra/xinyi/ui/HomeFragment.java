@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.HttpAdapter;
+import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,14 +35,13 @@ public class HomeFragment extends Fragment {
 
     private View view;
     private RefreshRecyclerView recyclerView;
-    private DifrenceAdapter adapter;
+    private HomeRListAdapter mAdapter;
     private List<Map<String, Object>> list;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
-        activity.setToolbar(0);
     }
 
     @Override
@@ -50,10 +52,10 @@ public class HomeFragment extends Fragment {
         if (list == null) {
             list = new ArrayList<Map<String, Object>>();
         }
-        adapter = new DifrenceAdapter(activity, list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setRefrshTop(true);
-        iHttp.upListView(Constant.URL_TABLE_1, recyclerView, "mealinfo", HTTPTAG);
+        mAdapter = new HomeRListAdapter(activity, list);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setHasFixedSize(true);
+        //下拉刷新
         recyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
@@ -71,33 +73,39 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        recyclerView.setRefrshBottom(false);
-        recyclerView.setListenerBottomRefresh(new RefreshRecyclerView.ListenerBottomRefresh() {
-            @Override
-            public void onRefrsh(View view) {
-                list.addAll(list);
-                adapter.notifyDataSetChanged();
-                recyclerView.refreshFinish();
-            }
-        });
-
+        //滚动到最后一行监听
         recyclerView.setListenerLastItem(new RefreshRecyclerView.ListenerLastItem() {
             @Override
             public void onLastItem() {
-                list.addAll(list);
-                adapter.notifyDataSetChanged();
             }
         });
-        recyclerView.setHasFixedSize(true);
+
         recyclerView.addItemDecoration(new MyItemDcoration());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        //初始数据
+        //ViewPager轮播
+        List vp_list = TestHttp.getViewPagerList();
+        for (int i = 0; i < 10; i++) {
+            Map vp_map = new HashMap();
+            vp_map.put(HttpAdapter.DATA, vp_list);
+            vp_map.put(HttpAdapter.TYPE, HttpAdapter.VIEWPAGER);
+            list.add(vp_map);
+        }
 
         return view;
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        activity.setToolbar(0);
     }
 
     @Override

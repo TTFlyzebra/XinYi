@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.flyzebra.xinyi.data.HttpAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;

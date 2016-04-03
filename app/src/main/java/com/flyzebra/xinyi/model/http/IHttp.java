@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.flyzebra.xinyi.data.HttpAdapter;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,12 +44,6 @@ public interface IHttp {
     interface Result {
         void succeed(Object object);
         void faild(Object object);
-    }
-
-    interface HttpAdapter<T extends List> {
-        T getList();
-
-        void notifyDataSetChanged();
     }
 
     interface Method {

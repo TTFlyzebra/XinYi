@@ -49,15 +49,19 @@ public class ViewPagerChildView extends BaseChildView {
             FlyLog.i("<ViewPagerChildView>playsTask running.currentItem=" + current_item);
         }
     };
+
     public ViewPagerChildView(Context context) {
         this(context, null);
     }
+
     public ViewPagerChildView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
     public ViewPagerChildView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
     public ViewPagerChildView(Context context, ViewGroup parent, @LayoutRes int ResId) {
         super(context, parent, ResId);
     }
@@ -100,9 +104,10 @@ public class ViewPagerChildView extends BaseChildView {
     @Override
     public void setData(List<Map<String, Object>> data) {
         super.setData(data);
-        countVP.setSumItem(data.size());
-        adapter.notifyDataSetChanged();
-        FlyLog.i("<ViewPagerChildView>setData:listsize=" + data.size());
+        if (data != null) {
+            countVP.setSumItem(data.size());
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

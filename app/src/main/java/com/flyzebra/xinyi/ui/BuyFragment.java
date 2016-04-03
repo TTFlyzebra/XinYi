@@ -44,7 +44,6 @@ public class BuyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
-        activity.setToolbar(2);
     }
 
     @Nullable
@@ -124,6 +123,12 @@ public class BuyFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
 //        iHttp.execute(IHttp.Builder.getInstance().setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
         iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        activity.setToolbar(2);
     }
 
     @Override
