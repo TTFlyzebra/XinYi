@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="RefreshRList1" type="id" />
+    <item name="RefreshRList2" type="id" />
+    <item name="RefreshRList3" type="id" />
+    <item name="RefreshRList4" type="id" />
+    <item name="RefreshRList5" type="id" />
+    <item name="RefreshRList6" type="id" />
+    <item name="RefreshRList7" type="id" />
+    <item name="RefreshRList8" type="id" />
+</resources>

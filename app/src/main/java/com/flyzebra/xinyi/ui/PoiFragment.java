@@ -28,6 +28,7 @@ public class PoiFragment extends Fragment {
     private ViewPager viewPager;
     private MyFragmentPagerAdapter mPagerAdapter;
     private String[] poiTypeArr;
+    private int[] poiResIDArr = {R.id.RefreshRList1, R.id.RefreshRList2, R.id.RefreshRList3, R.id.RefreshRList4, R.id.RefreshRList5, R.id.RefreshRList6};
 
     public PoiFragment() {
     }
@@ -116,7 +117,7 @@ public class PoiFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return PoiFragment_type.newInstance(poiTypeArr[position]);
+            return PoiFragment_type.newInstance(poiTypeArr[position], poiResIDArr[position]);
         }
 
         @Override

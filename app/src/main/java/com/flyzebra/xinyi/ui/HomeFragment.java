@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
         //初始数据
         //ViewPager轮播
         List vp_list = TestHttp.getViewPagerList();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 21; i++) {
             Map vp_map = new HashMap();
             vp_map.put(HttpAdapter.DATA, vp_list);
             vp_map.put(HttpAdapter.TYPE, HttpAdapter.VIEWPAGER);

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -20,8 +21,6 @@ import android.widget.TextView;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResUtils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,8 +37,8 @@ public class RefreshRecyclerView extends ViewGroup {
     private View topView;
     private View botView;
 
-    private int MAINVIEW = MainView.VIEW_NORMAL;
-    private int PULLVIEW = PullView.PULL_NOMARL;
+    private int RLIST = LIST.SCROLLED;
+    private int SHOW = PULL.NORMAL;
     private float down_y;
     private float mv_x, mv_y;
     private boolean TOP_MODE = false;
@@ -185,13 +184,13 @@ public class RefreshRecyclerView extends ViewGroup {
                 }
                 ////横向的划动冲突解决
                 if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y) && (TOP_MODE || BOT_MODE)) {
-                    if (PULLVIEW == PullView.PULL_TOP) {
+                    if (SHOW == PULL.TOP) {
                         mRecyclerView.scrollToPosition(0);
                     }
-                    if (PULLVIEW == PullView.PULL_BOTTOM) {
+                    if (SHOW == PULL.BOTTOM) {
                         mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
                     }
-                    if (PULLVIEW != PullView.PULL_TOP && PULLVIEW != PullView.PULL_BOTTOM) {
+                    if (SHOW != PULL.TOP && SHOW != PULL.BOTTOM) {
                         scrollTo(0, 0);
                     }
                 }
@@ -204,10 +203,10 @@ public class RefreshRecyclerView extends ViewGroup {
                 break;
             case MotionEvent.ACTION_UP:
                 if (getScrollY() != 0) {
-                    if (PULLVIEW == PullView.PULL_TOP && TOP_MODE) {
+                    if (SHOW == PULL.TOP && TOP_MODE) {
                         mRecyclerView.scrollToPosition(0);
                         perfromRefreshTop();
-                    } else if (PULLVIEW == PullView.PULL_BOTTOM && BOT_MODE) {
+                    } else if (SHOW == PULL.BOTTOM && BOT_MODE) {
                         mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
                         perfromRefreshBottom();
                     }
@@ -215,26 +214,26 @@ public class RefreshRecyclerView extends ViewGroup {
                 }
                 break;
         }
-        return PULLVIEW == PullView.PULL_TOP || PULLVIEW == PullView.PULL_BOTTOM;
+        return SHOW == PULL.TOP || SHOW == PULL.BOTTOM;
     }
 
     private boolean checkTopPullState(MotionEvent ev) {
-        if (PULLVIEW == PullView.PULL_TOP && TOP_MODE) {
+        if (SHOW == PULL.TOP && TOP_MODE) {
             setTopViewState();
             scrollBy(0, (int) (down_y - ev.getY()));
             if (getScrollY() >= 0) {
                 scrollTo(0, 0);
-                PULLVIEW = PullView.PULL_NOMARL;
+                SHOW = PULL.NORMAL;
                 mRecyclerView.scrollToPosition(0);
             } else {
-                PULLVIEW = PullView.PULL_TOP;
+                SHOW = PULL.TOP;
             }
             down_y = ev.getY();
             return true;
         }
-        if ((MAINVIEW == MainView.VIEW_TOP || mLayout.getItemCount() == 0) && (ev.getY() > down_y) && TOP_MODE) {
+        if ((RLIST == LIST.TOP || mLayout.getItemCount() == 0) && (ev.getY() > down_y) && TOP_MODE) {
             isNeedRefresh.set(false);
-            PULLVIEW = PullView.PULL_TOP;
+            SHOW = PULL.TOP;
             down_y = ev.getY();
             mRecyclerView.scrollToPosition(0);
             return true;
@@ -243,22 +242,22 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     private boolean checkTopBottomState(MotionEvent ev) {
-        if (PULLVIEW == PullView.PULL_BOTTOM && BOT_MODE) {
+        if (SHOW == PULL.BOTTOM && BOT_MODE) {
             setBottomViewState();
             scrollBy(0, (int) (down_y - ev.getY()));
             if (getScrollY() <= 0) {
                 scrollTo(0, 0);
-                PULLVIEW = PullView.PULL_NOMARL;
+                SHOW = PULL.NORMAL;
                 mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
             } else {
-                PULLVIEW = PullView.PULL_BOTTOM;
+                SHOW = PULL.BOTTOM;
             }
             down_y = ev.getY();
             return true;
         }
-        if (MAINVIEW == MainView.VIEW_BOTTOM && (ev.getY() < down_y) && BOT_MODE) {
+        if (RLIST == LIST.BOTTOM && (ev.getY() < down_y) && BOT_MODE) {
             isNeedRefresh.set(false);
-            PULLVIEW = PullView.PULL_BOTTOM;
+            SHOW = PULL.BOTTOM;
             down_y = ev.getY();
             mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
             return true;
@@ -309,17 +308,27 @@ public class RefreshRecyclerView extends ViewGroup {
         smoothScrollToY(getScrollY(), 0, animScoller_time);
     }
 
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        return super.onSaveInstanceState();
-    }
 
+    //
+//    /**
+//     用在ViewPager中不这样设置会提示找不到ID，解决方案1，如下所示，或者生成后重新分配ID
+//     java.lang.IllegalArgumentException: Wrong state class, expecting View State but received class
+//     android.support.v7.widget.RecyclerView$SavedState instead. This usually happens when two views
+//     of different type have the same id in the same hierarchy. This view's id is id/poi_type_rv_01.
+//     Make sure other views do not use the same id.
+//     * @param state
+//     */
     protected void onRestoreInstanceState(Parcelable state) {
         try {
             super.onRestoreInstanceState(state);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return super.onSaveInstanceState();
     }
 
     private void smoothScrollToY(int sy, int dy, int times) {
@@ -344,9 +353,9 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     public void refreshFinish() {
-        if (PULLVIEW == PullView.PULL_TOP) {
+        if (SHOW == PULL.TOP) {
             ((TextView) topView).setText("更新完成...");
-        } else if (PULLVIEW == PullView.PULL_BOTTOM) {
+        } else if (SHOW == PULL.BOTTOM) {
             ((TextView) botView).setText("更新完成...");
         }
         isNeedRefresh.set(false);
@@ -400,17 +409,18 @@ public class RefreshRecyclerView extends ViewGroup {
         void onLastItem();
     }
 
-    public interface MainView {
-        int VIEW_TOP = 1;
-        int VIEW_BOTTOM = 2;
-        int VIEW_LAST = 3;
-        int VIEW_NORMAL = 0;
+    public interface LIST {
+        int TOP = 1;
+        int BOTTOM = 2;
+        int LAST = 3;
+        int EMPTY = 4;
+        int SCROLLED = 0;
     }
 
-    public interface PullView {
-        int PULL_TOP = 1;
-        int PULL_BOTTOM = 2;
-        int PULL_NOMARL = 0;
+    public interface PULL {
+        int TOP = 1;
+        int BOTTOM = 2;
+        int NORMAL = 0;
     }
 
     private class SetMainViewState implements Runnable {
@@ -418,39 +428,31 @@ public class RefreshRecyclerView extends ViewGroup {
         public void run() {
             int first = -8, last = -8;
             View firstView = null, lastView = null;
-            Method findFirst, findLast, findView;
-            try {
-                Class cls = mLayout.getClass();
-                findFirst = cls.getDeclaredMethod("findFirstVisibleItemPosition");
-                findLast = cls.getDeclaredMethod("findLastVisibleItemPosition");
-                findView = cls.getDeclaredMethod("findViewByPosition", int.class);
-                first = (int) findFirst.invoke(mLayout);
-                last = (int) findLast.invoke(mLayout);
-                if (first == 0 && findView.invoke(mLayout, first) != null && ((View) findView.invoke(mLayout, first)).getTop() == 0) {
-                    FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->滚动到了顶部");
-                    MAINVIEW = MainView.VIEW_TOP;
-                } else if (last == mLayout.getItemCount() - 1 && findView.invoke(mLayout, last) != null && ((View) findView.invoke(mLayout, last)).getBottom() == getHeight()) {
-                    FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->滚动到了底部");
-                    MAINVIEW = MainView.VIEW_BOTTOM;
-                } else if (last > mLayout.getItemCount() - 2) {
-                    if (MAINVIEW != MainView.VIEW_LAST) {
-                        if (listenerLastItem != null) {
-                            listenerLastItem.onLastItem();
-                        }
-                        FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->滚动到最后一行");
-                    }
-                    MAINVIEW = MainView.VIEW_LAST;
-                } else {
-                    FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->没有状态发生");
-                    MAINVIEW = MainView.VIEW_NORMAL;
-                }
-            } catch (NoSuchMethodException e) {
-                FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->NoSuchMethodException");
-            } catch (InvocationTargetException e) {
-                FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->InvocationTargetException");
-            } catch (IllegalAccessException e) {
-                FlyLog.i("<RefreshRecyclerView>-->listenerMianViewState->IllegalAccessException");
+            LinearLayoutManager mGLayout = (LinearLayoutManager) mLayout;
+            first = mGLayout.findFirstVisibleItemPosition();
+            if (first == RecyclerView.NO_POSITION) {
+                RLIST = LIST.EMPTY;
+                FlyLog.i("<RefreshRecyclerView>-->SetMainViewState:MAINVIEW=" + RLIST);
+                return;
             }
+            last = mGLayout.findLastVisibleItemPosition();
+            firstView = mGLayout.findViewByPosition(0);
+            lastView = mGLayout.findViewByPosition(mLayout.getItemCount() - 1);
+            if (first == 0 && (firstView.getTop() == 0)) {
+                RLIST = LIST.TOP;
+            } else if ((last == mLayout.getItemCount() - 1) && (lastView.getBottom() == getHeight())) {
+                RLIST = LIST.BOTTOM;
+            } else if (last > mLayout.getItemCount() - 2) {
+                if (RLIST != LIST.LAST) {
+                    if (listenerLastItem != null) {
+                        listenerLastItem.onLastItem();
+                    }
+                }
+                RLIST = LIST.LAST;
+            } else {
+                RLIST = LIST.SCROLLED;
+            }
+            FlyLog.i("<RefreshRecyclerView>-->SetMainViewState:MAINVIEW=" + RLIST);
         }
     }
 
@@ -475,9 +477,9 @@ public class RefreshRecyclerView extends ViewGroup {
                 while (isNeedRefresh.get() && (Math.abs(scroolly) < height) && isAttach) {
                     if (cancleSmooth.get()) return;
                     if ((Math.abs(scroolly) < height)) {
-                        if (PULLVIEW == PullView.PULL_TOP) {
+                        if (SHOW == PULL.TOP) {
                             Message.obtain(mHandler, 2, 0, -height).sendToTarget();
-                        } else if (PULLVIEW == PullView.PULL_BOTTOM) {
+                        } else if (SHOW == PULL.BOTTOM) {
                             Message.obtain(mHandler, 2, 0, height).sendToTarget();
                         }
                     }
@@ -496,7 +498,7 @@ public class RefreshRecyclerView extends ViewGroup {
                 }
             }
             Message.obtain(mHandler, 2, 0, 0).sendToTarget();
-            PULLVIEW = PullView.PULL_NOMARL;
+            SHOW = PULL.NORMAL;
         }
     }
 

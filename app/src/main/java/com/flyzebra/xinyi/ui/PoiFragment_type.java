@@ -22,7 +22,9 @@ import java.util.List;
  */
 public class PoiFragment_type extends Fragment {
     private static final String ARG_TYPE = "TYPE";
+    private static final String ARG_ID = "ID";
     private String type;
+    private int ResID;
     private String HTTPTAG_TYPE = "PoiFragment_type" + Math.random();
     private IHttp iHttp = MyVolley.getInstance();
     private MainActivity activity;
@@ -34,10 +36,11 @@ public class PoiFragment_type extends Fragment {
     public PoiFragment_type() {
     }
 
-    public static PoiFragment_type newInstance(String type) {
+    public static PoiFragment_type newInstance(String type, int ResID) {
         Bundle args = new Bundle();
         PoiFragment_type fragment = new PoiFragment_type();
         args.putString(ARG_TYPE, type);
+        args.putInt(ARG_ID, ResID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +50,10 @@ public class PoiFragment_type extends Fragment {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         Bundle bundle = getArguments();
-        type = bundle.getString(ARG_TYPE);
+        if (bundle != null) {
+            type = bundle.getString(ARG_TYPE);
+            ResID = bundle.getInt(ARG_ID);
+        }
         HTTPTAG_TYPE = HTTPTAG_TYPE + type;
     }
 
@@ -56,6 +62,7 @@ public class PoiFragment_type extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = LayoutInflater.from(activity).inflate(R.layout.poi_fragment_type, container, false);
         mRecyclerView = (RefreshRecyclerView) view.findViewById(R.id.poi_type_rv_01);
+        mRecyclerView.setId(ResID);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
         if (list == null) {
             list = new ArrayList();

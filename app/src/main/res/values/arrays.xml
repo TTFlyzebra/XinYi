@@ -7,6 +7,7 @@
         <item>个人信息</item>
         <item>设置</item>
     </string-array>
+    <!-- 给下面的数组配置ID-->
     <string-array name="poi_type">
         <item>三大件</item>
         <item>主板</item>
