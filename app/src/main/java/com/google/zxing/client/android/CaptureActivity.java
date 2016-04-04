@@ -24,15 +24,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
 import com.google.zxing.BarcodeFormat;
@@ -70,8 +69,6 @@ public final class CaptureActivity extends Activity {
 
     private SurfaceHolder.Callback shCallback;
 
-    private ImageView menu_iv01;
-
     private static void drawLine(Canvas canvas, Paint paint, ResultPoint a, ResultPoint b, float scaleFactor) {
         if (a != null && b != null) {
             canvas.drawLine(scaleFactor * a.getX(),
@@ -100,15 +97,6 @@ public final class CaptureActivity extends Activity {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.zxing_capture);
-
-        menu_iv01 = (ImageView) findViewById(R.id.menu_iv01);
-        menu_iv01.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
@@ -127,15 +115,20 @@ public final class CaptureActivity extends Activity {
 
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
         viewfinderView.setCameraManager(cameraManager);
-
-//    statusView = (TextView) findViewById(R.id.status_view);
-
         handler = null;
 
-        //不设为水平显示
-//    setCurrentOrientation();
+//        SharedPreferences prefs = PreferenceManager
+//                .getDefaultSharedPreferences(this);
+//
+//        if (prefs.getBoolean("preferences_orientation",
+//                true)) {
+//            setRequestedOrientation(getCurrentOrientation());
+//        } else {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+//        }
 
-        resetStatusView();
+
+        viewfinderView.setVisibility(View.VISIBLE);
 
         beepManager.updatePrefs();
 
@@ -161,12 +154,12 @@ public final class CaptureActivity extends Activity {
                     }
                 }
 
-                if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
-                    int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
-                    if (cameraId >= 0) {
-                        cameraManager.setManualCameraId(cameraId);
-                    }
-                }
+//                if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
+//                    int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
+//                    if (cameraId >= 0) {
+//                        cameraManager.setManualCameraId(cameraId);
+//                    }
+//                }
 
 //        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
 //        if (customPromptMessage != null) {
@@ -207,17 +200,6 @@ public final class CaptureActivity extends Activity {
                 }
             };
             surfaceHolder.addCallback(shCallback);
-        }
-    }
-
-    private void setCurrentOrientation() {
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        switch (rotation) {
-            case Surface.ROTATION_0:
-            case Surface.ROTATION_90:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            default:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
         }
     }
 
@@ -348,29 +330,45 @@ public final class CaptureActivity extends Activity {
     }
 
     private void displayFrameworkBugMessageAndExit() {
-//    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//    builder.setTitle(getString(R.string.app_name));
-//    builder.setMessage(getString(R.string.msg_camera_framework_bug));
-//    builder.setPositiveButton(R.string.button_ok, new FinishListener(this));
-//    builder.setOnCancelListener(new FinishListener(this));
-//    builder.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.app_name));
+        builder.setMessage("抱歉，Android相机出现问题。您可能需要重启设备。");
+        builder.setPositiveButton("确定", new FinishListener(this));
+        builder.setOnCancelListener(new FinishListener(this));
+        builder.show();
     }
 
     public void restartPreviewAfterDelay(long delayMS) {
         if (handler != null) {
             handler.sendEmptyMessageDelayed(Contents.ID.restart_preview, delayMS);
         }
-        resetStatusView();
-    }
-
-    private void resetStatusView() {
-//    statusView.setText(R.string.msg_default_status);
-//    statusView.setVisibility(View.VISIBLE);
         viewfinderView.setVisibility(View.VISIBLE);
     }
 
     public void drawViewfinder() {
         viewfinderView.drawViewfinder();
+    }
+
+    private int getCurrentOrientation() {
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+            case Surface.ROTATION_90:
+                return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            default:
+                return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+        }
+    }
+
+    private void setCurrentOrientation(int screenOrientationLandscape) {
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+            case Surface.ROTATION_90:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            default:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+        }
     }
 
 

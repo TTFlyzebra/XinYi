@@ -63,7 +63,7 @@ public final class ViewfinderView extends View {
         // Initialize these once for performance rather than calling them every time in onDraw().
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         Resources resources = getResources();
-        maskColor = 0x60000000;
+        maskColor = 0x80000000;
         resultColor = 0xb0000000;
         laserColor = 0xffcc0000;
         resultPointColor = 0xc0ffbd21;
@@ -107,12 +107,12 @@ public final class ViewfinderView extends View {
             paint.setColor(laserColor);
             paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
             scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-            // �����޸� �м����
-            int middle = frame.width() / 2 + frame.left;
-            canvas.drawRect(middle - 2, frame.top, middle + 1, frame.bottom, paint);
+            // 竖屏修改 中间的线
+//            int middle = frame.width() / 2 + frame.left;
+//            canvas.drawRect(middle - 2, frame.top, middle + 1, frame.bottom, paint);
 
-//      int middle = frame.height() / 2 + frame.top;
-//      canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+            int middle = frame.height() / 2 + frame.top;
+            canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
 
             float scaleX = frame.width() / (float) previewFrame.width();
             float scaleY = frame.height() / (float) previewFrame.height();

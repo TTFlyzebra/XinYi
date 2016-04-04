@@ -24,7 +24,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.flyzebra.xinyi.utils.FlyLog;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
@@ -113,8 +115,8 @@ public final class CameraManager {
             configManager.setDesiredCameraParameters(theCamera, false);
         } catch (RuntimeException re) {
             // Driver failed
-            Log.w(TAG, "Camera rejected parameters. Setting only minimal safe-mode parameters");
-            Log.i(TAG, "Resetting to saved camera params: " + parametersFlattened);
+            FlyLog.i("<CameraManager>openDriver->Camera rejected parameters. Setting only minimal safe-mode parameters");
+            FlyLog.i("<CameraManager>openDriver->Resetting to saved camera params: " + parametersFlattened);
             // Reset:
             if (parametersFlattened != null) {
                 parameters = theCamera.getParameters();
@@ -124,7 +126,7 @@ public final class CameraManager {
                     configManager.setDesiredCameraParameters(theCamera, true);
                 } catch (RuntimeException re2) {
                     // Well, darn. Give up
-                    Log.w(TAG, "Camera rejected even safe-mode parameters! No configuration");
+                    FlyLog.i("<CameraManager>openDriver->Camera rejected even safe-mode parameters! No configuration");
                 }
             }
         }
@@ -178,7 +180,7 @@ public final class CameraManager {
     }
 
     /**
-     * Convenience method for {@link com.google.zxing.client.android.CaptureActivity}
+     * Convenience method for {@link CaptureActivity}
      *
      * @param newSetting if {@code true}, light should be turned on if currently off. And vice versa.
      */
@@ -264,18 +266,22 @@ public final class CameraManager {
                 // Called early, before init even finished
                 return null;
             }
-            rect.left = rect.left * cameraResolution.x / screenResolution.x;
-            rect.right = rect.right * cameraResolution.x / screenResolution.x;
-            rect.top = rect.top * cameraResolution.y / screenResolution.y;
-            rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
 
+
+            rect.left = rect.left * cameraResolution.y / screenResolution.x;
+            rect.right = rect.right * cameraResolution.y / screenResolution.x;
+            rect.top = rect.top * cameraResolution.x / screenResolution.y;
+            rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
+
+            FlyLog.i("<CameraManager>getFramingRectInPreview->cameraResolution: x=" + cameraResolution.x + ",y=" + cameraResolution.y);
+            FlyLog.i("<CameraManager>getFramingRectInPreview->screenResolution: x=" + screenResolution.x + ",y=" + screenResolution.y);
             //竖屏添加
-            int temp1 = rect.left;
-            rect.left = rect.top;
-            rect.top = temp1;
-            int temp2 = rect.bottom;
-            rect.bottom = rect.right;
-            rect.right = temp2;
+//            int temp1 = rect.left;
+//            rect.left = rect.top;
+//            rect.top = temp1;
+//            int temp2 = rect.bottom;
+//            rect.bottom = rect.right;
+//            rect.right = temp2;
 
             framingRectInPreview = rect;
         }

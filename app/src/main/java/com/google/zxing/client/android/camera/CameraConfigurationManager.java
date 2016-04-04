@@ -16,17 +16,17 @@
 
 package com.google.zxing.client.android.camera;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Display;
-import android.view.Surface;
 import android.view.WindowManager;
 
+import com.flyzebra.xinyi.utils.FlyLog;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -45,37 +45,6 @@ final class CameraConfigurationManager {
         this.context = context;
     }
 
-    public static void setCameraDisplayOrientation(Activity activity,
-                                                   int cameraId, Camera camera) {
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay()
-                .getRotation();
-        int degrees = 0;
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break;
-            case Surface.ROTATION_90:
-                degrees = 90;
-                break;
-            case Surface.ROTATION_180:
-                degrees = 180;
-                break;
-            case Surface.ROTATION_270:
-                degrees = 270;
-                break;
-        }
-
-        int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation + degrees) % 360;
-            result = (360 - result) % 360; // compensate the mirror
-        } else { // back-facing
-            result = (info.orientation - degrees + 360) % 360;
-        }
-        camera.setDisplayOrientation(result);
-    }
 
     /**
      * Reads, one time, values from the camera that are needed by the app.
@@ -87,31 +56,25 @@ final class CameraConfigurationManager {
         Point theScreenResolution = new Point();
         display.getSize(theScreenResolution);
         screenResolution = theScreenResolution;
-        Log.i(TAG, "Screen resolution: " + screenResolution);
+        FlyLog.i("<CameraConfigurationManager>initFromCameraParameters:screenResolution=" + screenResolution);
         cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
-        Log.i(TAG, "Camera resolution: " + cameraResolution);
     }
 
     void setDesiredCameraParameters(Camera camera, boolean safeMode) {
         Camera.Parameters parameters = camera.getParameters();
-
         if (parameters == null) {
-            Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
+            FlyLog.i("<CameraConfigurationManager>setDesiredCameraParameters->Device error: no camera parameters are available. Proceeding without configuration.");
             return;
         }
-
-        Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
-
+        FlyLog.i("<CameraConfigurationManager>setDesiredCameraParameters->Initial camera parameters: " + parameters.flatten());
         if (safeMode) {
-            Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
+            FlyLog.i("<CameraConfigurationManager>setDesiredCameraParameters->In camera config safe mode -- most settings will not be honored");
         }
-
+        //读取系统灯光开关状态并设置
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
         initializeTorch(parameters, prefs, safeMode);
 
         CameraConfigurationUtils.setFocus(parameters, true, true, safeMode);
-
         if (!safeMode) {
             CameraConfigurationUtils.setBarcodeSceneMode(parameters);
             CameraConfigurationUtils.setVideoStabilization(parameters);
@@ -119,18 +82,17 @@ final class CameraConfigurationManager {
             CameraConfigurationUtils.setMetering(parameters);
         }
 
+        setDisplayOrientation(camera, 90);
+
         parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
-
-        Log.i(TAG, "Final camera parameters: " + parameters.flatten());
-
+        FlyLog.i("<CameraConfigurationManager>setDesiredCameraParameters->Final camera parameters: " + parameters.flatten());
         //竖屏添加
-
         camera.setParameters(parameters);
 
         Camera.Parameters afterParameters = camera.getParameters();
         Camera.Size afterSize = afterParameters.getPreviewSize();
         if (afterSize != null && (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
-            Log.w(TAG, "Camera said it supported preview size " + cameraResolution.x + 'x' + cameraResolution.y +
+            FlyLog.i("<CameraConfigurationManager>setDesiredCameraParameters->Camera said it supported preview size " + cameraResolution.x + 'x' + cameraResolution.y +
                     ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
             cameraResolution.x = afterSize.width;
             cameraResolution.y = afterSize.height;
@@ -176,14 +138,24 @@ final class CameraConfigurationManager {
         }
     }
 
+    /*改变照相机成像的方向的方法*/
     protected void setDisplayOrientation(Camera camera, int angle) {
-        Method downPolymorphic;
+        Method downPolymorphic = null;
         try {
             downPolymorphic = camera.getClass().getMethod("setDisplayOrientation", int.class);
             if (downPolymorphic != null)
                 downPolymorphic.invoke(camera, angle);
-        } catch (Exception e1) {
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
+
     }
+
 
 }

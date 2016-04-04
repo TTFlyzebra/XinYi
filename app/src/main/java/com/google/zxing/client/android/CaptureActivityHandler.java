@@ -93,8 +93,7 @@ public final class CaptureActivityHandler extends Handler {
                 // We're decoding as fast as possible, so when one decode fails,
                 // start another.
                 state = State.PREVIEW;
-                cameraManager.requestPreviewFrame(decodeThread.getHandler(),
-                        Contents.ID.decode);
+                cameraManager.requestPreviewFrame(decodeThread.getHandler(), Contents.ID.decode);
                 break;
             case Contents.ID.return_scan_result:
                 Log.i(TAG, "CaptureActivityHandler->R.id.return_scan_result:");
@@ -125,8 +124,7 @@ public final class CaptureActivityHandler extends Handler {
     private void restartPreviewAndDecode() {
         if (state == State.SUCCESS) {
             state = State.PREVIEW;
-            cameraManager.requestPreviewFrame(decodeThread.getHandler(),
-                    Contents.ID.decode);
+            cameraManager.requestPreviewFrame(decodeThread.getHandler(), Contents.ID.decode);
             activity.drawViewfinder();
         }
     }

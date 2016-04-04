@@ -3,6 +3,7 @@ package com.flyzebra.xinyi.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -34,6 +35,7 @@ import java.util.List;
  * Created by FlyZebra on 2016/3/17.
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int AC_REQUESTCODE_01 = 88;
     public IHttp iHttp = MyVolley.getInstance();
     public UserInfo userInfo;
     public SlidingTabLayout toolBar_stl;
@@ -110,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolBar_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, ScanRQCodeActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -214,6 +217,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 toolBar_title.setVisibility(View.VISIBLE);
                 toolBar_scan.setVisibility(View.GONE);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == AC_REQUESTCODE_01) {
+            if (resultCode == RESULT_OK) {
+                String text = intent.getStringExtra("CODETEXT");
+                Bitmap bm = intent.getParcelableExtra("BITMAP");
+            }
         }
     }
 }

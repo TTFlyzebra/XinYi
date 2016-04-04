@@ -17,11 +17,16 @@
 package com.google.zxing.client.android.camera;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
+import android.view.Surface;
+
+import com.flyzebra.xinyi.utils.FlyLog;
+import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,14 +99,9 @@ public final class CameraConfigurationUtils {
         List<String> supportedFlashModes = parameters.getSupportedFlashModes();
         String flashMode;
         if (on) {
-            flashMode = findSettableValue("flash mode",
-                    supportedFlashModes,
-                    Camera.Parameters.FLASH_MODE_TORCH,
-                    Camera.Parameters.FLASH_MODE_ON);
+            flashMode = findSettableValue("flash mode", supportedFlashModes, Camera.Parameters.FLASH_MODE_TORCH, Camera.Parameters.FLASH_MODE_ON);
         } else {
-            flashMode = findSettableValue("flash mode",
-                    supportedFlashModes,
-                    Camera.Parameters.FLASH_MODE_OFF);
+            flashMode = findSettableValue("flash mode", supportedFlashModes, Camera.Parameters.FLASH_MODE_OFF);
         }
         if (flashMode != null) {
             if (flashMode.equals(parameters.getFlashMode())) {
@@ -277,10 +277,10 @@ public final class CameraConfigurationUtils {
 
         List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
         if (rawSupportedSizes == null) {
-            Log.i(TAG, "Device returned no supported preview sizes; using default");
+            FlyLog.i("<CameraConfigurationUtils>findBestPreviewSizeValue---Device returned no supported preview sizes; using default");
             Camera.Size defaultSize = parameters.getPreviewSize();
             if (defaultSize == null) {
-                throw new IllegalStateException("Parameters contained no preview size!");
+                throw new IllegalStateException("<CameraConfigurationUtils>findBestPreviewSizeValue:Parameters contained no preview size!");
             }
             return new Point(defaultSize.width, defaultSize.height);
         }
@@ -308,14 +308,16 @@ public final class CameraConfigurationUtils {
                 previewSizesString.append(supportedPreviewSize.width).append('x')
                         .append(supportedPreviewSize.height).append(' ');
             }
-            Log.i(TAG, "Supported preview sizes: " + previewSizesString);
+            FlyLog.i("<CameraConfigurationUtils>findBestPreviewSizeValue->Supported preview sizes: " + previewSizesString);
         }
 
-        double screenAspectRatio = (double) screenResolution.x / (double) screenResolution.y;
+        double screenAspectRatio = (double) Math.max(screenResolution.x, screenResolution.y) / (double) Math.min(screenResolution.x, screenResolution.y);
 
         // Remove sizes that are unsuitable
         Iterator<Camera.Size> it = supportedPreviewSizes.iterator();
         while (it.hasNext()) {
+
+            //将分辩率小于153600的全部移除
             Camera.Size supportedPreviewSize = it.next();
             int realWidth = supportedPreviewSize.width;
             int realHeight = supportedPreviewSize.height;
@@ -336,7 +338,7 @@ public final class CameraConfigurationUtils {
 
             if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
                 Point exactPoint = new Point(realWidth, realHeight);
-                Log.i(TAG, "Found preview size exactly matching screen size: " + exactPoint);
+                FlyLog.i("<CameraConfigurationUtils>findBestPreviewSizeValue->Found preview size exactly matching screen size: " + exactPoint);
                 return exactPoint;
             }
         }
@@ -347,25 +349,23 @@ public final class CameraConfigurationUtils {
         if (!supportedPreviewSizes.isEmpty()) {
             Camera.Size largestPreview = supportedPreviewSizes.get(0);
             Point largestSize = new Point(largestPreview.width, largestPreview.height);
-            Log.i(TAG, "Using largest suitable preview size: " + largestSize);
+            FlyLog.i("<CameraConfigurationUtils>findBestPreviewSizeValue->Using largest suitable preview size: " + largestSize);
             return largestSize;
         }
 
         // If there is nothing at all suitable, return current preview size
         Camera.Size defaultPreview = parameters.getPreviewSize();
         if (defaultPreview == null) {
-            throw new IllegalStateException("Parameters contained no preview size!");
+            throw new IllegalStateException("<CameraConfigurationUtils>findBestPreviewSizeValue->Parameters contained no preview size!");
         }
         Point defaultSize = new Point(defaultPreview.width, defaultPreview.height);
-        Log.i(TAG, "No suitable preview sizes, using default: " + defaultSize);
+        FlyLog.i("<CameraConfigurationUtils>findBestPreviewSizeValue->No suitable preview sizes, using default: " + defaultSize);
         return defaultSize;
     }
 
-    private static String findSettableValue(String name,
-                                            Collection<String> supportedValues,
-                                            String... desiredValues) {
-        Log.i(TAG, "Requesting " + name + " value from among: " + Arrays.toString(desiredValues));
-        Log.i(TAG, "Supported " + name + " values: " + supportedValues);
+    private static String findSettableValue(String name, Collection<String> supportedValues, String... desiredValues) {
+        FlyLog.i("<CameraConfigurationUtils>findBestPreviewSizeValue->Requesting " + name + " value from among: " + Arrays.toString(desiredValues));
+        FlyLog.i("<CameraConfigurationUtils>findBestPreviewSizeValue->Supported " + name + " values: " + supportedValues);
         if (supportedValues != null) {
             for (String desiredValue : desiredValues) {
                 if (supportedValues.contains(desiredValue)) {
@@ -442,6 +442,66 @@ public final class CameraConfigurationUtils {
         }
 
         return result.toString();
+    }
+
+    public static void setCameraDisplayOrientation(Activity context, int cameraId, Camera camera) {
+        Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+        int rotation = context.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;   // compensate the mirror
+        } else {
+            // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
+    }
+
+    public static void setCameraDisplayOrientation(Activity activity, Camera camera) {
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(OpenCameraInterface.NO_REQUESTED_CAMERA, info);
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
     }
 
 }
