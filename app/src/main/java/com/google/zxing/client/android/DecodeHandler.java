@@ -34,9 +34,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 final class DecodeHandler extends Handler {
-
-//  private static final String TAG = "com.flyzebra";
-
     /**
      * Decode the data within the viewfinder rectangle, and time how long it took. For efficiency,
      * reuse the same reader objects from one decode to the next.
@@ -90,11 +87,9 @@ final class DecodeHandler extends Handler {
             for (int x = 0; x < width; x++)
                 rotatedData[x * height + height - y - 1] = data[x + y * width];
         }
-        int tmp = width;
-        width = height;
-        height = tmp;
         data = rotatedData;
-        PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, width, height);
+        PlanarYUVLuminanceSource source = activity.getCameraManager().buildLuminanceSource(data, height, width);
+
         if (source != null) {
             BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
             try {
@@ -108,9 +103,6 @@ final class DecodeHandler extends Handler {
 
         Handler handler = activity.getHandler();
         if (rawResult != null) {
-            // Don't log the barcode contents for security.
-//      long end = System.currentTimeMillis();
-//      Log.i(TAG, "Found barcode in " + (end - start) + " ms");
             if (handler != null) {
                 Message message = Message.obtain(handler, Contents.ID.decode_succeeded, rawResult);
                 Bundle bundle = new Bundle();
@@ -125,6 +117,5 @@ final class DecodeHandler extends Handler {
             }
         }
     }
-
 
 }

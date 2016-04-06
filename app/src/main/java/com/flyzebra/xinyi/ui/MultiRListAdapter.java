@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.HttpAdapter;
+import com.flyzebra.xinyi.data.IAdapter;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 
@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Created by FlyZebra on 2016/3/26.
  */
-public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implements HttpAdapter {
+public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implements IAdapter {
     private List<Map<String, Object>> list;
     private Context context;
     private IHttp iHttp = MyVolley.getInstance();
@@ -41,7 +41,7 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
         ViewHolder hodler = null;
         switch (viewType) {
             case H_VIEWPAGER:
-                ViewPagerChildView childViewPager = new ViewPagerChildView(context);
+                ChildViewPager childViewPager = new ChildViewPager(context);
 //                view.setLayoutParams(parent.getLayoutParams());
                 hodler = new ViewPageHolder(childViewPager);
                 break;
@@ -58,6 +58,8 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
                     }
                 });
                 break;
+            case H_GRIDVIEW:
+                break;
         }
         return hodler;
     }
@@ -70,9 +72,11 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
             iHttp.upImageView(context, "http://192.168.1.88/ordermeal" + list.get(position).get(P1_IMG_URL), ((Product01) holder).iv01);
             holder.itemView.setTag(position);
         } else if (holder instanceof ViewPageHolder) {
-            ViewPagerChildView view = ((ViewPagerChildView) holder.itemView);
+            ChildViewPager view = ((ChildViewPager) holder.itemView);
             view.setData((List<Map<String, Object>>) list.get(position).get(DATA));
             holder.itemView.setTag(position);
+        } else if (holder instanceof GridViewHolder) {
+
         }
     }
 
@@ -120,5 +124,10 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
         }
     }
 
+    public class GridViewHolder extends ViewHolder {
+        public GridViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
 
 }

@@ -48,9 +48,15 @@ public class ScanRQCodeActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 String text = intent.getStringExtra("CODETEXT");
                 FlyLog.i("<ScanRQCodeActivity> Result scan info:" + text);
-                scan_rq_tv01.setText(text);
+                if (text != null) {
+                    scan_rq_tv01.setText(text);
+                } else {
+                    finish();
+                }
                 Bitmap bm = intent.getParcelableExtra("BITMAP");
-                scan_rq_iv01.setImageBitmap(bm);
+                if (bm != null) {
+                    scan_rq_iv01.setImageBitmap(bm);
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ public class UserInfo implements Serializable {
     private String userPhotoUrl;
     private String userToken;
     private long userExpired;
+    private int level;
 
     public String getUserName() {
         return userName;

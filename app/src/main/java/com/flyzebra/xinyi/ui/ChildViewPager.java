@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Created by FlyZebra on 2016/3/25.
  */
-public class ViewPagerChildView extends BaseChildView {
+public class ChildViewPager extends BaseChildView {
 
     private int current_item = 0;
     private IHttp iHttp = MyVolley.getInstance();
@@ -46,23 +46,23 @@ public class ViewPagerChildView extends BaseChildView {
                 viewPager.setCurrentItem(current_item);
             }
             playsHander.postDelayed(playsTask, delayMillis);
-            FlyLog.i("<ViewPagerChildView>playsTask running.currentItem=" + current_item);
+            FlyLog.i("<ChildViewPager>playsTask running.currentItem=" + current_item);
         }
     };
 
-    public ViewPagerChildView(Context context) {
-        this(context, null);
+    public ChildViewPager(Context context) {
+        super(context);
     }
 
-    public ViewPagerChildView(Context context, AttributeSet attrs) {
+    public ChildViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ViewPagerChildView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ChildViewPager(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public ViewPagerChildView(Context context, ViewGroup parent, @LayoutRes int ResId) {
+    public ChildViewPager(Context context, ViewGroup parent, @LayoutRes int ResId) {
         super(context, parent, ResId);
     }
 
@@ -74,7 +74,7 @@ public class ViewPagerChildView extends BaseChildView {
     public void onCreate() {
         super.onCreate();
         if (ResId == 0) {
-            ResId = R.layout.play_viewpager_autoheight;
+            ResId = R.layout.child_viewpager;
         }
         View view = setContentView(ResId);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
@@ -88,7 +88,7 @@ public class ViewPagerChildView extends BaseChildView {
     public void onStart() {
         //下面这句放在onCread()后会立即执行，不知道原因(最后找到原因，当ChildView中的super(context)改为了this(context,null))
         playsHander.postDelayed(playsTask, delayMillis);
-        FlyLog.i("<ViewPagerChildView>playsHander.postDelayed(playsTask,delayMillis):delayMillis=" + delayMillis);
+        FlyLog.i("<ChildViewPager>playsHander.postDelayed(playsTask,delayMillis):delayMillis=" + delayMillis);
         super.onStart();
     }
 
@@ -97,7 +97,7 @@ public class ViewPagerChildView extends BaseChildView {
         if (playsHander != null && playsTask != null) {
             playsHander.removeCallbacks(playsTask);
         }
-        FlyLog.i("<ViewPagerChildView>onStop");
+        FlyLog.i("<ChildViewPager>onStop");
         super.onStop();
     }
 
@@ -115,7 +115,7 @@ public class ViewPagerChildView extends BaseChildView {
         data = super.addData(data);
         countVP.setSumItem(data.size());
         adapter.notifyDataSetChanged();
-        FlyLog.i("<ViewPagerChildView>addData:listsize=" + data.size());
+        FlyLog.i("<ChildViewPager>addData:listsize=" + data.size());
         return data;
     }
 
@@ -157,7 +157,7 @@ public class ViewPagerChildView extends BaseChildView {
 //                    list.remove(i);
 //                    countVP.setSumItem(list.size());
 //                    notifyDataSetChanged();
-//                    FlyLog.i("<ViewPagerChildView><PlaysAdapter>instantiateItem->onClick:i=" + i + ",list.size()=" + list.size());
+//                    FlyLog.i("<ChildViewPager><PlaysAdapter>instantiateItem->onClick:i=" + i + ",list.size()=" + list.size());
                 }
             });
             container.addView(iv);

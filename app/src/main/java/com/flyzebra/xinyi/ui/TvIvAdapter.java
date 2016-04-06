@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.flyzebra.xinyi.data.HttpAdapter;
+import com.flyzebra.xinyi.data.IAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TvIvAdapter extends BaseAdapter implements HttpAdapter<List<Map<String, Object>>> {
+public class TvIvAdapter extends BaseAdapter implements IAdapter<List<Map<String, Object>>> {
     private List<Map<String, Object>> list;
     private int idListview;
     private int tvid[];
@@ -52,7 +52,7 @@ public class TvIvAdapter extends BaseAdapter implements HttpAdapter<List<Map<Str
 
     @Override
     public int getCount() {
-        return list.size();
+        return list == null ? 0 : list.size();
     }
 
     @Override

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">新艺电脑</string>
+    <string name="app_name">Fly Zebra! </string>
     <string name="login">登陆</string>
     <string name="home">首页</string>
     <string name="poi">商城</string>
@@ -14,4 +14,6 @@
     <string name="newsells">新品</string>
     <string name="test">测试用显示文字</string>
     <string name="searth">输入商品名称、店名搜索</string>
+    <string name="open">开启</string>
+    <string name="close">关闭</string>
 </resources>

@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class PoiFragment_type extends Fragment {
     private static final String ARG_TYPE = "TYPE";
-    private static final String ARG_ID = "ID";
+    private static final String ARG_ID = "RESID";
     private String type;
     private int ResID;
     private String HTTPTAG_TYPE = "PoiFragment_type" + Math.random();
@@ -92,7 +92,7 @@ public class PoiFragment_type extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        iHttp.upListView(Constant.URL_TABLE_1, mRecyclerView, "mealinfo", HTTPTAG_TYPE);
+        iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG_TYPE);
     }
 
     @Override

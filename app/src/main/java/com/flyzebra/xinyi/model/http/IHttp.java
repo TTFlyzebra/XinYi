@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.flyzebra.xinyi.data.HttpAdapter;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,27 +13,14 @@ import java.util.Map;
  */
 public interface IHttp {
     void upImageView(Context context, String url, ImageView iv);
-    /**
-     * 使用须知，跟控件view适配的Adapter必须实现HttpAdapter接口
-     *
-     * @param url
-     * @param view
-     * @param tag
-     * @param <T>
-     */
-    <T extends View> void upListView(String url, T view, Object tag);
 
-    /**
-     * 使用须知，跟控件view适配的Adapter必须实现HttpAdapter接口
-     *
-     * @param url
-     * @param view
-     * @param tag
-     * @param <T>
-     */
-    <T extends View> void upListView(String url, T view, String jsonKey, Object tag);
+    void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag);
 
-    <T extends View> void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag);
+    void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag);
+
+    void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, Result result);
+
+    void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, Result result);
 
     void execute(Builder builder);
 
@@ -43,6 +28,7 @@ public interface IHttp {
 
     interface Result {
         void succeed(Object object);
+
         void faild(Object object);
     }
 
@@ -58,6 +44,15 @@ public interface IHttp {
         int PATCH = 7;
     }
 
+    /**
+     * Created by Administrator on 2016/4/3.
+     */
+    interface HttpAdapter<T extends List> {
+        T getList();
+
+        void notifyDataSetChanged();
+    }
+
     class Builder {
         public String url;
         public String jsonKey;
@@ -69,6 +64,7 @@ public interface IHttp {
         public boolean retry = true;
         public int method = Method.GET;
         public Result result;
+        private boolean isAdd;
 
         public static Builder getInstance() {
             return new Builder();
@@ -129,6 +125,11 @@ public interface IHttp {
 
         public Builder setResult(Result result) {
             this.result = result;
+            return this;
+        }
+
+        public Builder setIsAdd(boolean isAdd) {
+            this.isAdd = isAdd;
             return this;
         }
     }

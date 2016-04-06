@@ -105,8 +105,6 @@ public final class CaptureActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
         // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
         // want to open the camera driver and measure the screen size if we're going to show the help on
         // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
@@ -116,17 +114,6 @@ public final class CaptureActivity extends Activity {
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
         viewfinderView.setCameraManager(cameraManager);
         handler = null;
-
-//        SharedPreferences prefs = PreferenceManager
-//                .getDefaultSharedPreferences(this);
-//
-//        if (prefs.getBoolean("preferences_orientation",
-//                true)) {
-//            setRequestedOrientation(getCurrentOrientation());
-//        } else {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-//        }
-
 
         viewfinderView.setVisibility(View.VISIBLE);
 
@@ -154,18 +141,12 @@ public final class CaptureActivity extends Activity {
                     }
                 }
 
-//                if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
-//                    int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
-//                    if (cameraId >= 0) {
-//                        cameraManager.setManualCameraId(cameraId);
-//                    }
-//                }
-
-//        String customPromptMessage = intent.getStringExtra(Intents.Scan.PROMPT_MESSAGE);
-//        if (customPromptMessage != null) {
-//          statusView.setText(customPromptMessage);
-//        }
-
+                if (intent.hasExtra(Intents.Scan.CAMERA_ID)) {
+                    int cameraId = intent.getIntExtra(Intents.Scan.CAMERA_ID, -1);
+                    if (cameraId >= 0) {
+                        cameraManager.setManualCameraId(cameraId);
+                    }
+                }
             }
             characterSet = intent.getStringExtra(Intents.Scan.CHARACTER_SET);
 
@@ -272,6 +253,14 @@ public final class CaptureActivity extends Activity {
         intent.putExtra("BITMAP", barcode);
         setResult(Activity.RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getIntent().getAction());
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+        super.onBackPressed();
     }
 
     /**

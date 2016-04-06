@@ -17,16 +17,13 @@
 package com.google.zxing.client.android.camera;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
-import android.view.Surface;
 
 import com.flyzebra.xinyi.utils.FlyLog;
-import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -404,104 +401,6 @@ public final class CameraConfigurationUtils {
             result.append(area.rect).append(':').append(area.weight).append(' ');
         }
         return result.toString();
-    }
-
-    public static String collectStats(Camera.Parameters parameters) {
-        return collectStats(parameters.flatten());
-    }
-
-    public static String collectStats(CharSequence flattenedParams) {
-        StringBuilder result = new StringBuilder(1000);
-
-        result.append("BOARD=").append(Build.BOARD).append('\n');
-        result.append("BRAND=").append(Build.BRAND).append('\n');
-        result.append("CPU_ABI=").append(Build.CPU_ABI).append('\n');
-        result.append("DEVICE=").append(Build.DEVICE).append('\n');
-        result.append("DISPLAY=").append(Build.DISPLAY).append('\n');
-        result.append("FINGERPRINT=").append(Build.FINGERPRINT).append('\n');
-        result.append("HOST=").append(Build.HOST).append('\n');
-        result.append("ID=").append(Build.ID).append('\n');
-        result.append("MANUFACTURER=").append(Build.MANUFACTURER).append('\n');
-        result.append("MODEL=").append(Build.MODEL).append('\n');
-        result.append("PRODUCT=").append(Build.PRODUCT).append('\n');
-        result.append("TAGS=").append(Build.TAGS).append('\n');
-        result.append("TIME=").append(Build.TIME).append('\n');
-        result.append("TYPE=").append(Build.TYPE).append('\n');
-        result.append("USER=").append(Build.USER).append('\n');
-        result.append("VERSION.CODENAME=").append(Build.VERSION.CODENAME).append('\n');
-        result.append("VERSION.INCREMENTAL=").append(Build.VERSION.INCREMENTAL).append('\n');
-        result.append("VERSION.RELEASE=").append(Build.VERSION.RELEASE).append('\n');
-        result.append("VERSION.SDK_INT=").append(Build.VERSION.SDK_INT).append('\n');
-
-        if (flattenedParams != null) {
-            String[] params = SEMICOLON.split(flattenedParams);
-            Arrays.sort(params);
-            for (String param : params) {
-                result.append(param).append('\n');
-            }
-        }
-
-        return result.toString();
-    }
-
-    public static void setCameraDisplayOrientation(Activity context, int cameraId, Camera camera) {
-        Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, info);
-        int rotation = context.getWindowManager().getDefaultDisplay().getRotation();
-        int degrees = 0;
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break;
-            case Surface.ROTATION_90:
-                degrees = 90;
-                break;
-            case Surface.ROTATION_180:
-                degrees = 180;
-                break;
-            case Surface.ROTATION_270:
-                degrees = 270;
-                break;
-        }
-        int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation + degrees) % 360;
-            result = (360 - result) % 360;   // compensate the mirror
-        } else {
-            // back-facing
-            result = (info.orientation - degrees + 360) % 360;
-        }
-        camera.setDisplayOrientation(result);
-    }
-
-    public static void setCameraDisplayOrientation(Activity activity, Camera camera) {
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(OpenCameraInterface.NO_REQUESTED_CAMERA, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        int degrees = 0;
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break;
-            case Surface.ROTATION_90:
-                degrees = 90;
-                break;
-            case Surface.ROTATION_180:
-                degrees = 180;
-                break;
-            case Surface.ROTATION_270:
-                degrees = 270;
-                break;
-        }
-
-        int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation + degrees) % 360;
-            result = (360 - result) % 360;  // compensate the mirror
-        } else {  // back-facing
-            result = (info.orientation - degrees + 360) % 360;
-        }
-        camera.setDisplayOrientation(result);
     }
 
 }

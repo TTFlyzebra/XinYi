@@ -4,11 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.flyzebra.xinyi.data.HttpAdapter;
+import com.flyzebra.xinyi.data.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
@@ -60,21 +59,24 @@ public class MyOkHttp implements IHttp {
     }
 
     @Override
-    public <T extends View> void upListView(String url, T view, Object tag) {
-        Builder builder = new Builder().setUrl(url).setView(view).setTag(tag);
-        execute(builder);
-    }
-
-    @Override
-    public <T extends View> void upListView(String url, T view, String jsonKey, Object tag) {
-        Builder builder = new Builder().setUrl(url).setView(view).setJsonKey(jsonKey).setTag(tag);
-        execute(builder);
-    }
-
-    @Override
-    public <T extends View> void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag) {
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag) {
         Builder builder = new Builder().setUrl(url).setAdapter(adapter).setJsonKey(jsonKey).setTag(tag);
         execute(builder);
+    }
+
+    @Override
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag) {
+
+    }
+
+    @Override
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, Result result) {
+
+    }
+
+    @Override
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, Result result) {
+
     }
 
     @Override
@@ -105,15 +107,15 @@ public class MyOkHttp implements IHttp {
                 if (builder.view != null) {
                     if (builder.view instanceof ListView) {
                         final ListView listView = (ListView) builder.view;
-                        final HttpAdapter adapter = (HttpAdapter) listView.getAdapter();
+                        final IAdapter adapter = (IAdapter) listView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
                     } else if (builder.view instanceof RecyclerView) {
                         final RecyclerView recyclerView = (RecyclerView) builder.view;
-                        final HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
+                        final IAdapter adapter = (IAdapter) recyclerView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
                     } else if (builder.view instanceof RefreshRecyclerView) {
                         final RefreshRecyclerView recyclerView = (RefreshRecyclerView) builder.view;
-                        final HttpAdapter adapter = (HttpAdapter) recyclerView.getAdapter();
+                        final IAdapter adapter = (IAdapter) recyclerView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
                     }
                 } else if (builder.adapter != null) {

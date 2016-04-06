@@ -3,7 +3,6 @@ package com.flyzebra.xinyi.model.http;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
@@ -19,7 +18,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.HttpAdapter;
+import com.flyzebra.xinyi.data.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
 
@@ -44,6 +43,13 @@ public class MyVolley implements IHttp {
 
     public static MyVolley getInstance() {
         return MyVolleyHolder.sInstance;
+    }
+
+
+    public static RequestQueue Init(Context context) {
+        mRequestQueue = Volley.newRequestQueue(context);
+        mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
+        return mRequestQueue;
     }
 
     public static void getString(final IHttp.Builder info, final Result result) {
@@ -86,12 +92,6 @@ public class MyVolley implements IHttp {
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
         stringRequest.setTag(info.tag);
         mRequestQueue.add(stringRequest);
-    }
-
-    public static RequestQueue Init(Context context) {
-        mRequestQueue = Volley.newRequestQueue(context);
-        mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
-        return mRequestQueue;
     }
 
     public static void upImageView(String url, NetworkImageView iv, int res1, int res2) {
@@ -151,43 +151,13 @@ public class MyVolley implements IHttp {
     }
 
     @Override
-    public <T extends View> void upListView(String url, T view, Object tag) {
-        upListView(url, view, null, tag);
-    }
-
-    @Override
-    public <T extends View> void upListView(String url, T view, String jsonKey, Object tag) {
-        //反射
-        HttpAdapter adapter = null;
-        try {
-            Field field = view.getClass().getDeclaredField("mAdapter");
-            field.setAccessible(true);
-            field.setAccessible(true);
-            adapter = (HttpAdapter) field.get(view);
-            FlyLog.i("<MyVolley>upListView->adapter=" + adapter);
-        } catch (NoSuchFieldException e) {
-            FlyLog.i("<MyVolley>upListView->NoSuchFieldException");
-        } catch (IllegalAccessException e) {
-            FlyLog.i("<MyVolley>upListView->IllegalAccessException");
-        }
-        if (adapter != null) {
-            getInstance().upListView(url, adapter, adapter.getList(), jsonKey, tag);
-        }
-    }
-
-    @Override
-    public <T extends View> void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag) {
-        getInstance().upListView(url, adapter, adapter.getList(), jsonKey, tag);
-    }
-
-    @Override
     public void execute(Builder builder) {
-        HttpAdapter adapter = null;
+        IAdapter adapter = null;
         try {
             Field field = builder.view.getClass().getDeclaredField("mAdapter");
             field.setAccessible(true);
             field.setAccessible(true);
-            adapter = (HttpAdapter) field.get(builder.view);
+            adapter = (IAdapter) field.get(builder.view);
         } catch (NoSuchFieldException e) {
             FlyLog.i("<MyVolley>upListView->NoSuchFieldException");
         } catch (IllegalAccessException e) {
@@ -195,23 +165,42 @@ public class MyVolley implements IHttp {
         }
         if (adapter != null) {
             if (builder.result != null) {
-                getInstance().upListView(builder.result, builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+                getInstance().upListView(builder.url, adapter, builder.jsonKey, false, builder.tag, builder.result);
             } else {
-                getInstance().upListView(builder.url, adapter, adapter.getList(), builder.jsonKey, builder.tag);
+                getInstance().upListView(builder.url, adapter, builder.jsonKey, builder.tag);
             }
         }
     }
 
-    private void upListView(final Result result, final String url, final HttpAdapter adapter, final List list, final String jsonKey, final Object tag) {
+
+    //*ListView RecyclearView调用部分
+
+    @Override
+    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final Object tag) {
+        upListView(url, adapter, jsonKey, false, tag);
+    }
+
+    @Override
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, Result result) {
+        upListView(url, adapter, jsonKey, false, tag, result);
+    }
+
+    @Override
+    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag) {
+        upListView(url, adapter, jsonKey, isAdd, tag, null);
+    }
+
+    @Override
+    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag, final Result result) {
         //判断任务是否已取消
         set_upListView.add(tag);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                if (list != null) {
-                    list.clear();
-                    JsonUtils.getList(list, jsonObject, jsonKey);
+                if (!isAdd) {
+                    adapter.getList().clear();
                 }
+                adapter.getList().addAll(JsonUtils.getList(jsonObject, jsonKey));
                 adapter.notifyDataSetChanged();
                 if (result != null) {
                     result.succeed(jsonObject);
@@ -221,6 +210,7 @@ public class MyVolley implements IHttp {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
                 if (result != null) {
                     result.faild(volleyError);
                 } else {
@@ -228,44 +218,11 @@ public class MyVolley implements IHttp {
                         @Override
                         public void run() {
                             if (set_upListView.contains(tag)) {
-                                upListView(url, adapter, list, jsonKey, tag);
+                                upListView(url, adapter, jsonKey, isAdd, tag, result);
                             }
                         }
                     }, RETRY_TIME);
-                    FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
                 }
-            }
-        });
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
-        jsonObjectRequest.setTag(tag);
-        mRequestQueue.add(jsonObjectRequest);
-    }
-
-    private void upListView(final String url, final HttpAdapter adapter, final List list, final String jsonKey, final Object tag) {
-        //判断任务是否已取消
-        set_upListView.add(tag);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                if (list != null) {
-                    list.clear();
-                    JsonUtils.getList(list, jsonObject, jsonKey);
-                }
-                adapter.notifyDataSetChanged();
-                FlyLog.i("<MyVolley>upListView->onResponse:tag=" + tag);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (set_upListView.contains(tag)) {
-                            upListView(url, adapter, list, jsonKey, tag);
-                        }
-                    }
-                }, RETRY_TIME);
             }
         });
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));

@@ -68,6 +68,24 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     }
 
+    public void test10To5() {
+        for (int i = 0; i < 10; i++) {
+            int level = (int) (Math.random() * 50);
+            int tempLevel = level;
+            StringBuffer setpNum = new StringBuffer();
+            while (tempLevel / 5 > 0) {
+                setpNum.append(tempLevel % 5);
+                tempLevel = tempLevel / 5;
+            }
+            setpNum.append(tempLevel);
+            StringBuffer print = new StringBuffer();
+            for (int j = 0; j < setpNum.length(); j++) {
+                print.append(setpNum.charAt(setpNum.length() - 1 - j));
+            }
+            FlyLog.i("<ApplicationTest>test10To5 level=" + level + "," + print.toString() + "," + setpNum.toString());
+        }
+    }
+
     public void testUser() throws IOException, ClassNotFoundException {
         User user = new User(1, "flyzebra", "13888888888");
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("/mnt/sdcard/testuser.txt"));

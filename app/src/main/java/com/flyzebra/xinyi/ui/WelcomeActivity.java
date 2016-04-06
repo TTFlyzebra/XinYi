@@ -22,7 +22,7 @@ import java.util.Map;
 public class WelcomeActivity extends AppCompatActivity {
     private static final int delayMillis = 2000;
     int count = 0;
-    private ViewPagerChildView viewPagerChildView;
+    private ChildViewPager viewPagerChildView;
     private List<Map<String, Object>> list;
     private Handler mHandler = new Handler();
     private Runnable task = new Runnable() {
@@ -44,7 +44,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        viewPagerChildView = new ViewPagerChildView(this, (ViewGroup) null, R.layout.play_viewpager_fullscreen);
+        viewPagerChildView = new ChildViewPager(this, (ViewGroup) null, R.layout.child_viewpager_fullscreen);
         viewPagerChildView.setPadding(0, 0, 0, 0);
         setContentView(viewPagerChildView);
         list = TestHttp.getViewPagerList1();

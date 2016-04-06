@@ -11,7 +11,7 @@ import com.nineoldandroids.view.ViewHelper;
 import java.lang.reflect.Field;
 
 /**
- * Created by Administrator on 2016/3/18.
+ * Created by FlyZebra on 2016/3/18.
  */
 public class DrawerLayoutUtils {
     /**
@@ -73,17 +73,17 @@ public class DrawerLayoutUtils {
 
         @Override
         public void onDrawerOpened(View drawerView) {
-
+            FlyLog.i("<DrawerLayoutUtils>->onDrawerOpened");
         }
 
         @Override
         public void onDrawerClosed(View drawerView) {
-
+            FlyLog.i("<DrawerLayoutUtils>->onDrawerClosed");
         }
 
         @Override
         public void onDrawerStateChanged(int newState) {
-
+            FlyLog.i("<DrawerLayoutUtils>->onDrawerStateChanged:newState=" + newState);
         }
     }
 }

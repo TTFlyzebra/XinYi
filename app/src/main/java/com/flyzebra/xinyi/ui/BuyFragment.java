@@ -56,40 +56,7 @@ public class BuyFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-//        // 标题的文字需在setSupportActionBar之前，不然会无效
-//        mToolbar.setTitle("购物车");
-//        mToolbar.setLogo(R.drawable.ic_love);
-//        activity.setSupportActionBar(mToolbar);
-//        activity.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-
         listView = (PullToRefreshListView) view.findViewById(R.id.buy_lv_01);
-
-        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-
-        //上拉下拉刷新
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetDataTask().execute();
-                iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetDataTask().execute();
-            }
-        });
-
-        listView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-            @Override
-            public void onLastItemVisible() {
-//                list.addAll(list);
-                Toast.makeText(activity, "End of List!", Toast.LENGTH_SHORT).show();
-                adapter.notifyDataSetChanged();
-            }
-        });
-
         if (list == null) {
             list = new ArrayList<Map<String, Object>>();
         } else {
@@ -108,6 +75,33 @@ public class BuyFragment extends Fragment {
         });
         listView.setAdapter(adapter);
 
+        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+
+        //上拉下拉刷新
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                iHttp.upListView(Constant.URL_TABLE_1, adapter, "mealinfo", HTTPTAG, new IHttp.Result() {
+                    @Override
+                    public void succeed(Object object) {
+                        listView.onRefreshComplete();
+                    }
+
+                    @Override
+                    public void faild(Object object) {
+                        listView.onRefreshComplete();
+                    }
+                });
+            }
+        });
+
+        listView.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                Toast.makeText(activity, "End of List!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //设置没有数据时ListView的显示
         LinearLayout list_empty = (LinearLayout) view.findViewById(R.id.empty_view);
         listView.setEmptyView(list_empty);
@@ -122,7 +116,7 @@ public class BuyFragment extends Fragment {
         });
         Map<String, String> params = new HashMap<>();
 //        iHttp.execute(IHttp.Builder.getInstance().setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
-        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", listView, "mealinfo", HTTPTAG);
+        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", adapter, "mealinfo", HTTPTAG);
     }
 
     @Override

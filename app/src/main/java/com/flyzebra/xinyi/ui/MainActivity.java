@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,11 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public SlidingTabLayout toolBar_stl;
     public String[] fragmentName = {"HomeFragment", "PoiFragment", "BuyFragment", "HomeFragment", "BuyFragment"};
     public String[] fragmentTitle = {"首页", "商城", "订单", "我的", "设置"};
+    public DrawerLayout mDrawerLayout;
     private Toolbar toolBar;
     private TextView toolBar_title;
     private ImageView toolBar_scan;
     private RelativeLayout toolBar_searth;
-    private DrawerLayout mDrawerLayout;
     private int[] imageViewResID = {R.id.main_iv_home, R.id.main_iv_poi, R.id.main_iv_buy, R.id.main_iv_user, R.id.main_iv_more};
     private int[] textViewResID = {R.id.main_tv_home, R.id.main_tv_poi, R.id.main_tv_buy, R.id.main_tv_user, R.id.main_tv_more};
     private int[] linearLayoutResID = {R.id.main_ll_home, R.id.main_ll_poi, R.id.main_ll_buy, R.id.main_ll_user, R.id.main_ll_more};
@@ -58,13 +59,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<LinearLayout> ll_list = new ArrayList<>();
 
     private int cerrent_fragment = 0;
+    private boolean isOpen_left = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
-
         textColer_Off = ResUtils.getColorStateList(this, R.color.color_select);
         textColor_On = ResUtils.getColor(this, R.color.menu_select_on);
 
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tv_list.get(i).setTextColor(textColer_Off);
                 }
             }
+            isOpen_left = savedInstanceState.getBoolean("mDrawerLayoutisopen", mDrawerLayout.isDrawerOpen(Gravity.LEFT));
         }
 
         //获取用户信息
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt("cerrent_fragment", cerrent_fragment);
+        outState.putBoolean("mDrawerLayoutisopen", mDrawerLayout.isDrawerOpen(Gravity.LEFT));
         super.onSaveInstanceState(outState);
     }
 
@@ -218,6 +220,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 toolBar_scan.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Override
+    protected void onStart() {
+        FlyLog.i("<MainActivity>onStart.");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FlyLog.i("<MainActivity>onResume:mDrawerLayout is Open=" + mDrawerLayout.isDrawerOpen(Gravity.LEFT));
+        if (isOpen_left) {
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        }
+
     }
 
     @Override
