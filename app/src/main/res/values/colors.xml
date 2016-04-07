@@ -14,6 +14,10 @@
     <color name="left_menu_text_01">#000</color>
     <color name="left_menu_text_02">#fff</color>
     <color name="toolbar01">#EEFFFF</color>
-    <color name="usericon">#EE8800</color>
+    <color name="usericon">#FFF</color>
     <color name="drawerscrimColor">#99000000</color>
+    <color name="day_back">#FFF</color>
+    <color name="night_back">#000</color>
+    <color name="day_text">#000</color>
+    <color name="day_night">#BBBBBB</color>
 </resources>

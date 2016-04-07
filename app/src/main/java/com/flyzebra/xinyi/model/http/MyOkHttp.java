@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -56,6 +57,11 @@ public class MyOkHttp implements IHttp {
     @Override
     public void upImageView(Context context, String url, ImageView iv) {
         Picasso.with(context).load(url).into(iv);
+    }
+
+    @Override
+    public void upListData(String url, List list, String jsonKey, Object tag) {
+
     }
 
     @Override

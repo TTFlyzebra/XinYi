@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.ui;
+package com.flyzebra.xinyi.view;
 
 import android.content.Context;
 import android.os.Handler;
@@ -17,8 +17,6 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.FlyLog;
-import com.flyzebra.xinyi.view.BaseChildView;
-import com.flyzebra.xinyi.view.NaviForViewPager;
 
 import java.util.List;
 import java.util.Map;

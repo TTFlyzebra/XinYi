@@ -13,6 +13,9 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.IAdapter;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.utils.FlyLog;
+import com.flyzebra.xinyi.view.ChildGridView;
+import com.flyzebra.xinyi.view.ChildViewPager;
 
 import java.util.List;
 import java.util.Map;
@@ -42,7 +45,6 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
         switch (viewType) {
             case H_VIEWPAGER:
                 ChildViewPager childViewPager = new ChildViewPager(context);
-//                view.setLayoutParams(parent.getLayoutParams());
                 hodler = new ViewPageHolder(childViewPager);
                 break;
             case H_RCLIST:
@@ -59,6 +61,14 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
                 });
                 break;
             case H_GRIDVIEW:
+                ChildGridView childGridView = new ChildGridView(context);
+                childGridView.setOnItemClick(new ChildGridView.OnItemClick() {
+                    @Override
+                    public void OnItemClidk(Map<String, Object> data) {
+                        FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
+                    }
+                });
+                hodler = new GridViewHolder(childGridView);
                 break;
         }
         return hodler;
@@ -76,7 +86,14 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
             view.setData((List<Map<String, Object>>) list.get(position).get(DATA));
             holder.itemView.setTag(position);
         } else if (holder instanceof GridViewHolder) {
-
+            ChildGridView view = (ChildGridView) holder.itemView;
+            view.setShowImageSrc(new ChildGridView.ShowImageSrc() {
+                @Override
+                public void setImageSrcWithUrl(ImageView iv, String url) {
+                    iHttp.upImageView(context, url, iv);
+                }
+            });
+            view.setData((List<Map<String, Object>>) list.get(position).get(DATA));
         }
     }
 
@@ -92,6 +109,8 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
             return H_RCLIST;
         } else if (type.equals(VIEWPAGER)) {
             return H_VIEWPAGER;
+        } else if (type.equals(GRIDVIEW)) {
+            return H_GRIDVIEW;
         }
         return H_RCLIST;
     }

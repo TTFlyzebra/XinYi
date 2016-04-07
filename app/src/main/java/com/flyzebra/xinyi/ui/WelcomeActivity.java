@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
+import com.flyzebra.xinyi.view.ChildViewPager;
 
 import java.util.List;
 import java.util.Map;

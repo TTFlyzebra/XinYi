@@ -9,14 +9,17 @@ import java.util.List;
  */
 public interface IAdapter<T extends List> extends IHttp.HttpAdapter {
     String DATA = "DATA";
-    String VIEWPAGER = "VIEWPAGER";
     String TYPE = "TYPE";
+
+    String VIEWPAGER = "1";
+    String GRIDVIEW = "2";
+
     //RecyclearView TYPE
     int H_VIEWPAGER = 1;
-    int H_HOTBUY = 2;
-    int H_GRIDVIEW = 3;
+    int H_GRIDVIEW = 2;
     int H_RCLIST = 100;
+
     String P1_NAME = "mealname";
-    String P1_PRICE = "mealprice";
+    String P1_PRICE = "mealremark";
     String P1_IMG_URL = "mealimage";
 }

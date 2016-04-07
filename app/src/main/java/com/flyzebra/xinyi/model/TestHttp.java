@@ -13,7 +13,7 @@ public class TestHttp {
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
         for(int i= 1;i<=4;i++){
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("name", String.valueOf(i));
+            map.put("name", "测试图片1组" + i);
             map.put("path", "http://192.168.1.88/ordermeal/images/aa" + i + ".jpg");
             list.add(map);
         }
@@ -24,7 +24,7 @@ public class TestHttp {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (int i = 4; i >= 1; i--) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("name", String.valueOf(i));
+            map.put("name", "测试图片2组" + i);
             map.put("path", "http://192.168.1.88/ordermeal/images/welcome" + i + ".jpg");
             list.add(map);
         }
@@ -35,7 +35,7 @@ public class TestHttp {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (int i = 4; i >= 1; i--) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("name", String.valueOf(i));
+            map.put("name", "测试图片3组" + i);
             list.add(map);
         }
         return list;

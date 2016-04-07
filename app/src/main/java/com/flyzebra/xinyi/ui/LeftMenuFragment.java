@@ -81,10 +81,10 @@ public class LeftMenuFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.left_drawer_menu_news:
-                StartActivity(NoDevelopActivity.class);
+                StartActivity(NewsActiviy.class);
                 break;
             case R.id.left_drawer_menu_order:
-                StartActivity(NoDevelopActivity.class);
+                StartActivity(OrderActivity.class);
                 break;
             case R.id.left_drawer_menu_favorite:
                 StartActivity(NoDevelopActivity.class);

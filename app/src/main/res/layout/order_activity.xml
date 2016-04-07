@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/order_ll_01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.flyzebra.xinyi.view.ChildGridView
+            android:id="@+id/cl01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.flyzebra.xinyi.view.ChildGridView
+            android:id="@+id/cl02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.flyzebra.xinyi.view.ChildGridView
+            android:id="@+id/cl03"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.flyzebra.xinyi.view.ChildGridView
+            android:id="@+id/cl04"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.flyzebra.xinyi.view.ChildGridView
+            android:id="@+id/cl05"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</ScrollView>

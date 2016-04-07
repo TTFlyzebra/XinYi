@@ -13,6 +13,7 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.IAdapter;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.view.ChildViewPager;
 
 import java.util.List;
 import java.util.Map;

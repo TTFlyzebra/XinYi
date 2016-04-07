@@ -57,11 +57,16 @@ public class RefreshRecyclerView extends ViewGroup {
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             executors.submit(new SetMainViewState());
         }
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            //当没有滚动条出现时的情况，如不处理，下拉无反应
+            executors.submit(new SetMainViewState());
+        }
     };
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-//            FlyLog.i("<RefreshRecycleryView>handleMessage:what=" + msg.what + ",x=" + msg.arg1 + ",y" + msg.arg2);
             switch (msg.what) {
                 case 1:
                     scrollBy(msg.arg1, msg.arg2);
@@ -182,7 +187,7 @@ public class RefreshRecyclerView extends ViewGroup {
                 if (down_y == 0) {
                     break;
                 }
-                ////横向的划动冲突解决
+                //横向的划动冲突解决
                 if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y) && (TOP_MODE || BOT_MODE)) {
                     if (SHOW == PULL.TOP) {
                         mRecyclerView.scrollToPosition(0);
@@ -231,6 +236,7 @@ public class RefreshRecyclerView extends ViewGroup {
             down_y = ev.getY();
             return true;
         }
+
         if ((RLIST == LIST.TOP || mLayout.getItemCount() == 0) && (ev.getY() > down_y) && TOP_MODE) {
             isNeedRefresh.set(false);
             SHOW = PULL.TOP;

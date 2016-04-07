@@ -107,6 +107,7 @@ public class MyVolley implements IHttp {
     }
 
     public static void PostUser(final String url, final Map<String, String> Params, final List<Map<String, Object>> list, final String jsonKey, final BaseAdapter adapter, final Object tag) {
+        set_upListView.add(tag);
         FlyLog.i("<MyVolley>PostUser->response:url=" + url + ",Params=" + Params.toString());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -151,6 +152,40 @@ public class MyVolley implements IHttp {
     }
 
     @Override
+    public void upListData(final String url, final List list, final String jsonKey, final Object tag) {
+        set_upListView.add(tag);
+        FlyLog.i("<MyVolley>upListData->response:url=" + url);
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                FlyLog.i("<MyVolley>upListData->response:response=" + response);
+                try {
+                    list.clear();
+                    JsonUtils.getList(list, new JSONObject(response), jsonKey);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                FlyLog.i("<MyVolley>upListData->onErrorResponse:tag=" + tag);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (set_upListView.contains(tag)) {
+                            upListData(url, list, jsonKey, tag);
+                        }
+                    }
+                }, RETRY_TIME);
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
+        stringRequest.setTag(url);
+        mRequestQueue.add(stringRequest);
+    }
+
+    @Override
     public void execute(Builder builder) {
         IAdapter adapter = null;
         try {
@@ -172,9 +207,7 @@ public class MyVolley implements IHttp {
         }
     }
 
-
     //*ListView RecyclearView调用部分
-
     @Override
     public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final Object tag) {
         upListView(url, adapter, jsonKey, false, tag);

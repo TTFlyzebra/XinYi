@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (ResId == linearLayoutResID[i]) {
                 iv_list.get(i).setImageResource(imageViewSrcResID_On[i]);
                 tv_list.get(i).setTextColor(textColor_On);
-                cerrent_fragment = i;
                 ReplaceFragment(fragmentName[i], R.id.main_fl_01);
+                cerrent_fragment = i;
             } else {
                 iv_list.get(i).setImageResource(imageViewSrcResID_Off[i]);
                 tv_list.get(i).setTextColor(textColer_Off);
@@ -163,9 +163,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean ReplaceFragment(String classname, int resId) {
         try {
             FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
-            Class<?> c = Class.forName(MainActivity.class.getPackage().getName() + "." + classname);
-            Fragment fragment = (Fragment) c.newInstance();
-            transaction1.replace(resId, fragment, classname);
+            Class<?> c1 = Class.forName(MainActivity.class.getPackage().getName() + "." + classname);
+            Fragment fragmentRe = (Fragment) c1.newInstance();
+            if (fragmentName[cerrent_fragment].equals(classname)) {
+                Class<?> c2 = Class.forName(MainActivity.class.getPackage().getName() + "." + fragmentName[cerrent_fragment]);
+                Fragment fragmentRm = (Fragment) c2.newInstance();
+                transaction1.remove(fragmentRm);
+            }
+            transaction1.replace(resId, fragmentRe, classname);
             transaction1.commit();
             return true;
         } catch (ClassNotFoundException e) {
