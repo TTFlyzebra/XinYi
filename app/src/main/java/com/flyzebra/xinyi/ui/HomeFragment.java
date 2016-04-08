@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
-import com.flyzebra.xinyi.data.IAdapter;
 import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
@@ -61,7 +60,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
-                recyclerView.refreshFinish();
+                recyclerView.refreshSuccess();
             }
         });
 

@@ -2,6 +2,7 @@ package com.flyzebra.xinyi.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Slide;
 import android.widget.LinearLayout;
 
 import com.flyzebra.xinyi.R;
@@ -17,6 +18,7 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setEnterTransition(new Slide());
         setContentView(R.layout.order_activity);
 //        ChildGridView childGridView = (ChildGridView) findViewById(R.id.order_cgv_01);
 //        childGridView.setData(TestHttp.getViewPagerList());

@@ -8,7 +8,7 @@ import android.util.Log;
  */
 public class FlyLog {
     public static final String TAG = "com.flyzebra";
-    public static String[] filter = {"<ChildViewPager>", "<MyVolley>", "<DrawerLayoutUtils>", "<RefreshRecyclerView>"};//"<MyVolley>","<MainActivity>", "<RefreshRecyclerView>"
+    public static String[] filter = {"<ChildViewPager>", "<ChildGridView>", "<DrawerLayoutUtils>", "<PoiFragment>", "<HomeFragment>", "<RefreshRecyclerView>", "<MainActivity>"};//"<MyVolley>"
     public static void i(String logString) {
         for (int i = 0; i < filter.length; i++) {
             if (logString.indexOf(filter[i]) == 0) {

@@ -14,8 +14,6 @@ import java.util.Map;
 public interface IHttp {
     void upImageView(Context context, String url, ImageView iv);
 
-    void upListData(String url, List list, String jsonKey, Object tag);
-
     void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag);
 
     void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag);
@@ -24,6 +22,8 @@ public interface IHttp {
 
     void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, Result result);
 
+    void getString(String url, Object tag, Result result);
+
     void execute(Builder builder);
 
     void cancelAll(Object tag);
@@ -31,6 +31,7 @@ public interface IHttp {
     interface Result {
         void succeed(Object object);
 
+        void readDiskCache(Object data);
         void faild(Object object);
     }
 

@@ -3,18 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+
+    <com.flyzebra.xinyi.view.ChildGridView
+        android:id="@+id/news_cgv_01"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content" />
 
-        <com.flyzebra.xinyi.view.ChildGridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.flyzebra.xinyi.view.GridViewForScrollView
-            android:id="@+id/news_gv01"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 </ScrollView>

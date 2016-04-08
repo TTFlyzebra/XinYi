@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.flyzebra.xinyi.data.IAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

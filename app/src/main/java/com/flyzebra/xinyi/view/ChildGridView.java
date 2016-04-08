@@ -2,6 +2,7 @@ package com.flyzebra.xinyi.view;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.ui.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -23,8 +25,6 @@ import java.util.Map;
  */
 public class ChildGridView extends LinearLayout {
     private final String ROOT = "ROOT";
-    private final String IV01 = "IV01";
-    private final String TV01 = "TV01";
     private Context context;
     private LinearLayout titleView;
     private List<Map<String, View>> itemViewList;
@@ -35,13 +35,19 @@ public class ChildGridView extends LinearLayout {
     private boolean isAttach = false;
     private List<Map<String, Object>> list;
 
-    private int column = 3;
+    private int column = 2;
     private int childMargin = 3;
     private int TitleHeight = 48;
     private float textSize = 18;
     private int textColor = 0xff000000;
     private OnItemClick mOnItemClick;
     private ShowImageSrc mShowImageSrc;
+
+    private int layoutResID = R.layout.child_gridview_item;
+    private int[] textViewID = {R.id.child_gridview_item_tv01};
+    private String[] textViewKey = {IAdapter.P2_NAME};
+    private int[] imageViewID = {R.id.child_gridview_item_iv01};
+    private String[] imageViewKEY = {IAdapter.P2_IMG_URL};
 
     public ChildGridView(Context context) {
         this(context, null);
@@ -55,6 +61,22 @@ public class ChildGridView extends LinearLayout {
     public ChildGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initContext(context);
+    }
+
+    public ChildGridView init(@LayoutRes int layoutResID, @LayoutRes int[] textViewID, String[] textViewKey, int[] imageViewID, String[] imageViewKEY) {
+        this.layoutResID = layoutResID;
+        this.textViewID = new int[textViewID.length];
+        System.arraycopy(textViewID, 0, this.textViewID, 0, textViewID.length);
+
+        this.textViewKey = new String[textViewKey.length];
+        System.arraycopy(textViewKey, 0, this.textViewKey, 0, textViewKey.length);
+
+        this.imageViewID = new int[imageViewID.length];
+        System.arraycopy(imageViewID, 0, this.imageViewID, 0, imageViewID.length);
+
+        this.imageViewKEY = new String[imageViewKEY.length];
+        System.arraycopy(imageViewKEY, 0, this.imageViewKEY, 0, imageViewKEY.length);
+        return this;
     }
 
     private void initContext(Context context) {
@@ -72,17 +94,14 @@ public class ChildGridView extends LinearLayout {
         createTitleTitle("最新产品");
         createTitleButton("查看更多");
 
-//        titleView = LayoutInflater.from(context).inflate(R.layout.child_gridview_title, null);
-//        titleIv = (ImageView) titleView.findViewById(R.id.child_gridview_title_iv01);
-//        titleTvHeader = (TextView) titleView.findViewById(R.id.child_gridview_title_tv01);
-//        titleTvMore = (TextView) titleView.findViewById(R.id.child_gridview_title_tv02);
         this.addView(titleView);
     }
 
-    public void setTitleImage(@DrawableRes int ResID) {
+    public ChildGridView setTitleImage(@DrawableRes int ResID) {
         if (titleImageView != null) {
             titleImageView.setImageResource(ResID);
         }
+        return this;
     }
 
     private void createTitleImage(@DrawableRes int ResID) {
@@ -97,10 +116,11 @@ public class ChildGridView extends LinearLayout {
         titleView.addView(titleImageView);
     }
 
-    public void setTitle(String title) {
+    public ChildGridView setTitle(String title) {
         if (titleTitle != null) {
             titleTitle.setText(title);
         }
+        return this;
     }
 
     public void createTitleTitle(String title) {
@@ -115,10 +135,11 @@ public class ChildGridView extends LinearLayout {
         titleView.addView(titleTitle);
     }
 
-    public void setTitleButtonName(String title) {
+    public ChildGridView setTitleButtonName(String title) {
         if (titleButton != null) {
             titleButton.setText(title);
         }
+        return this;
     }
 
     public void createTitleButton(String name) {
@@ -150,7 +171,7 @@ public class ChildGridView extends LinearLayout {
             }
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) child.getLayoutParams();
             if (!(heightMode == MeasureSpec.EXACTLY && lp.height == 0 && lp.weight > 0)) {
-                if (i == 0) {
+                if (titleView != null && i == 0) {
                     measureChildWithMargins(child, MeasureSpec.makeMeasureSpec(widthMeasureSpec, MeasureSpec.EXACTLY), 0, heightMeasureSpec, 0);
                 } else {
                     int childWidth = MeasureSpec.getSize(widthMeasureSpec) / column;
@@ -163,13 +184,11 @@ public class ChildGridView extends LinearLayout {
             FlyLog.i("<ChildGridView>onMeasure:childHeight=" + childHeight);
             mBigChildHeight = Math.max(totalLength, childHeight);
         }
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY);
         int number = itemViewList == null ? 0 : itemViewList.size() % column > 0 ? itemViewList.size() / column + 1 : itemViewList.size() / column;
         int mMaxHeight = titleView.getMeasuredHeight() + number * mBigChildHeight;
-        heightMeasureSpec = Math.max(MeasureSpec.makeMeasureSpec(mMaxHeight, MeasureSpec.EXACTLY), heightMeasureSpec);
-        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-        FlyLog.i("<ChildGridView>onMeasure:mBigChildHeight=" + mBigChildHeight);
-        FlyLog.i("<ChildGridView>onMeasure:width=" + MeasureSpec.getSize(widthMeasureSpec) + ",height=" + MeasureSpec.getSize(heightMeasureSpec));
+//        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), mMaxHeight);//此处设置的值为控件将要显示的高度和宽度
+        FlyLog.i("<ChildGridView>setMeasuredDimension:width=" + MeasureSpec.getSize(widthMeasureSpec) + ",height=" + mMaxHeight);
     }
 
     @Override
@@ -206,24 +225,31 @@ public class ChildGridView extends LinearLayout {
         isAttach = false;
     }
 
-    public void addItemView(Context context, final int i) {
+    public void addItemView(Context context, final int num) {
         Map map = new HashMap();
-        View view = LayoutInflater.from(context).inflate(R.layout.child_gridview_item, null);
-        view.setOnClickListener(new OnClickListener() {
+        View root = LayoutInflater.from(context).inflate(layoutResID, null);
+        root.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnItemClick != null) {
-                    mOnItemClick.OnItemClidk(list.get(i));
+                    //为了图元共亨动画，转入VIEW
+                    mOnItemClick.OnItemClidk(list.get(num), v);
                 }
             }
         });
-        map.put(ROOT, view);
-        ImageView iv01 = (ImageView) view.findViewById(R.id.child_gridview_item_iv01);
-        map.put(IV01, iv01);
-        TextView tv01 = (TextView) view.findViewById(R.id.child_gridview_item_tv01);
-        map.put(TV01, tv01);
+        map.put(ROOT, root);
+
+        for (int n = 0; n < textViewID.length; n++) {
+            TextView tv = (TextView) root.findViewById(textViewID[n]);
+            map.put(textViewID[n], tv);
+        }
+
+        for (int n = 0; n < imageViewID.length; n++) {
+            ImageView iv = (ImageView) root.findViewById(imageViewID[n]);
+            map.put(imageViewID[n], iv);
+        }
         itemViewList.add(map);
-        this.addView(view);
+        this.addView(root);
     }
 
     public void setData(List<Map<String, Object>> list) {
@@ -251,13 +277,17 @@ public class ChildGridView extends LinearLayout {
     }
 
     public void ShowItemViewData(Map<String, View> itemView, Map<String, Object> data) {
-        ImageView iv01 = (ImageView) itemView.get(IV01);
-        TextView tv01 = (TextView) itemView.get(TV01);
-        if (mShowImageSrc != null) {
-            mShowImageSrc.setImageSrcWithUrl(iv01, (String) data.get("path"));
+        for (int i = 0; i < textViewID.length; i++) {
+            TextView tv = (TextView) itemView.get(textViewID[i]);
+            tv.setText((String) data.get(textViewKey[i]));
+            tv.setTextColor(textColor);
         }
-        tv01.setText((String) data.get("name"));
-        FlyLog.i("<ChildGridView>ShowItemViewData:path=" + data.get("path") + ",name=" + data.get("name"));
+        for (int i = 0; i < imageViewID.length; i++) {
+            ImageView iv = (ImageView) itemView.get(imageViewID[i]);
+            if (mShowImageSrc != null) {
+                mShowImageSrc.setImageSrcWithUrl((String) data.get(imageViewKEY[i]), iv);
+            }
+        }
         postInvalidate();
     }
 
@@ -271,40 +301,47 @@ public class ChildGridView extends LinearLayout {
         return (int) (dipValue * scale + 0.5f);
     }
 
-    public void setColumn(int column) {
+    public ChildGridView setColumn(int column) {
         this.column = column;
+        return this;
     }
 
-    public void setChildMargin(int childMargin) {
+    public ChildGridView setChildMargin(int childMargin) {
         this.childMargin = childMargin;
+        return this;
     }
 
-    public void setTitleHeight(int titleHeight) {
+    public ChildGridView setTitleHeight(int titleHeight) {
         TitleHeight = titleHeight;
+        return this;
     }
 
-    public void setTextSize(float textSize) {
+    public ChildGridView setTextSize(float textSize) {
         this.textSize = textSize;
+        return this;
     }
 
-    public void setTextColor(int textColor) {
+    public ChildGridView setTextColor(int textColor) {
         this.textColor = textColor;
+        return this;
     }
 
-    public void setOnItemClick(OnItemClick onItemClick) {
+    public ChildGridView setOnItemClick(OnItemClick onItemClick) {
         this.mOnItemClick = onItemClick;
+        return this;
     }
 
-    public void setShowImageSrc(ShowImageSrc mShowImageSrc) {
+    public ChildGridView setShowImageSrc(ShowImageSrc mShowImageSrc) {
         this.mShowImageSrc = mShowImageSrc;
+        return this;
     }
 
     public interface OnItemClick {
-        void OnItemClidk(Map<String, Object> data);
+        void OnItemClidk(Map<String, Object> data, View v);
     }
 
     public interface ShowImageSrc {
-        void setImageSrcWithUrl(ImageView iv, String url);
+        void setImageSrcWithUrl(String url, ImageView iv);
     }
 
 }

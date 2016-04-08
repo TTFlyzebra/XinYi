@@ -103,12 +103,24 @@ public class CircleImageView extends ImageView {
         if (mBitmap == null) {
             return;
         }
+//        cropBitmap();
         mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         mBitmapShader.setLocalMatrix(getMatrix(width, height, mBitmap.getWidth(), mBitmap.getHeight()));
         bitmapPaint.setShader(mBitmapShader);
         int circleRid = Math.min(width, height) / 2;
         canvas.drawCircle(width / 2, height / 2, circleRid - borderWidth, bitmapPaint);
         canvas.drawCircle(width / 2, height / 2, circleRid - borderWidth / 2, borderPaint);
+    }
+
+    private void cropBitmap() {
+        width = mBitmap.getWidth();
+        height = mBitmap.getHeight();
+        int x = width < height ? 0 : (width - height) / 2;
+        int y = width < height ? (height - width) / 2 : 0;
+        int size = Math.min(width, height);
+        Bitmap oldBitmap = mBitmap;
+        mBitmap = Bitmap.createBitmap(mBitmap, x, y, size, size);
+        oldBitmap.recycle();
     }
 
     private Matrix getMatrix(int width, int height, int b_width, int b_height) {

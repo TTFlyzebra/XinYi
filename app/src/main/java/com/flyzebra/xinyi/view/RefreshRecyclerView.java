@@ -36,8 +36,10 @@ public class RefreshRecyclerView extends ViewGroup {
     private LayoutManager mLayout;
     private View topView;
     private View botView;
+    private int childMargin = 0;
+    private AtomicBoolean isGetChildMargin = new AtomicBoolean(false);
 
-    private int RLIST = LIST.SCROLLED;
+    private int RLIST = LIST.SCROLL;
     private int SHOW = PULL.NORMAL;
     private float down_y;
     private float mv_x, mv_y;
@@ -55,13 +57,13 @@ public class RefreshRecyclerView extends ViewGroup {
     private RecyclerView.OnScrollListener onScrollLisenter = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            executors.submit(new SetMainViewState());
+            executors.execute(new SetMainViewState());
         }
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             //当没有滚动条出现时的情况，如不处理，下拉无反应
-            executors.submit(new SetMainViewState());
+            executors.execute(new SetMainViewState());
         }
     };
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
@@ -83,6 +85,7 @@ public class RefreshRecyclerView extends ViewGroup {
         mRecyclerView = new RecyclerView(context);
         init(context);
     }
+
 
     public RefreshRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -123,11 +126,11 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             measureChild(getChildAt(i), widthMeasureSpec, heightMeasureSpec);
         }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     public void setRefrshTop(boolean flag) {
@@ -140,6 +143,7 @@ public class RefreshRecyclerView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        FlyLog.i("<RefreshRecyclerView>onLayout::l=" + l + ",t=" + t + ",r=" + r + ",b=" + b);
         if (isAttach) {
             if (mRecyclerView != null) {
                 mRecyclerView.layout(l, t, r, b);
@@ -314,8 +318,6 @@ public class RefreshRecyclerView extends ViewGroup {
         smoothScrollToY(getScrollY(), 0, animScoller_time);
     }
 
-
-    //
 //    /**
 //     用在ViewPager中不这样设置会提示找不到ID，解决方案1，如下所示，或者生成后重新分配ID
 //     java.lang.IllegalArgumentException: Wrong state class, expecting View State but received class
@@ -358,11 +360,20 @@ public class RefreshRecyclerView extends ViewGroup {
         super.onDetachedFromWindow();
     }
 
-    public void refreshFinish() {
+    public void refreshSuccess() {
         if (SHOW == PULL.TOP) {
-            ((TextView) topView).setText("更新完成...");
+            ((TextView) topView).setText("更新成功...");
         } else if (SHOW == PULL.BOTTOM) {
-            ((TextView) botView).setText("更新完成...");
+            ((TextView) botView).setText("更新成功...");
+        }
+        isNeedRefresh.set(false);
+    }
+
+    public void refreshFailed() {
+        if (SHOW == PULL.TOP) {
+            ((TextView) topView).setText("网络连接失败...");
+        } else if (SHOW == PULL.BOTTOM) {
+            ((TextView) botView).setText("网络连接失败...");
         }
         isNeedRefresh.set(false);
     }
@@ -401,6 +412,7 @@ public class RefreshRecyclerView extends ViewGroup {
         mRecyclerView.setItemAnimator(animator);
     }
 
+
     public interface ListenerTopRefresh {
         void onRefrsh(View view);
 
@@ -420,7 +432,7 @@ public class RefreshRecyclerView extends ViewGroup {
         int BOTTOM = 2;
         int LAST = 3;
         int EMPTY = 4;
-        int SCROLLED = 0;
+        int SCROLL = 0;
     }
 
     public interface PULL {
@@ -432,21 +444,31 @@ public class RefreshRecyclerView extends ViewGroup {
     private class SetMainViewState implements Runnable {
         @Override
         public void run() {
-            int first = -8, last = -8;
-            View firstView = null, lastView = null;
+            int first = -8;
+            int last = -8;
+            View firstView = null;
+            View lastView = null;
             LinearLayoutManager mGLayout = (LinearLayoutManager) mLayout;
             first = mGLayout.findFirstVisibleItemPosition();
             if (first == RecyclerView.NO_POSITION) {
                 RLIST = LIST.EMPTY;
-                FlyLog.i("<RefreshRecyclerView>-->SetMainViewState:MAINVIEW=" + RLIST);
                 return;
             }
             last = mGLayout.findLastVisibleItemPosition();
             firstView = mGLayout.findViewByPosition(0);
             lastView = mGLayout.findViewByPosition(mLayout.getItemCount() - 1);
-            if (first == 0 && (firstView.getTop() == 0)) {
+            if (first == 0 && !isGetChildMargin.get()) {
+                View secondView = mGLayout.findViewByPosition(1);
+                if (secondView != null && firstView != null) {
+                    int firstBootm = firstView.getBottom();
+                    int secondTop = secondView.getTop();
+                    childMargin = (secondTop - firstBootm) / 2;
+                    isGetChildMargin.set(true);
+                }
+            }
+            if (first == 0 && firstView.getTop() == childMargin) {
                 RLIST = LIST.TOP;
-            } else if ((last == mLayout.getItemCount() - 1) && (lastView.getBottom() == getHeight())) {
+            } else if ((last == mLayout.getItemCount() - 1) && (lastView.getBottom() == getHeight() - childMargin)) {
                 RLIST = LIST.BOTTOM;
             } else if (last > mLayout.getItemCount() - 2) {
                 if (RLIST != LIST.LAST) {
@@ -456,9 +478,10 @@ public class RefreshRecyclerView extends ViewGroup {
                 }
                 RLIST = LIST.LAST;
             } else {
-                RLIST = LIST.SCROLLED;
+                RLIST = LIST.SCROLL;
             }
-            FlyLog.i("<RefreshRecyclerView>-->SetMainViewState:MAINVIEW=" + RLIST);
+//            FlyLog.i("<RefreshRecyclerView>-->SetMainViewState:RLIST=" + RLIST + ",first=" + first + ",last" + last + ",top=" + firstView.getTop() + ",bottom=" + lastView.getBottom() + ",height=" + getHeight());
+            FlyLog.i("<RefreshRecyclerView>-->SetMainViewState:RLIST=" + RLIST);
         }
     }
 

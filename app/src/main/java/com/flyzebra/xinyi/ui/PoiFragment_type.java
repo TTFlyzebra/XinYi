@@ -73,17 +73,22 @@ public class PoiFragment_type extends Fragment {
         mRecyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
-                iHttp.execute(new IHttp.Builder().setTag(HTTPTAG_TYPE).setUrl(Constant.URL_TABLE_1).setView(mRecyclerView).setJsonKey("mealinfo").setResult(new IHttp.Result() {
+                iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG_TYPE, new IHttp.Result() {
                     @Override
                     public void succeed(Object object) {
-                        mRecyclerView.refreshFinish();
+                        mRecyclerView.refreshSuccess();
                     }
 
                     @Override
                     public void faild(Object object) {
-                        mRecyclerView.refreshFinish();
+                        mRecyclerView.refreshFailed();
                     }
-                }));
+
+                    @Override
+                    public void readDiskCache(Object data) {
+                        mRecyclerView.refreshFailed();
+                    }
+                });
             }
         });
         return view;

@@ -1,4 +1,4 @@
-package com.flyzebra.xinyi.data;
+package com.flyzebra.xinyi.ui;
 
 import com.flyzebra.xinyi.model.http.IHttp;
 
@@ -22,4 +22,7 @@ public interface IAdapter<T extends List> extends IHttp.HttpAdapter {
     String P1_NAME = "mealname";
     String P1_PRICE = "mealremark";
     String P1_IMG_URL = "mealimage";
+
+    String P2_NAME = "name";
+    String P2_IMG_URL = "path";
 }

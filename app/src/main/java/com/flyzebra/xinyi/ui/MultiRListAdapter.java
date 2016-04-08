@@ -1,6 +1,10 @@
 package com.flyzebra.xinyi.ui;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -10,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.IAdapter;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.FlyLog;
@@ -61,11 +64,19 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
                 });
                 break;
             case H_GRIDVIEW:
-                ChildGridView childGridView = new ChildGridView(context);
+                final ChildGridView childGridView = new ChildGridView(context);
                 childGridView.setOnItemClick(new ChildGridView.OnItemClick() {
                     @Override
-                    public void OnItemClidk(Map<String, Object> data) {
+                    public void OnItemClidk(Map<String, Object> data, View v) {
                         FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
+                        Intent intent = new Intent(context, ProductInfoActivity.class);
+                        intent.putExtra(ProductInfoActivity.IMG_URL, (String) data.get(P2_IMG_URL));
+                        intent.putExtra(ProductInfoActivity.TEXT, (String) data.get(P2_NAME));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                            context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, v, "IMAGE01").toBundle());
+                        } else {
+                            context.startActivity(intent);
+                        }
                     }
                 });
                 hodler = new GridViewHolder(childGridView);
@@ -86,10 +97,10 @@ public class MultiRListAdapter extends RecyclerView.Adapter<ViewHolder> implemen
             view.setData((List<Map<String, Object>>) list.get(position).get(DATA));
             holder.itemView.setTag(position);
         } else if (holder instanceof GridViewHolder) {
-            ChildGridView view = (ChildGridView) holder.itemView;
+            final ChildGridView view = (ChildGridView) holder.itemView;
             view.setShowImageSrc(new ChildGridView.ShowImageSrc() {
                 @Override
-                public void setImageSrcWithUrl(ImageView iv, String url) {
+                public void setImageSrcWithUrl(String url, ImageView iv) {
                     iHttp.upImageView(context, url, iv);
                 }
             });

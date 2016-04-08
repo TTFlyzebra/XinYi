@@ -91,6 +91,11 @@ public class BuyFragment extends Fragment {
                     public void faild(Object object) {
                         listView.onRefreshComplete();
                     }
+
+                    @Override
+                    public void readDiskCache(Object data) {
+                        listView.onRefreshComplete();
+                    }
                 });
             }
         });

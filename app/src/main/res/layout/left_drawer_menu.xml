@@ -167,6 +167,11 @@
                 style="@style/left_drawer_menu_image"
                 android:src="@drawable/ic_crop_original_18dp" />
 
+            <ViewSwitcher
+                android:id="@+id/viewSwitcher"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
             <LinearLayout style="@style/left_drawer_menu_ll_01">
 
                 <TextView
@@ -175,7 +180,7 @@
                     android:layout_height="match_parent"
                     android:text="图片显示" />
 
-                <Switch
+                <ToggleButton
                     style="@style/left_drawer_menu_switch"
                     android:checked="true" />
             </LinearLayout>
@@ -199,7 +204,12 @@
                     android:layout_height="match_parent"
                     android:text="夜间模式" />
 
-                <Switch style="@style/left_drawer_menu_switch" />
+                <ToggleButton style="@style/left_drawer_menu_switch" />
+
+                <ViewStub
+                    android:id="@+id/viewStub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
 

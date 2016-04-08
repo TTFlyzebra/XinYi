@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.flyzebra.xinyi.data.IAdapter;
+import com.flyzebra.xinyi.ui.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
@@ -17,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -60,11 +59,6 @@ public class MyOkHttp implements IHttp {
     }
 
     @Override
-    public void upListData(String url, List list, String jsonKey, Object tag) {
-
-    }
-
-    @Override
     public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag) {
         Builder builder = new Builder().setUrl(url).setAdapter(adapter).setJsonKey(jsonKey).setTag(tag);
         execute(builder);
@@ -82,6 +76,11 @@ public class MyOkHttp implements IHttp {
 
     @Override
     public void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, Result result) {
+
+    }
+
+    @Override
+    public void getString(String url, Object tag, Result result) {
 
     }
 
