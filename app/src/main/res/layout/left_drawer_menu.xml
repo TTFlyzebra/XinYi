@@ -180,7 +180,7 @@
                     android:layout_height="match_parent"
                     android:text="图片显示" />
 
-                <ToggleButton
+                <Switch
                     style="@style/left_drawer_menu_switch"
                     android:checked="true" />
             </LinearLayout>
@@ -204,12 +204,8 @@
                     android:layout_height="match_parent"
                     android:text="夜间模式" />
 
-                <ToggleButton style="@style/left_drawer_menu_switch" />
+                <Switch style="@style/left_drawer_menu_switch" />
 
-                <ViewStub
-                    android:id="@+id/viewStub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
 

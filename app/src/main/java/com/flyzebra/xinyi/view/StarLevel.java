@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 /**
+ * 仿QQ星星月亮太阳等的等级显示控件
  * Created by Administrator on 2016/4/5.
  */
 public class StarLevel extends LinearLayout {
@@ -39,15 +40,26 @@ public class StarLevel extends LinearLayout {
         this.context = context;
     }
 
-    public void setLevelSetpAndrImgaes(int levelStep, @DrawableRes int ResID[]) {
+    /**
+     * @param levelStep 设置进制，如腾讯的QQ，此数设为4,则三个星星后要显示月亮
+     * @param ResID     设置不同等级要显示的图片数组，如QQ的星星月亮太阳
+     */
+    public StarLevel setLevelSetpAndrImgaes(int levelStep, @DrawableRes int ResID[]) {
         this.levelSetp = levelStep;
         this.ResID = new int[ResID.length];
         System.arraycopy(ResID, 0, this.ResID, 0, ResID.length);
+        return this;
     }
 
-    public void setLevel(int level) {
+    /**
+     * 设置显示的等级
+     *
+     * @param level 传入要显示的等级
+     */
+    public StarLevel setLevel(int level) {
         this.level = level;
         drawStars(level);
+        return this;
     }
 
     public void drawStars(int level) {
@@ -93,15 +105,16 @@ public class StarLevel extends LinearLayout {
             int height = this.starHeight > 0 ? this.starHeight : LayoutParams.WRAP_CONTENT;
             LayoutParams lp = new LinearLayout.LayoutParams(width, height);
             iv.setLayoutParams(lp);
+            iv.setPadding(3, 3, 3,3);
             addView(iv);
             iv.setImageResource(ResID);
         }
     }
 
-    public void setStarSize(int width, int height) {
+    public StarLevel setStarSize(int width, int height) {
         this.starWidth = width;
         this.starHeight = height;
-        drawStars(level);
+        return this;
     }
 
     @Override

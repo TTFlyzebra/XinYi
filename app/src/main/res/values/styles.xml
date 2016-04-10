@@ -2,6 +2,13 @@
 
     <style name="AppTheme" parent="@style/BaseTheme"></style>
 
+    <style name="rotateImage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:alpha">0.9</item>
+        <item name="android:padding">80dp</item>
+    </style>
+
     <style name="left_drawer_menu_ll_02">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

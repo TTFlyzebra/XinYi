@@ -26,16 +26,19 @@ import com.flyzebra.xinyi.utils.JsonUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
+ *
  * Created by FlyZebra on 2016/3/20.
  */
 public class MyVolley implements IHttp {
+    private static final int OK = 1;
+    private static final int DISK = 2;
+    private static final int FAIL = 3;
     public static Set<Object> set_upListView = new HashSet<>();
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
@@ -45,7 +48,6 @@ public class MyVolley implements IHttp {
     public static MyVolley getInstance() {
         return MyVolleyHolder.sInstance;
     }
-
 
     public static RequestQueue Init(Context context) {
         mRequestQueue = Volley.newRequestQueue(context);
@@ -159,17 +161,17 @@ public class MyVolley implements IHttp {
             @Override
             public void onResponse(String response) {
                 FlyLog.i("<MyVolley>getString:response=" + response);
-                result.succeed(response);
+                sendResult(result, response, OK);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 String data = readDiskCache(url);
                 if (data != null) {
-                    result.readDiskCache(data);
+                    sendResult(result, data, DISK);
                     FlyLog.i("<MyVolley>getString->readDiskCache data=" + data);
                 } else {
-                    result.faild(error);
+                    sendResult(result, error, FAIL);
                     FlyLog.i("<MyVolley>getString->onErrorResponse:tag=" + tag);
                 }
             }
@@ -206,9 +208,7 @@ public class MyVolley implements IHttp {
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                if (result != null) {
-                    result.succeed(jsonObject);
-                }
+                sendResult(result, jsonObject.toString(), DISK);
                 notifyData(isAdd, adapter, jsonObject, jsonKey);
                 FlyLog.i("<MyVolley>upListView->onResponse:tag=" + tag);
             }
@@ -221,13 +221,13 @@ public class MyVolley implements IHttp {
                     try {
                         JSONObject jsonObject = new JSONObject(data);
                         notifyData(isAdd, adapter, jsonObject, jsonKey);
-                        result.readDiskCache(data);
+                        sendResult(result, data, DISK);
                         FlyLog.i("<MyVolley>upListView->readDiskCache data=" + data);
                     } catch (JSONException e) {
-                        result.faild(volleyError);
+                        sendResult(result, volleyError, FAIL);
                     }
                 } else {
-                    result.faild(volleyError);
+                    sendResult(result, volleyError, FAIL);
                     FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
                 }
             }
@@ -241,6 +241,22 @@ public class MyVolley implements IHttp {
         FlyLog.i("<MyVolley>cancelAll:tag=" + tag);
         set_upListView.remove(tag);
         mRequestQueue.cancelAll(tag);
+    }
+
+    public void sendResult(Result result, Object object, int type) {
+        if (result != null) {
+            switch (type) {
+                case OK:
+                    result.succeed(object);
+                    break;
+                case DISK:
+                    result.readDiskCache(object);
+                    break;
+                case FAIL:
+                    result.faild(object);
+                    break;
+            }
+        }
     }
 
     private void notifyData(boolean isAdd, HttpAdapter adapter, JSONObject jsonObject, String jsonKey) {
@@ -257,7 +273,8 @@ public class MyVolley implements IHttp {
         if (entry != null) {
             try {
                 data = new String(entry.data, HttpHeaderParser.parseCharset(entry.responseHeaders, "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
+            } catch (Exception e) {
+                FlyLog.i("<MyVolley>upListView->readDiskCache Error");
                 return null;
             }
         }

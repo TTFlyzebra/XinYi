@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="#000">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="50dp"
+    <!--com.flyzebra.xinyi.view.CardImageView
+        android:id="@+id/wel_iv_01"
+        style="@style/rotateImage"
         android:src="@drawable/welcome1" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="50dp"
+    <com.flyzebra.xinyi.view.CardImageView
+        android:id="@+id/wel_iv_02"
+        style="@style/rotateImage"
         android:src="@drawable/welcome2" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="50dp"
+    <com.flyzebra.xinyi.view.CardImageView
+        android:id="@+id/wel_iv_03"
+        style="@style/rotateImage"
         android:src="@drawable/welcome3" />
 
+    <com.flyzebra.xinyi.view.CardImageView
+        android:id="@+id/wel_iv_04"
+        style="@style/rotateImage"
+        android:src="@drawable/welcome4" />
+
+    <com.flyzebra.xinyi.view.CardImageView
+        android:id="@+id/wel_iv_05"
+        style="@style/rotateImage"
+        android:src="@drawable/welcome1" />
+
+    <com.flyzebra.xinyi.view.CardImageView
+        android:id="@+id/wel_iv_06"
+        style="@style/rotateImage"
+        android:src="@drawable/welcome2" /-->
+    <com.flyzebra.xinyi.view.Play3DImages
+        android:id="@+id/wel_play3d"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>
+

@@ -54,7 +54,10 @@ public class LeftMenuFragment extends Fragment implements View.OnClickListener {
         left_drawer_iv_01 = (ImageView) view.findViewById(R.id.left_drawer_iv_01);
         left_drawer_tv_01 = (TextView) view.findViewById(R.id.left_drawer_tv_01);
         left_drawer_starlevel = (StarLevel) view.findViewById(R.id.left_drawer_starlevel);
-
+        left_drawer_starlevel.setLevelSetpAndrImgaes(4, new int[]{R.drawable.star, R.drawable.moon, R.drawable.sun})
+                .setStarSize(DisplayUtils.dip2px(activity, 20), DisplayUtils.dip2px(activity, 20))
+                .setLevel(63);
+        left_drawer_starlevel.setLevel(63);
         UserInfo userInfo = activity.userInfo;
         if (userInfo != null) {
             String name = userInfo.getUserName();
