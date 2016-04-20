@@ -13,6 +13,7 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
@@ -22,6 +23,8 @@ import android.widget.ImageView;
 
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.FlyLog;
+
+import butterknife.OnClick;
 
 
 /**
@@ -62,6 +65,7 @@ public class Play3DImages extends FrameLayout {
     private int mTouchSlop;
     private boolean isFling;
 
+
     public Play3DImages(Context context) {
         super(context);
         initContext(context);
@@ -82,15 +86,38 @@ public class Play3DImages extends FrameLayout {
         ViewConfiguration config = ViewConfiguration.get(context);
         mTouchSlop = config.getScaledTouchSlop();
         mGestureListener = new SimpleOnGestureListener() {
+
+            @Override
+            public boolean onDown(MotionEvent e) {
+                FlyLog.i("<Play3DImages> onDown ");
+                return super.onDown(e);
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                FlyLog.i("<Play3DImages> onLongPress ");
+                super.onLongPress(e);
+            }
+
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 FlyLog.i("<Play3DImages> onFling X=" + velocityX + ",Y=" + velocityY);
-                if ((Math.abs(velocityX) > Math.abs(velocityY)) && (Math.abs(e1.getX() - e2.getX()) > mTouchSlop)) {
+                if (Math.abs(velocityX) > Math.abs(velocityY)) {
                     isFling = true;
                     if (velocityX < 0) {
-                        pauseShowForeImage(500);
+                        FlyLog.i("<Play3DImages> pauseShowForeImage X=" + velocityX + ",Y=" + velocityY);
+                        playToFroeImage(300);
+                        if (isPlay) {
+                            mHandler.removeCallbacks(playTask);
+                            playAnimition(durationMillis + showMillis);
+                        }
                     } else {
-                        pauseShowNextImage(500);
+                        FlyLog.i("<Play3DImages> pauseShowNextImage X=" + velocityX + ",Y=" + velocityY);
+                        playToNextImage(300);
+                        if (isPlay) {
+                            mHandler.removeCallbacks(playTask);
+                            playAnimition(durationMillis + showMillis);
+                        }
                     }
                 }
                 return super.onFling(e1, e2, velocityX, velocityY);
@@ -99,29 +126,38 @@ public class Play3DImages extends FrameLayout {
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
     }
 
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent ev) {
+//        mGestureDetector.onTouchEvent(ev);
+//        if(isFling ) return true;
+//        switch (ev.getAction()) {
+//            case MotionEvent.ACTION_MOVE:
+//                if(isFling){
+//                    return true;
+//                }
+//                break;
+//        }
+//        return false;
+//    }
+
     /**
      * 滑动手势判断
      *
      * @param event
      * @return
      */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        mGestureDetector.onTouchEvent(event);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                FlyLog.i("<Play3DImages> ACTION_DOWN");
-                isFling = false;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                FlyLog.i("<Play3DImages> ACTION_MOVE");
-                break;
-            case MotionEvent.ACTION_UP:
-                FlyLog.i("<Play3DImages> ACTION_UP");
-                return isFling;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        mGestureDetector.onTouchEvent(event);
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                isFling = false;
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                return isFling;
+//        }
+//        return true;
+//    }
 
     /**
      * 当前播放状态
@@ -161,6 +197,7 @@ public class Play3DImages extends FrameLayout {
 
     /**
      * 设置图片间的间隔
+     *
      * @param padding
      * @return
      */
@@ -171,6 +208,7 @@ public class Play3DImages extends FrameLayout {
 
     /**
      * 设置显示图片的透明度
+     *
      * @param imageAlpha
      * @return
      */
@@ -197,7 +235,7 @@ public class Play3DImages extends FrameLayout {
             iv.setPadding(imagePadding, imagePadding, imagePadding, imagePadding);
             iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
             iv.setTag(i);
-            iv.setAlpha(imageAlpha);
+            iv.setAlpha((int) (255 * imageAlpha));
             imageView[i] = iv;
             this.addView(iv);
         }
@@ -219,6 +257,7 @@ public class Play3DImages extends FrameLayout {
 
     /**
      * 播放下一张图片
+     *
      * @param durationMillis
      */
     public void playToNextImage(long durationMillis) {
@@ -236,6 +275,7 @@ public class Play3DImages extends FrameLayout {
 
     /**
      * 播放上一张图片
+     *
      * @param durationMillis
      */
     public void playToFroeImage(long durationMillis) {
@@ -257,7 +297,7 @@ public class Play3DImages extends FrameLayout {
         for (int i = 0; i < urlArray.length; i++) {
             MyVolley.getInstance().upImageView(context, urlArray[i], imageView[i]);
         }
-        playAnimition();
+        playAnimition(0);
     }
 
     @Override
@@ -268,6 +308,7 @@ public class Play3DImages extends FrameLayout {
 
     /**
      * 设置转动一张图片所要的时间
+     *
      * @param durationMillis
      * @return
      */
@@ -278,6 +319,7 @@ public class Play3DImages extends FrameLayout {
 
     /**
      * 设置图片播放停止显示图片的时间
+     *
      * @param showMillis
      * @return
      */
@@ -291,9 +333,9 @@ public class Play3DImages extends FrameLayout {
      *
      * @return
      */
-    public Play3DImages playAnimition() {
+    public Play3DImages playAnimition(long durationMillis) {
         isPlay = true;
-        mHandler.post(playTask);
+        mHandler.postDelayed(playTask, durationMillis);
         return this;
     }
 
@@ -347,13 +389,15 @@ public class Play3DImages extends FrameLayout {
     public Play3DImages pauseShowForeImage(long delayMillis) {
         if (isPlay) {
             if (isClockwise()) {
-                finishAnimition(delayMillis);
+                playToFroeImage(delayMillis);
             } else {
                 cancleAnimition(delayMillis);
             }
         } else {
             playToFroeImage(delayMillis);
         }
+        isPlay = false;
+        isClockwise = true;
         return this;
     }
 
@@ -366,19 +410,58 @@ public class Play3DImages extends FrameLayout {
     public Play3DImages pauseShowNextImage(long delayMillis) {
         if (isPlay) {
             if (!isClockwise()) {
-                finishAnimition(delayMillis);
+                playToNextImage(delayMillis);
             } else {
                 cancleAnimition(delayMillis);
             }
         } else {
             playToNextImage(delayMillis);
         }
+        isPlay = false;
+        isClockwise = false;
         return this;
+    }
+
+    private OnItemClick mOnItemClick;
+
+    public interface OnItemClick {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClick(OnItemClick onItemClick) {
+        if (this.mOnItemClick == null) {
+            for (ImageView iv : imageView) {
+//                iv.setOnClickListener(new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        mOnItemClick.onItemClick((Integer) v.getTag());
+//                        FlyLog.i("<Play3DImages> setOnItemClick position=" + v.getTag());
+//                    }
+//                });
+                iv.setOnTouchListener(new OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        mGestureDetector.onTouchEvent(event);
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                isFling = false;
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if(!isFling){
+                                    mOnItemClick.onItemClick((Integer) v.getTag());
+                                }
+                        }
+                        return true;
+                    }
+                });
+            }
+        }
+        this.mOnItemClick = onItemClick;
     }
 
 
     /**
-     *自定义3D播放动画类
+     * 自定义3D播放动画类
      */
     public class Rotate3dAnimation extends Animation {
         private float mFromDegrees;
@@ -451,9 +534,14 @@ public class Play3DImages extends FrameLayout {
                 Zorder = Zorder > 180 ? 180 - Zorder % 180 : Zorder;
                 mView.setTranslationZ(180f - Zorder);
             } else {
-                float mdegrees = currentDegress % 360;
-                if (mdegrees > 360 - 360 / mNums) {
-                    mView.bringToFront();
+                float mDegrees = currentDegress % 360;
+                float frontDegrees = 360f / mNums;
+                if (mToDegrees % 360 == 0) {
+                    if (mDegrees >= 360 - frontDegrees) {
+                        mView.bringToFront();
+                    } else if (mDegrees < frontDegrees) {
+                        mView.bringToFront();
+                    }
                 }
             }
             final float centerX = mCenterX;
@@ -461,12 +549,28 @@ public class Play3DImages extends FrameLayout {
             final Camera camera = mCamera;
             final Matrix matrix = t.getMatrix();
             camera.save();
+
+
             new_x = (float) Math.sin(Math.PI * currentDegress / 180) * mDepthZ;
-            new_z = -(float) Math.cos(Math.PI * currentDegress / 180) * mDepthZ;
-            camera.translate(new_x, 0.0f, new_z + mDepthZ);
+            new_z = (float) Math.cos(Math.PI * currentDegress / 180) * mDepthZ;
+
+            float degress = (currentDegress + 360) % 360;
+            float move_x = (float) (Math.cos(Math.PI * degress / 180) * centerX);
+            if (degress <= 90) {
+                camera.translate(new_x - move_x + mCenterX, 0.0f, mDepthZ - new_z);
+            } else if (degress <= 180) {
+                camera.translate(new_x + move_x + mCenterX, 0.0f, mDepthZ - new_z);
+            } else if (degress <= 270) {
+                camera.translate(new_x - move_x - mCenterX, 0.0f, mDepthZ - new_z);
+            } else if (degress <= 360) {
+                camera.translate(new_x + move_x - mCenterX, 0.0f, mDepthZ - new_z);
+            }
+
             camera.rotateY(currentDegress);
+
             camera.getMatrix(matrix);
             camera.restore();
+
             matrix.preTranslate(-centerX, -centerY);
             matrix.postTranslate(centerX, centerY);
         }

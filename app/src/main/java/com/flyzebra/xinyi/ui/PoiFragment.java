@@ -23,8 +23,6 @@ import com.flyzebra.xinyi.utils.ResUtils;
  */
 public class PoiFragment extends Fragment {
     private MainActivity activity;
-    private IHttp iHttp = MyVolley.getInstance();
-    private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
     private MyFragmentPagerAdapter mPagerAdapter;
     private String[] poiTypeArr;

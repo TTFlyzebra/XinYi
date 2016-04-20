@@ -143,7 +143,7 @@ public class RefreshRecyclerView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        FlyLog.i("<RefreshRecyclerView>onLayout::l=" + l + ",t=" + t + ",r=" + r + ",b=" + b);
+//        FlyLog.i("<RefreshRecyclerView>onLayout::l=" + l + ",t=" + t + ",r=" + r + ",b=" + b);
         if (isAttach) {
             if (mRecyclerView != null) {
                 mRecyclerView.layout(l, t, r, b);
@@ -362,9 +362,9 @@ public class RefreshRecyclerView extends ViewGroup {
 
     public void refreshSuccess() {
         if (SHOW == PULL.TOP) {
-            ((TextView) topView).setText("更新成功...");
+            ((TextView) topView).setText("更新数据成功...");
         } else if (SHOW == PULL.BOTTOM) {
-            ((TextView) botView).setText("更新成功...");
+            ((TextView) botView).setText("更新数据成功...");
         }
         isNeedRefresh.set(false);
     }
@@ -374,6 +374,15 @@ public class RefreshRecyclerView extends ViewGroup {
             ((TextView) topView).setText("网络连接失败...");
         } else if (SHOW == PULL.BOTTOM) {
             ((TextView) botView).setText("网络连接失败...");
+        }
+        isNeedRefresh.set(false);
+    }
+
+    public void refreshDisk() {
+        if (SHOW == PULL.TOP) {
+            ((TextView) topView).setText("网络连接失败，读取缓存数据...");
+        } else if (SHOW == PULL.BOTTOM) {
+            ((TextView) botView).setText("网络连接失败，读取缓存数据...");
         }
         isNeedRefresh.set(false);
     }

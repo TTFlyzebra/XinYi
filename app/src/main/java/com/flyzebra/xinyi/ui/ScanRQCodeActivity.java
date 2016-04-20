@@ -47,7 +47,7 @@ public class ScanRQCodeActivity extends Activity {
         if (requestCode == AC_REQUESTCODE_01) {
             if (resultCode == RESULT_OK) {
                 String text = intent.getStringExtra("CODETEXT");
-                FlyLog.i("<ScanRQCodeActivity> Result scan info:" + text);
+                FlyLog.i("<ScanRQCodeActivity> R esult scan info:" + text);
                 if (text != null) {
                     scan_rq_tv01.setText(text);
                 } else {

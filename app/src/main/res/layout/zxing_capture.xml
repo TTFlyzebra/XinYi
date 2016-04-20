@@ -27,14 +27,22 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <!--
-       TextView android:id="@+id/status_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/transparent"
-            android:text="@string/msg_default_status"
-            android:textColor="@color/status_text"/
-    -->
+    <ImageView
+        android:id="@+id/zxing_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="36dp"
+        android:alpha="0.6"
+        android:src="@drawable/zxing_arrow_left" />
+
+    <ImageView
+        android:id="@+id/zxing_light"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="36dp"
+        android:alpha="0.6"
+        android:src="@drawable/zxing_light" />
 
 </RelativeLayout>

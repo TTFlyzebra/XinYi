@@ -41,7 +41,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         List<Map<String, Object>> childList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Map<String, Object> map = new HashMap<>();
-            map.put("LIST", TestHttp.getViewPagerList2());
+            map.put("LIST", TestHttp.getViewPagerList1());
             parentlist.add(map);
         }
         childList = (List<Map<String, Object>>) parentlist.get(0).get("LIST");

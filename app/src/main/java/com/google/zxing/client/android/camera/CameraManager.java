@@ -54,6 +54,7 @@ public final class CameraManager {
      * clear the handler so it will only receive one message.
      */
     private final PreviewCallback previewCallback;
+
     private Camera camera;
     private AutoFocusManager autoFocusManager;
     private Rect framingRect;
@@ -343,6 +344,27 @@ public final class CameraManager {
         // Go ahead and assume it's YUV rather than die.
         return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
                 rect.width(), rect.height(), false);
+    }
+
+    public void flashHandler() {
+        //camera.startPreview();
+        Camera.Parameters parameters = camera.getParameters();
+        // 判断闪光灯当前状态來修改
+        if (Camera.Parameters.FLASH_MODE_OFF.equals(parameters.getFlashMode())) {
+            turnOn(parameters);
+        } else if (Camera.Parameters.FLASH_MODE_TORCH.equals(parameters.getFlashMode())) {
+            turnOff(parameters);
+        }
+    }
+    //開
+    private void turnOn(Camera.Parameters parameters) {
+        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+        camera.setParameters(parameters);
+    }
+    //關
+    private void turnOff(Camera.Parameters parameters) {
+        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+        camera.setParameters(parameters);
     }
 
 }

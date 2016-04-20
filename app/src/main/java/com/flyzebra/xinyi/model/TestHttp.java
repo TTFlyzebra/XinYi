@@ -35,9 +35,21 @@ public class TestHttp {
 
     public static List<Map<String, Object>> getViewPagerList2() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        for (int i = 4; i >= 1; i--) {
+        for (int i = 6; i >= 1; i--) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(IAdapter.P2_NAME, "测试图片2组" + i);
+            map.put(IAdapter.P2_IMG_URL, "http://192.168.1.88/ordermeal/images/s" + i + ".jpg");
+            list.add(map);
+        }
+        return list;
+    }
+
+    public static List<Map<String, Object>> getViewPagerList3() {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        for (int i = 1; i <= 6; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put(IAdapter.P2_NAME, "测试图片3组" + i);
+            map.put(IAdapter.P2_IMG_URL, "http://192.168.1.88/ordermeal/images/wel" + i + ".jpg");
             list.add(map);
         }
         return list;

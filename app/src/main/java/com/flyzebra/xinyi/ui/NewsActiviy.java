@@ -49,7 +49,7 @@ public class NewsActiviy extends AppCompatActivity {
         });
 
         childGridViewList1 = new ArrayList();
-        iHttp.getString(Constant.URL_TABLE_1, HTTPTAG, new IHttp.Result() {
+        iHttp.getString(Constant.URL_TABLE_1, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(Object object) {
                 try {

@@ -81,7 +81,7 @@ public class BuyFragment extends Fragment {
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                iHttp.upListView(Constant.URL_TABLE_1, adapter, "mealinfo", HTTPTAG, new IHttp.Result() {
+                iHttp.upListView(Constant.URL_TABLE_1, adapter, "mealinfo", HTTPTAG, new IHttp.HttpResult() {
                     @Override
                     public void succeed(Object object) {
                         listView.onRefreshComplete();

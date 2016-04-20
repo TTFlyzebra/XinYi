@@ -70,17 +70,17 @@ public class MyOkHttp implements IHttp {
     }
 
     @Override
-    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, Result result) {
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, HttpResult result) {
 
     }
 
     @Override
-    public void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, Result result) {
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, HttpResult result) {
 
     }
 
     @Override
-    public void getString(String url, Object tag, Result result) {
+    public void getString(String url, Object tag, HttpResult result) {
 
     }
 

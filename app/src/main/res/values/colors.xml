@@ -20,4 +20,6 @@
     <color name="night_back">#000</color>
     <color name="day_text">#000</color>
     <color name="day_night">#BBBBBB</color>
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
 </resources>

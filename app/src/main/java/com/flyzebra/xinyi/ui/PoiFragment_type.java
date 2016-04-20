@@ -69,16 +69,14 @@ public class PoiFragment_type extends Fragment {
         }
         mAdapter = new DifrenceAdapter(activity, list);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setRefrshTop(true);
         mRecyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
-                iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG_TYPE, new IHttp.Result() {
+                iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG_TYPE, new IHttp.HttpResult() {
                     @Override
                     public void succeed(Object object) {
                         mRecyclerView.refreshSuccess();
                     }
-
                     @Override
                     public void faild(Object object) {
                         mRecyclerView.refreshFailed();
@@ -86,7 +84,7 @@ public class PoiFragment_type extends Fragment {
 
                     @Override
                     public void readDiskCache(Object data) {
-                        mRecyclerView.refreshFailed();
+                        mRecyclerView.refreshDisk();
                     }
                 });
             }

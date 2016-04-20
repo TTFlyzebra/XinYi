@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -20,6 +21,7 @@ public class NaviForViewPager extends View {
     private Paint un_select_paint;
     private int width;
     private int height;
+    private ViewPager viewPager;
     //总页数
     private int sumItem = 10;
     //当前页
@@ -44,6 +46,10 @@ public class NaviForViewPager extends View {
         circleColor1 = typedArray.getColor(R.styleable.NaviForViewPager_CircelColor1, 0x70000000);
         circleColor2 = typedArray.getColor(R.styleable.NaviForViewPager_CircelColor2, 0xDFFF1100);
         typedArray.recycle();
+    }
+
+    public void setViewPager(ViewPager viewPager){
+        this.viewPager = viewPager;
     }
 
     @Override

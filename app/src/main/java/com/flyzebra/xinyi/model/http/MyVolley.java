@@ -55,7 +55,7 @@ public class MyVolley implements IHttp {
         return mRequestQueue;
     }
 
-    public static void getString(final IHttp.Builder info, final Result result) {
+    public static void getString(final IHttp.Builder info, final HttpResult result) {
         set_upListView.add(info.tag);
         StringRequest stringRequest = new StringRequest(info.method, info.url, new Response.Listener<String>() {
             @Override
@@ -155,7 +155,7 @@ public class MyVolley implements IHttp {
     }
 
     @Override
-    public void getString(final String url, final Object tag, final Result result) {
+    public void getString(final String url, final Object tag, final HttpResult result) {
         set_upListView.add(tag);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -192,7 +192,7 @@ public class MyVolley implements IHttp {
     }
 
     @Override
-    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, Result result) {
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, HttpResult result) {
         upListView(url, adapter, jsonKey, false, tag, result);
     }
 
@@ -202,13 +202,13 @@ public class MyVolley implements IHttp {
     }
 
     @Override
-    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag, final Result result) {
+    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag, final HttpResult result) {
         //判断任务是否已取消
         set_upListView.add(tag);
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                sendResult(result, jsonObject.toString(), DISK);
+                sendResult(result, jsonObject.toString(), OK);
                 notifyData(isAdd, adapter, jsonObject, jsonKey);
                 FlyLog.i("<MyVolley>upListView->onResponse:tag=" + tag);
             }
@@ -243,7 +243,7 @@ public class MyVolley implements IHttp {
         mRequestQueue.cancelAll(tag);
     }
 
-    public void sendResult(Result result, Object object, int type) {
+    public void sendResult(HttpResult result, Object object, int type) {
         if (result != null) {
             switch (type) {
                 case OK:

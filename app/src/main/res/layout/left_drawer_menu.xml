@@ -180,9 +180,9 @@
                     android:layout_height="match_parent"
                     android:text="图片显示" />
 
-                <Switch
+                <!--Switch
                     style="@style/left_drawer_menu_switch"
-                    android:checked="true" />
+                    android:checked="true" /-->
             </LinearLayout>
 
         </LinearLayout>
@@ -194,7 +194,7 @@
 
             <ImageView
                 style="@style/left_drawer_menu_image"
-                android:src="@drawable/ic_brightness_1_18dp" />
+                android:src="@drawable/zxing_light" />
 
             <LinearLayout style="@style/left_drawer_menu_ll_01">
 
@@ -204,7 +204,7 @@
                     android:layout_height="match_parent"
                     android:text="夜间模式" />
 
-                <Switch style="@style/left_drawer_menu_switch" />
+                <!--Switch style="@style/left_drawer_menu_switch" /-->
 
             </LinearLayout>
         </LinearLayout>

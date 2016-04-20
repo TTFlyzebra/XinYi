@@ -232,7 +232,7 @@ public class ChildGridView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (mOnItemClick != null) {
-                    //为了图元共亨动画，转入VIEW
+                    //为了图元共亨动画，传入VIEW
                     mOnItemClick.OnItemClidk(list.get(num), v);
                 }
             }

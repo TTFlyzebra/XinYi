@@ -39,18 +39,12 @@
 
                 <ImageView
                     android:id="@+id/main_iv_home"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="@string/app_name"
-                    android:duplicateParentState="true"
+                    style="@style/main_menu_img"
                     android:src="@drawable/ic_menu_home_on" />
 
                 <TextView
                     android:id="@+id/main_tv_home"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:duplicateParentState="true"
-                    android:gravity="center"
+                    style="@style/main_menu_text"
                     android:text="@string/home"
                     android:textColor="@color/menu_select_on" />
 
@@ -66,20 +60,14 @@
 
                 <ImageView
                     android:id="@+id/main_iv_poi"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="@string/app_name"
-                    android:duplicateParentState="true"
+                    style="@style/main_menu_img"
                     android:src="@drawable/ic_menu_poi" />
 
                 <TextView
                     android:id="@+id/main_tv_poi"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:duplicateParentState="true"
-                    android:gravity="center"
+                    style="@style/main_menu_text"
                     android:text="@string/poi"
-                    android:textColor="@color/color_select" />
+                    android:textColor="@color/home_select" />
 
             </LinearLayout>
 
@@ -93,22 +81,14 @@
 
                 <ImageView
                     android:id="@+id/main_iv_buy"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="@string/app_name"
-                    android:duplicateParentState="true"
-                    android:orientation="vertical"
+                    style="@style/main_menu_img"
                     android:src="@drawable/ic_menu_buy" />
 
                 <TextView
                     android:id="@+id/main_tv_buy"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:duplicateParentState="true"
-                    android:gravity="center"
-                    android:orientation="vertical"
+                    style="@style/main_menu_text"
                     android:text="@string/buy"
-                    android:textColor="@color/color_select" />
+                    android:textColor="@color/home_select" />
 
             </LinearLayout>
 
@@ -122,22 +102,14 @@
 
                 <ImageView
                     android:id="@+id/main_iv_user"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="@string/app_name"
-                    android:duplicateParentState="true"
-                    android:orientation="vertical"
+                    style="@style/main_menu_img"
                     android:src="@drawable/ic_menu_user" />
 
                 <TextView
                     android:id="@+id/main_tv_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:duplicateParentState="true"
-                    android:gravity="center"
-                    android:orientation="vertical"
+                    style="@style/main_menu_text"
                     android:text="@string/user"
-                    android:textColor="@color/color_select" />
+                    android:textColor="@color/home_select" />
 
             </LinearLayout>
 
@@ -151,20 +123,14 @@
 
                 <ImageView
                     android:id="@+id/main_iv_more"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="@string/app_name"
-                    android:duplicateParentState="true"
+                    style="@style/main_menu_img"
                     android:src="@drawable/ic_menu_more" />
 
                 <TextView
                     android:id="@+id/main_tv_more"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:duplicateParentState="true"
-                    android:gravity="center"
+                    style="@style/main_menu_text"
                     android:text="@string/more"
-                    android:textColor="@color/color_select" />
+                    android:textColor="@color/home_select" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

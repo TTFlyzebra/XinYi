@@ -18,19 +18,18 @@ public interface IHttp {
 
     void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag);
 
-    void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, Result result);
+    void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, HttpResult result);
 
-    void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, Result result);
+    void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, HttpResult result);
 
-    void getString(String url, Object tag, Result result);
+    void getString(String url, Object tag, HttpResult result);
 
     void execute(Builder builder);
 
     void cancelAll(Object tag);
 
-    interface Result {
+    interface HttpResult {
         void succeed(Object object);
-
         void readDiskCache(Object data);
         void faild(Object object);
     }
@@ -66,7 +65,7 @@ public interface IHttp {
         public View view;
         public boolean retry = true;
         public int method = Method.GET;
-        public Result result;
+        public HttpResult result;
         private boolean isAdd;
 
         public static Builder getInstance() {
@@ -126,7 +125,7 @@ public interface IHttp {
             return this;
         }
 
-        public Builder setResult(Result result) {
+        public Builder setResult(HttpResult result) {
             this.result = result;
             return this;
         }

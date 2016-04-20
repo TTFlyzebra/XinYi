@@ -44,15 +44,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                //QQ方式登陆
+                //百度方式登陆
                 case R.id.lg_iv_baidu:
                     mLogin = new MyLoginBaidu(LoginActivity.this, loginResult);
                     mLogin.login();
                     break;
+                //QQ方式登陆
                 case R.id.lg_iv_qq:
                     mLogin = new MyLoginQQ(LoginActivity.this, loginResult);
                     mLogin.login();
                     break;
+                //新浪
                 case R.id.lg_iv_sina:
                     mLogin = new MyLoginSina(LoginActivity.this, loginResult);
                     mLogin.login();
@@ -95,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //QQ登陆方式，需添加以下代码
         if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
             if (mLogin != null) {
                 mLogin.onActivtyResult(requestCode, resultCode, data);

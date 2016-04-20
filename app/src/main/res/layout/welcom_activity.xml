@@ -1,43 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="#000">
+    android:background="@color/black">
 
-    <!--com.flyzebra.xinyi.view.CardImageView
-        android:id="@+id/wel_iv_01"
-        style="@style/rotateImage"
-        android:src="@drawable/welcome1" />
-
-    <com.flyzebra.xinyi.view.CardImageView
-        android:id="@+id/wel_iv_02"
-        style="@style/rotateImage"
-        android:src="@drawable/welcome2" />
-
-    <com.flyzebra.xinyi.view.CardImageView
-        android:id="@+id/wel_iv_03"
-        style="@style/rotateImage"
-        android:src="@drawable/welcome3" />
-
-    <com.flyzebra.xinyi.view.CardImageView
-        android:id="@+id/wel_iv_04"
-        style="@style/rotateImage"
-        android:src="@drawable/welcome4" />
-
-    <com.flyzebra.xinyi.view.CardImageView
-        android:id="@+id/wel_iv_05"
-        style="@style/rotateImage"
-        android:src="@drawable/welcome1" />
-
-    <com.flyzebra.xinyi.view.CardImageView
-        android:id="@+id/wel_iv_06"
-        style="@style/rotateImage"
-        android:src="@drawable/welcome2" /-->
     <com.flyzebra.xinyi.view.Play3DImages
         android:id="@+id/wel_play3d"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.flyzebra.xinyi.view.FlashTextView
+            android:id="@+id/wel_bt_goHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/wel_bt"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:weightSum="5"
+        android:orientation="horizontal">
+
+        <!--ImageView
+            android:id="@+id/wel_iv_go1"
+            style="@style/welcome_ivbuttom"
+            android:onClick="goHome"
+            android:src="@drawable/ic_love_go_48dp" /-->
+
+        <ImageView
+            android:id="@+id/wel_iv_fore"
+            style="@style/welcome_ivbuttom"
+            android:src="@drawable/ic_fore_48dp" />
+
+        <ImageView
+            android:id="@+id/wel_iv_pasue"
+            style="@style/welcome_ivbuttom"
+            android:src="@drawable/ic_pause_48dp" />
+
+        <ImageView
+            android:id="@+id/wel_iv_next"
+            style="@style/welcome_ivbuttom"
+            android:src="@drawable/ic_next_48dp" />
+
+        <!--ImageView
+            android:id="@+id/wel_iv_go2"
+            style="@style/welcome_ivbuttom"
+            android:onClick="goHome"
+            android:src="@drawable/ic_love_go_48dp" /-->
+    </LinearLayout>
+
+</RelativeLayout>
 

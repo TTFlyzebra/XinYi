@@ -22,6 +22,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -32,12 +33,14 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.client.android.camera.CameraConfigurationUtils;
 import com.google.zxing.client.android.camera.CameraManager;
 
 import java.io.IOException;
@@ -55,7 +58,10 @@ import java.util.Map;
  * @author Sean Owen
  */
 public final class CaptureActivity extends Activity {
-    //  private static final String TAG = "com.flyzebra";
+    private ImageView iv_back;
+    private ImageView iv_light;
+    private boolean isLight = false;
+
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private ViewfinderView viewfinderView;
@@ -100,6 +106,23 @@ public final class CaptureActivity extends Activity {
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
+
+        iv_back = (ImageView) findViewById(R.id.zxing_back);
+        iv_light = (ImageView) findViewById(R.id.zxing_light);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        iv_light.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraManager.flashHandler();
+            }
+        });
+
     }
 
     @Override
