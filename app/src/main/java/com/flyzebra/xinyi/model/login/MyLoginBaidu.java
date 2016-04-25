@@ -29,20 +29,12 @@ public class MyLoginBaidu extends LoginFrontiaBase implements ILogin {
     @Override
     public void logout() {
         super.logout();
-//        boolean result = mAuthorization.clearAuthorizationInfo(MediaType.BAIDU.toString());
-//        if (result) {
-//            Frontia.setCurrentAccount(null);
-//            FlyLog.i("<MyLoginBaidu>百度退出成功");
-//        } else {
-//            FlyLog.i("<MyLoginBaidu>百度退出失败");
-//        }
     }
 
     @Override
     public void loginSucccessd(FrontiaUser result) {
-        userInfo.setUserOpenID(result.getId());
-        userInfo.setUserToken(result.getAccessToken());
-        userInfo.setUserExpired(result.getExpiresIn());
+        userInfo.setOpenid(result.getId());
+        userInfo.setLoginwith("BAIDU");
     }
 
     @Override

@@ -30,7 +30,6 @@ public abstract class LoginFrontiaBase {
             getUserInfo();
             FlyLog.i("<LoginFrontiaBase>onSuccess: social id=" + result.getId() + "token=" + result.getAccessToken() + "expired=" + result.getExpiresIn());
         }
-
         @Override
         public void onFailure(int errCode, String errMsg) {
             loginResult.loginFaild();
@@ -77,8 +76,8 @@ public abstract class LoginFrontiaBase {
                         + "province:" + result.getProvince()
                         + "sex:" + result.getSex()
                         + "pic url:" + result.getHeadUrl());
-                userInfo.setUserName(result.getName());
-                userInfo.setUserPhotoUrl(result.getHeadUrl());
+                userInfo.setNickname(result.getName());
+                userInfo.setPictureurl(result.getHeadUrl());
                 loginResult.loginSuccees(userInfo);
             }
 

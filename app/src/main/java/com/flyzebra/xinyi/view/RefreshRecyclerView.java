@@ -100,10 +100,9 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     private void init(Context context) {
+        //设置拉动窗口的高度
         pull_Height = ResUtils.getMetrices((Activity) context).heightPixels / 10;
-
         topView = createPullTextView(context);
-
         botView = createPullTextView(context);
 
         setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));

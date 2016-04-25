@@ -32,7 +32,7 @@ public class MyLoginQQ implements ILogin {
         }
         @Override
         public void onComplete(final Object response) {
-            FlyLog.i("loginIUlistener" + response.toString());
+            FlyLog.i("<MyLoginQQ>loginIUlistener" + response.toString());
             //获取QQ昵称
             final JSONObject json = (JSONObject) response;
             String name = null;
@@ -51,8 +51,9 @@ public class MyLoginQQ implements ILogin {
                 } catch (JSONException e) {
                 }
             }
-            userInfo.setUserName(name);
-            userInfo.setUserPhotoUrl(url);
+            userInfo.setNickname(name);
+            userInfo.setPictureurl(url);
+            userInfo.setLoginwith("QQ");
             mLoginResult.loginSuccees(userInfo);
         }
 
@@ -83,12 +84,12 @@ public class MyLoginQQ implements ILogin {
                     mTencent.setAccessToken(token, expires);
                     mTencent.setOpenId(openId);
                 }
-                userInfo.setUserOpenID(openId);
+                userInfo.setOpenid(openId);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 //            mTencent.logout(context);
-            FlyLog.i("loginIUlistener" + jsonResponse.toString());
+            FlyLog.i("<MyLoginQQ>loginIUlistener" + jsonResponse.toString());
             getUserInfo();
         }
 
@@ -117,7 +118,9 @@ public class MyLoginQQ implements ILogin {
         if (!mTencent.isSessionValid()) {
             mTencent.login((Activity) context, "all", loginIUlistener);
         } else {
-            getUserInfo();
+//            getUserInfo();
+            mTencent.logout(context);
+            mTencent.login((Activity) context, "all", loginIUlistener);
         }
     }
 

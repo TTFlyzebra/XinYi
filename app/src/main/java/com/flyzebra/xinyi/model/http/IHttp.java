@@ -12,6 +12,10 @@ import java.util.Map;
  * Created by FlyZebra on 2016/3/20.
  */
 public interface IHttp {
+    void getString(String url, Object tag, HttpResult result);
+
+    void postString(String url, Map<String,String> map , Object tag, HttpResult result);
+
     void upImageView(Context context, String url, ImageView iv);
 
     void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag);
@@ -22,7 +26,6 @@ public interface IHttp {
 
     void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, HttpResult result);
 
-    void getString(String url, Object tag, HttpResult result);
 
     void execute(Builder builder);
 

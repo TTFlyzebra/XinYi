@@ -1,6 +1,9 @@
 package com.flyzebra.xinyi.ui;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,11 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.TestHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.utils.DiskUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
+import com.flyzebra.xinyi.utils.GsonUtils;
 import com.flyzebra.xinyi.utils.ResUtils;
 import com.flyzebra.xinyi.view.Play3DImages;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +49,8 @@ public class WelcomeActivity extends AppCompatActivity {
     ImageView welIvNext;
     @Bind(R.id.wel_bt_goHome)
     TextView welBtGoHome;
-//    @Bind(R.id.wel_iv_go1)
-//    ImageView welIvGo1;
-//    @Bind(R.id.wel_iv_go2)
-//    ImageView welIvGo2;
+    private IHttp iHttp = MyVolley.getInstance();
+    private String HTTPTAG = "Fragment" + Math.random();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +74,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 if (welIvFore.getVisibility() == View.VISIBLE) {
-                    FlyLog.i("<Play3DImages> setOnItemClick position=" + position);
+                    FlyLog.i("<WelcomeActivity> setOnItemClick position=" + position);
 //                    goHome();
                     Toast.makeText(WelcomeActivity.this, "Click " + position, Toast.LENGTH_SHORT);
                     delayHideView(0);
@@ -122,6 +130,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         mHandler.removeCallbacks(hideViewTask);
+        iHttp.cancelAll(HTTPTAG);
     }
 
     @Override
@@ -161,10 +170,73 @@ public class WelcomeActivity extends AppCompatActivity {
         welPlay3d.pauseShowForeImage(500);
     }
 
+    private ProgressDialog waitPlg;
+
+    IHttp.HttpResult upLoginInfo = new IHttp.HttpResult() {
+        @Override
+        public void succeed(Object object) {
+            FlyLog.i("<WelcomeActivity>upLoginInfo->succeed:object-->" + object);
+            if (object == null) {
+                waitPlg.dismiss();
+                Toast.makeText(WelcomeActivity.this, "未知错误，登陆失败！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String result = object.toString();
+            UserInfo userInfo = GsonUtils.jsonToObject(result, UserInfo.class);
+            userInfo.saveLocalUserInfo(WelcomeActivity.this);
+            waitPlg.dismiss();
+            if (userInfo != null) {
+                startMainActivity(userInfo);
+            }
+        }
+
+        @Override
+        public void readDiskCache(Object data) {
+            FlyLog.i("<WelcomeActivity>upLoginInfo->readDiskCache:data-->" + data.toString());
+            waitPlg.setMessage("连接服务器超时.....");
+            waitPlg.setCancelable(true);
+        }
+
+        @Override
+        public void faild(Object object) {
+            FlyLog.i("<WelcomeActivity>upLoginInfo->faild:object-->" + object.toString());
+            waitPlg.setMessage("连接服务器超时.....");
+            waitPlg.setCancelable(true);
+        }
+    };
+
+    /**
+     * 此处要考虑的情况为，如果已保存登陆信息，是否需要再次向服务器提交验证(需保存密码)
+     * 或者只更新登陆信息
+     */
+    private void upLoignInfo(UserInfo userInfo) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", String.valueOf(userInfo.getId()));
+        waitPlg.setMessage("正在登陆服务器.....");
+        waitPlg.setCancelable(false);
+        waitPlg.show();
+        iHttp.postString(Constant.URL + "/API/User/upLoginInfo", params, HTTPTAG, upLoginInfo);
+    }
+
     @OnClick(R.id.wel_bt_goHome)
     public void goHome() {
-        Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+        waitPlg = new ProgressDialog(this);
+        UserInfo userInfo = UserInfo.getLocalUserInfo(WelcomeActivity.this);
+        if (userInfo != null) {
+            upLoignInfo(userInfo);
+        } else {
+            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+    private void startMainActivity(UserInfo userInfo) {
+        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("UserInfo", userInfo);
+        intent.putExtras(bundle);
         startActivity(intent);
         finish();
     }
+
 }

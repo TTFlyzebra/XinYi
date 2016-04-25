@@ -1,5 +1,9 @@
 package com.flyzebra.xinyi.utils;
 
+import android.os.Build;
+
+import com.flyzebra.xinyi.data.UserInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +27,7 @@ public class JsonUtils {
         try {
             JSONArray jsonArray = null;
             if (jsonKey == null) {
-                jsonArray = new JSONArray(jsonObject);
+                jsonArray = new JSONArray(jsonObject.toString());
             } else {
                 jsonArray = jsonObject.getJSONArray(jsonKey);
             }
@@ -52,7 +56,7 @@ public class JsonUtils {
         JSONArray jsonArray;
         try {
             if (jsonKey == null) {
-                jsonArray = new JSONArray(jsonObject);
+                jsonArray = new JSONArray(jsonObject.toString());
             } else {
                 jsonArray = jsonObject.getJSONArray(jsonKey);
             }
@@ -103,6 +107,11 @@ public class JsonUtils {
         return map;
     }
 
+    /**
+     * List按给定键值排序
+     * @param list
+     * @param KEY
+     */
     private void sortList(List<Map<String, Object>> list, final String KEY) {
         Collections.sort(list, new Comparator<Map<String, Object>>() {
             @Override
@@ -116,5 +125,30 @@ public class JsonUtils {
                 }
             }
         });
+    }
+
+    public static Object jsonArrayToObject(Class<?> cls, String jsonString) {
+        Object obj = null;
+        try {
+            obj = cls.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Iterator<String> iterator = jsonObject.keys();
+                while (iterator.hasNext()) {
+                    String json_key = iterator.next();
+                    Object json_value = jsonObject.get(json_key);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 }

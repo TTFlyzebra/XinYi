@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -81,6 +82,11 @@ public class MyOkHttp implements IHttp {
 
     @Override
     public void getString(String url, Object tag, HttpResult result) {
+
+    }
+
+    @Override
+    public void postString(String url, Map<String, String> map, Object tag, HttpResult result) {
 
     }
 

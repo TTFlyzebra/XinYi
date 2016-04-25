@@ -43,7 +43,8 @@ public class MyVolley implements IHttp {
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
     private static Handler mHandler = new Handler(Looper.getMainLooper());
-    private static long RETRY_TIME = 2500;
+    private static int RETRY_TIME = 10000;
+    private static int RETRY_NUM = 0;
 
     public static MyVolley getInstance() {
         return MyVolleyHolder.sInstance;
@@ -92,7 +93,7 @@ public class MyVolley implements IHttp {
                 return info.method == Method.POST ? info.params : super.getParams();
             }
         };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
         stringRequest.setTag(info.tag);
         mRequestQueue.add(stringRequest);
     }
@@ -144,7 +145,7 @@ public class MyVolley implements IHttp {
                 return Params;
             }
         };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
         stringRequest.setTag(url);
         mRequestQueue.add(stringRequest);
     }
@@ -157,7 +158,7 @@ public class MyVolley implements IHttp {
     @Override
     public void getString(final String url, final Object tag, final HttpResult result) {
         set_upListView.add(tag);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 FlyLog.i("<MyVolley>getString:response=" + response);
@@ -176,7 +177,32 @@ public class MyVolley implements IHttp {
                 }
             }
         });
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
+        stringRequest.setTag(url);
+        mRequestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void postString(final String url, final Map<String, String> Params, final Object tag, final HttpResult result) {
+        set_upListView.add(tag);
+        FlyLog.i("<MyVolley>postString->response:url=" + url + ",Params=" + Params.toString());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                sendResult(result, response, OK);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                sendResult(result, error, FAIL);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return Params;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
         stringRequest.setTag(url);
         mRequestQueue.add(stringRequest);
     }
@@ -232,7 +258,7 @@ public class MyVolley implements IHttp {
                 }
             }
         });
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2500, 1, 1f));
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
         jsonObjectRequest.setTag(tag);
         mRequestQueue.add(jsonObjectRequest);
     }

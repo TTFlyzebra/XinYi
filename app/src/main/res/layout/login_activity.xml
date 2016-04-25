@@ -29,14 +29,29 @@
             android:hint="@string/login_pass_mark"
             android:password="true" />
 
-        <Button
-            android:id="@+id/lg_bt_lg"
-            style="@style/ActionButton"
-            android:layout_margin="4dp"
-            android:layout_marginTop="1dp"
-            android:text="@string/login_bt"
-            android:textSize="20dp"
-            tools:ignore="SpUsage" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/lg_bt_lg"
+                style="@style/ActionButton"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:layout_marginTop="1dp"
+                android:text="@string/login_bt"
+                android:textSize="20dp" />
+            <Button
+                android:id="@+id/lg_bt_rg"
+                style="@style/ActionButton"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:layout_marginTop="1dp"
+                android:text="@string/registe_bt"
+                android:textSize="20dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
