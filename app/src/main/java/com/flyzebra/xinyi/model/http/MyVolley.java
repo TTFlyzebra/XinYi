@@ -293,7 +293,7 @@ public class MyVolley implements IHttp {
         adapter.notifyDataSetChanged();
     }
 
-    private String readDiskCache(String url) {
+    public static String readDiskCache(String url) {
         String data = null;
         Cache.Entry entry = mRequestQueue.getCache().get(url);
         if (entry != null) {

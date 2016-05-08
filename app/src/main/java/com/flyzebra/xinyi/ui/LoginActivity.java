@@ -5,10 +5,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -85,23 +88,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             if (result.equals("pw error")) {
                 waitPlg.dismiss();
-                Toast.makeText(LoginActivity.this, "用户名存在，登陆密码错误！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "登陆密码错误！", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            if (result.equals("us exist")) {
+                waitPlg.dismiss();
+                Toast.makeText(LoginActivity.this, "用户已存在！", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             UserInfo userInfo = GsonUtils.jsonToObject(result, UserInfo.class);
-            userInfo.saveLocalUserInfo(LoginActivity.this);
             waitPlg.dismiss();
             if (userInfo != null) {
+                userInfo.saveLocalUserInfo(LoginActivity.this);
                 startMainActivity(userInfo);
+            }else{
+                Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
             }
         }
-
         @Override
         public void readDiskCache(Object data) {
             FlyLog.i("<LoginActivity>loginUser->readDiskCache:data-->" + data.toString());
             waitPlg.dismiss();
         }
-
         @Override
         public void faild(Object object) {
             FlyLog.i("<LoginActivity>loginUser->faild:object-->" + object.toString());
@@ -114,11 +124,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      *
      * @param userInfo
      */
-    private void registerUserinfo(final UserInfo userInfo) {
+    private void loginWithOther(final UserInfo userInfo) {
         waitPlg.setMessage("正请求通过第三方完成登陆.....");
         waitPlg.setCancelable(false);
         waitPlg.show();
         iHttp.postString(Constant.URL + "/API/User/login", userInfo.toMap(), HTTPTAG, loginUser);
+        FlyLog.i("<LoginActivity>loginWithOther"+ userInfo.toMap());
     }
 
 
@@ -126,19 +137,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ILogin.LoginResult loginResult = new ILogin.LoginResult() {
         @Override
         public void loginSuccees(UserInfo userInfo) {
-            registerUserinfo(userInfo);
+            loginWithOther(userInfo);
         }
-
         @Override
         public void loginFaild() {
             waitPlg.dismiss();
         }
-
         @Override
         public void loginCancel() {
             waitPlg.dismiss();
         }
     };
+
     private View.OnClickListener loginOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -164,7 +174,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * 校验输入的用户名和密码
-     *
      * @return
      */
     private Map<String, String> getSendParames() {
@@ -180,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         //对密码进行加密
         loginword = MD5.encode(loginword);
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("loginname", loginname);
         params.put("loginword", loginword);
         return params;
@@ -205,27 +214,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void registerLocal() {
         final Map<String, String> params = getSendParames();
         if (params != null) {
-            final TextView tv = new EditText(this);
-            tv.setGravity(Gravity.CENTER);
-            tv.setTextColor(0xffff0000);
-            tv.setText("您设置的密码为："+lg_ed_ps.getText());
-            new AlertDialog.Builder(this).setTitle("密码将通过不可逆算法加密，请牢记：")
-                    .setView(tv)
-                    .setPositiveButton("确定申请", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            waitPlg.setMessage("正在向服务器提交申请.....");
-                            waitPlg.setCancelable(false);
-                            waitPlg.show();
-                            iHttp.postString(Constant.URL + "/API/User/register", params, HTTPTAG, loginUser);
-                        }
-                    })
-                    .setNegativeButton("取消申请", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }).show();
+            final String pswd = lg_ed_ps.getText().toString();
+            View view  = LayoutInflater.from(this).inflate(R.layout.login_reg_dialog, null);
+            TextView title = (TextView) view.findViewById(R.id.lg_dlg_tv1);
+            TextView message = (TextView) view.findViewById(R.id.lg_dlg_tv2);
+            Button bt1 = (Button) view.findViewById(R.id.lg_dlg_bt1);
+            Button bt2 = (Button) view.findViewById(R.id.lg_dlg_bt2);
+            title.setTextColor(0xffff0000);
+            title.setText("密码将进行不可逆算法加密，请牢记!");
+            message.setTextColor(0xff000000);
+            message.setText(Html.fromHtml("您设置的密码为：<font color=red>" + pswd + "</font>"));
+            final AlertDialog dlg = new AlertDialog.Builder(this)
+                    .setView(view)
+                    .show();
+            bt1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    waitPlg.setMessage("正在向服务器提交申请.....");
+                    waitPlg.setCancelable(false);
+                    waitPlg.show();
+                    iHttp.postString(Constant.URL + "/API/User/register", params, HTTPTAG, loginUser);
+                    dlg.dismiss();
+                }
+            });
+            bt2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dlg.cancel();
+                }
+            });
         }
     }
 

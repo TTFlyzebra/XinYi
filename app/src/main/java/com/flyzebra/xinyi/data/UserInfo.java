@@ -19,13 +19,14 @@ public class UserInfo implements Serializable {
     private String loginname;
     private String nickname;
     private String loginword;
-    private String phone;
+    private String telephone;
     private String openid;
     private String loginwith;
     private String pictureurl;
     private String address;
     private int level;
     private int logintime;
+    private int lastlogintime;
 
     public int getId() {
         return id;
@@ -59,12 +60,12 @@ public class UserInfo implements Serializable {
         this.loginword = loginword;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getOpenid() {
@@ -115,6 +116,14 @@ public class UserInfo implements Serializable {
         this.logintime = logintime;
     }
 
+    public int getLastlogintime() {
+        return lastlogintime;
+    }
+
+    public void setLastlogintime(int lastlogintime) {
+        this.lastlogintime = lastlogintime;
+    }
+
     public Map<String,String> toMap(){
         Map<String,String> map = new HashMap<>();
         if(loginname!=null){
@@ -126,8 +135,8 @@ public class UserInfo implements Serializable {
         if(loginword!=null){
             map.put("loginword",loginword);
         }
-        if(phone!=null){
-            map.put("phone",phone);
+        if(telephone!=null){
+            map.put("telephone",telephone);
         }
         if(openid!=null){
             map.put("openid",openid);
@@ -164,7 +173,7 @@ public class UserInfo implements Serializable {
      */
     public void saveLocalUserInfo(Context context) {
         DiskUtils.saveData(context, "userinfo",
-                new String[]{"id", "nickname", "level", "logintime", "pictureurl"},
-                new Object[]{id, nickname, level, logintime, pictureurl});
+                new String[]{"id", "nickname", "level", "logintime","pictureurl"},
+                new Object[]{id, nickname, level, logintime,  pictureurl});
     }
 }

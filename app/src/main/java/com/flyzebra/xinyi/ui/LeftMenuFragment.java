@@ -72,11 +72,11 @@ public class LeftMenuFragment extends Fragment implements View.OnClickListener {
             if (name != null) {
                 left_drawer_tv_01.setText(userInfo.getNickname());
             }
-            if (url != null||!url.equals("")) {
+            if (url != null&&!url.equals("")) {
                 activity.iHttp.upImageView(activity, userInfo.getPictureurl(), left_drawer_iv_01);
             }
             if (time > 1461427376) {
-                left_drawer_tv_02.setText(DateUtils.DateToString(new Date(time * 1000), "上次登陆：MM月dd日HH:mm"));
+                left_drawer_tv_02.setText(DateUtils.DateToString(new Date(time * 1000), "登陆时间：MM月dd日HH:mm"));
             }
              left_drawer_starlevel.setLevel(userInfo.getLevel());
         }

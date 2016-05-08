@@ -3,6 +3,8 @@ package com.flyzebra.xinyi.ui;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,7 +37,6 @@ public class BuyFragment extends Fragment {
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
     private IHttp iHttp = MyVolley.getInstance();
-
 
     public BuyFragment() {
     }

@@ -38,7 +38,7 @@ import butterknife.OnClick;
 /**
  * by FlyZebra on 2016/3/27.
  */
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
     @Bind(R.id.wel_play3d)
     Play3DImages welPlay3d;
     @Bind(R.id.wel_iv_fore)
@@ -49,8 +49,6 @@ public class WelcomeActivity extends AppCompatActivity {
     ImageView welIvNext;
     @Bind(R.id.wel_bt_goHome)
     TextView welBtGoHome;
-    private IHttp iHttp = MyVolley.getInstance();
-    private String HTTPTAG = "Fragment" + Math.random();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,24 +56,46 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.welcom_activity);
         ButterKnife.bind(this);
 
-        List<Map<String, Object>> list = TestHttp.getViewPagerList3();
-        String imageArray[] = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            imageArray[i] = new String((String) list.get(i).get(IAdapter.P2_IMG_URL));
-        }
-
-        welPlay3d.setImageUrlArray(imageArray)
-                .setDuration(1000)
+        waitPlg = new ProgressDialog(this);
+        waitPlg.setMessage("正在读取信息.....");
+        waitPlg.setCancelable(false);
+        waitPlg.show();
+        welPlay3d.setDuration(1000)
                 .setShowMillis(2000)
                 .setImageAlpha(0.95f)
-                .setImagePadding(ResUtils.getMetrices(this).widthPixels / 10)
-                .Init();
-        welPlay3d.setOnItemClick(new Play3DImages.OnItemClick() {
+                .setImagePadding(ResUtils.getMetrices(WelcomeActivity.this).widthPixels / 10);
+
+        iHttp.getString(Constant.URL_WEL, HTTPTAG, new IHttp.HttpResult() {
+            @Override
+            public void succeed(Object object) {
+                startPlay(object);
+            }
+            @Override
+            public void readDiskCache(Object data) {
+                startPlay(data);
+            }
+            @Override
+            public void faild(Object object) {
+                waitPlg.dismiss();
+            }
+        });
+    }
+
+    private void startPlay(Object object) {
+        List<Map<String, Object>> list = GsonUtils.json2List(object.toString());
+        String imageArray[] = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            imageArray[i] = Constant.URL + list.get(i).get("imageurl");
+        }
+        //旋转动画初始化
+        welPlay3d.setImageUrlArray(imageArray).Init();
+        waitPlg.dismiss();
+        welPlay3d.setOnItemClick(new Play3DImages.OnItemClick(){
             @Override
             public void onItemClick(int position) {
                 if (welIvFore.getVisibility() == View.VISIBLE) {
                     FlyLog.i("<WelcomeActivity> setOnItemClick position=" + position);
-//                    goHome();
+                    //                    goHome();
                     Toast.makeText(WelcomeActivity.this, "Click " + position, Toast.LENGTH_SHORT);
                     delayHideView(0);
                     setViewVisble(View.GONE);
@@ -116,8 +136,6 @@ public class WelcomeActivity extends AppCompatActivity {
         welIvPasue.setVisibility(visibility);
         welIvNext.setVisibility(visibility);
         welBtGoHome.setVisibility(visibility);
-//        welIvGo1.setVisibility(visibility);
-//        welIvGo2.setVisibility(visibility);
     }
 
     @Override
@@ -139,6 +157,10 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * 延时关闭轮播菜单
+     * @param delayMillis
+     */
     private void delayHideView(long delayMillis) {
         mHandler.removeCallbacks(hideViewTask);
         mHandler.postDelayed(hideViewTask, delayMillis);
@@ -170,6 +192,8 @@ public class WelcomeActivity extends AppCompatActivity {
         welPlay3d.pauseShowForeImage(500);
     }
 
+
+    /*  * 以下使用本地存存储的用户信息登陆    */
     private ProgressDialog waitPlg;
 
     IHttp.HttpResult upLoginInfo = new IHttp.HttpResult() {
@@ -179,10 +203,17 @@ public class WelcomeActivity extends AppCompatActivity {
             if (object == null) {
                 waitPlg.dismiss();
                 Toast.makeText(WelcomeActivity.this, "未知错误，登陆失败！", Toast.LENGTH_SHORT).show();
+                startMainActivity(null);
                 return;
             }
             String result = object.toString();
             UserInfo userInfo = GsonUtils.jsonToObject(result, UserInfo.class);
+            if(userInfo==null){
+                waitPlg.dismiss();
+                Toast.makeText(WelcomeActivity.this, "获取用户信息失败！", Toast.LENGTH_SHORT).show();
+//                startMainActivity(null);
+                return;
+            }
             userInfo.saveLocalUserInfo(WelcomeActivity.this);
             waitPlg.dismiss();
             if (userInfo != null) {
@@ -206,6 +237,7 @@ public class WelcomeActivity extends AppCompatActivity {
     };
 
     /**
+     * 向服务器提交用户信息，记录用户登陆信息
      * 此处要考虑的情况为，如果已保存登陆信息，是否需要再次向服务器提交验证(需保存密码)
      * 或者只更新登陆信息
      */
@@ -215,12 +247,16 @@ public class WelcomeActivity extends AppCompatActivity {
         waitPlg.setMessage("正在登陆服务器.....");
         waitPlg.setCancelable(false);
         waitPlg.show();
+        FlyLog.i("<WelcomeActivity>upLoignInfo:id=" + userInfo.getId());
         iHttp.postString(Constant.URL + "/API/User/upLoginInfo", params, HTTPTAG, upLoginInfo);
     }
 
     @OnClick(R.id.wel_bt_goHome)
     public void goHome() {
-        waitPlg = new ProgressDialog(this);
+
+        /**
+         * 如果本地没有缓存用户登陆信息，需要重新登陆或注册用户
+         */
         UserInfo userInfo = UserInfo.getLocalUserInfo(WelcomeActivity.this);
         if (userInfo != null) {
             upLoignInfo(userInfo);
@@ -238,5 +274,4 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
 }

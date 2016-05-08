@@ -224,6 +224,9 @@ public class Play3DImages extends FrameLayout {
         initImageViews();
         initAnimatios();
         initDegrees();
+        for (int i = 0; i < urlArray.length; i++) {
+            MyVolley.getInstance().upImageView(context, urlArray[i], imageView[i]);
+        }
     }
 
     private void initImageViews() {
@@ -253,6 +256,7 @@ public class Play3DImages extends FrameLayout {
         for (int i = 0; i < degreesArr.length; i++) {
             degreesArr[i] = (i * 360f / degreesArr.length) % 360;
         }
+        playAnimition(0);
     }
 
     /**
@@ -294,10 +298,6 @@ public class Play3DImages extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        for (int i = 0; i < urlArray.length; i++) {
-            MyVolley.getInstance().upImageView(context, urlArray[i], imageView[i]);
-        }
-        playAnimition(0);
     }
 
     @Override

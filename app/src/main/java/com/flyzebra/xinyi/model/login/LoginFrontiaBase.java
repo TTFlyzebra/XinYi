@@ -70,7 +70,7 @@ public abstract class LoginFrontiaBase {
         mAuthorization.getUserInfo(FrontiaAuthorization.MediaType.BAIDU.toString(), new UserInfoListener() {
             @Override
             public void onSuccess(FrontiaUser.FrontiaUserDetail result) {
-                FlyLog.i("<MyLoginBaidu>getUserInfo->onSucces:result = username:" + result.getName()
+                FlyLog.i("<LoginFrontiaBase>getUserInfo->onSucces:result = username:" + result.getName()
                         + "birthday:" + result.getBirthday()
                         + "city:" + result.getCity()
                         + "province:" + result.getProvince()
