@@ -1,13 +1,11 @@
 package com.flyzebra.xinyi.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.ChildGridView;
 
@@ -20,9 +18,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/4/7.
  */
-public class NewsActiviy extends AppCompatActivity {
-    private IHttp iHttp = MyVolley.getInstance();
-    private String HTTPTAG = "Fragment" + Math.random();
+public class NewsActiviy extends BaseActivity {
 
     private ChildGridView childGridView;
     private List childGridViewList1;
@@ -53,7 +49,7 @@ public class NewsActiviy extends AppCompatActivity {
             @Override
             public void succeed(Object object) {
                 try {
-                    JsonUtils.getList(childGridViewList1, new JSONObject(object.toString()), "mealinfo");
+                    JsonUtils.addList(childGridViewList1, new JSONObject(object.toString()), "mealinfo");
                     childGridViewList1.addAll(childGridViewList1);
                     childGridView.setData(childGridViewList1);
                 } catch (JSONException e) {
@@ -64,7 +60,7 @@ public class NewsActiviy extends AppCompatActivity {
             @Override
             public void readDiskCache(Object data) {
                 try {
-                    JsonUtils.getList(childGridViewList1, new JSONObject(data.toString()), "mealinfo");
+                    JsonUtils.addList(childGridViewList1, new JSONObject(data.toString()), "mealinfo");
                     childGridViewList1.addAll(childGridViewList1);
                     childGridView.setData(childGridViewList1);
                 } catch (JSONException e) {

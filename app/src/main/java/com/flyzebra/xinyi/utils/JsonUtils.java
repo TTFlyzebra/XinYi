@@ -3,6 +3,7 @@ package com.flyzebra.xinyi.utils;
 import android.os.Build;
 
 import com.flyzebra.xinyi.data.UserInfo;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +24,13 @@ public class JsonUtils {
         return jsonObject.toString();
     }
 
-    public static void getList(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey) {
+    /**
+     * 将转换成的List添加到list中
+     * @param list
+     * @param jsonObject
+     * @param jsonKey
+     */
+    public static void addList(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey) {
         try {
             JSONArray jsonArray = null;
             if (jsonKey == null) {
@@ -46,12 +53,17 @@ public class JsonUtils {
                 list.add(map);
             }
         } catch (JSONException e) {
-            FlyLog.i("JsonUtils->getList-->JSONException:" + e.toString());
             e.printStackTrace();
         }
     }
 
-    public static List<Map<String, Object>> getList(JSONObject jsonObject, String jsonKey) {
+    /**
+     * 返回jsonObject转换成的list
+     * @param jsonObject
+     * @param jsonKey
+     * @return
+     */
+    public static List<Map<String, Object>> addList(JSONObject jsonObject, String jsonKey) {
         List list = new ArrayList();
         JSONArray jsonArray;
         try {
@@ -75,7 +87,29 @@ public class JsonUtils {
                 list.add(map);
             }
         } catch (JSONException e) {
-            FlyLog.i("JsonUtils->getList-->JSONException:" + e.toString());
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static List<Map<String, Object>> addList(JSONArray jsonArray) {
+        List list = new ArrayList();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                Map<String, Object> map = new HashMap<String, Object>();
+                Iterator<String> iterator = jsonObject2.keys();
+                while (iterator.hasNext()) {
+                    String json_key = iterator.next();
+                    Object json_value = jsonObject2.get(json_key);
+                    if (json_value == null) {
+                        json_value = "";
+                    }
+                    map.put(json_key, json_value);
+                }
+                list.add(map);
+            }
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return list;

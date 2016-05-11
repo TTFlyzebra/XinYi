@@ -14,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.ui.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.List;
@@ -47,7 +49,7 @@ public class ChildViewPager extends BaseChildView {
             FlyLog.i("<ChildViewPager>playsTask running.currentItem=" + current_item);
         }
     };
-
+    private ShowImageSrc mShowImageSrc;
     public ChildViewPager(Context context) {
         super(context);
     }
@@ -144,7 +146,11 @@ public class ChildViewPager extends BaseChildView {
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             iv.setLayoutParams(lp);
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
-            iHttp.upImageView(context, (String) list.get(position).get("path"), iv);
+            if(mShowImageSrc!=null){
+                mShowImageSrc.setImageSrcWithUrl(list.get(position),iv);
+            }else{
+                iHttp.upImageView(context, (String) list.get(position).get("imgurl"), iv);
+            }
             iv.setTag(position);
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -168,5 +174,13 @@ public class ChildViewPager extends BaseChildView {
             current_item = position;
             super.setPrimaryItem(container, position, object);
         }
+    }
+
+    public interface ShowImageSrc {
+        void setImageSrcWithUrl(Map data, ImageView iv);
+    }
+
+    public void setShowImageSrc(ShowImageSrc mShowImageSrc) {
+        this.mShowImageSrc = mShowImageSrc;
     }
 }

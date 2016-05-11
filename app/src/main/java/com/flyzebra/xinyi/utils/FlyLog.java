@@ -14,9 +14,9 @@ public class FlyLog {
             "<DrawerLayoutUtils>",
             "<PoiFragment>",
             "<HomeFragment>",
-            "<RefreshRecyclerView>",
+//            "<RefreshRecyclerView>",
             "<MainActivity>",
-//            "<MyVolley>",
+            "<MyVolley>",
             "<StarLevel>",
             "<Play3DImages>"
     };

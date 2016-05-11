@@ -65,7 +65,7 @@ public class NaviForViewPager extends View {
     }
 
     public void setSumItem(int sumItem) {
-        if (sumItem > 0) {
+        if (sumItem > 1) {
             setVisibility(VISIBLE);
         } else {
             setVisibility(GONE);

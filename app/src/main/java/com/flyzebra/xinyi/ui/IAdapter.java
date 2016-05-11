@@ -23,6 +23,10 @@ public interface IAdapter<T extends List> extends IHttp.HttpAdapter {
     String P1_PRICE = "mealremark";
     String P1_IMG_URL = "mealimage";
 
-    String P2_NAME = "name";
-    String P2_IMG_URL = "path";
+    String SHOP_NAME = "shopname";
+    String SHOP_IMGURL = "imgurl";
+
+    String PR1_NAME = "name";
+    String PR1_IMGURL = "imgurl";
+
 }

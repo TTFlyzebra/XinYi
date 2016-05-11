@@ -3,7 +3,7 @@ package com.flyzebra.xinyi.model.http;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.BaseAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -15,17 +15,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.utils.FlyLog;
+import com.flyzebra.xinyi.utils.GsonUtils;
 import com.flyzebra.xinyi.utils.JsonUtils;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -110,46 +117,6 @@ public class MyVolley implements IHttp {
         mImageLoader.get(url, listener);
     }
 
-    public static void PostUser(final String url, final Map<String, String> Params, final List<Map<String, Object>> list, final String jsonKey, final BaseAdapter adapter, final Object tag) {
-        set_upListView.add(tag);
-        FlyLog.i("<MyVolley>PostUser->response:url=" + url + ",Params=" + Params.toString());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                FlyLog.i("<MyVolley>PostUser->response:response=" + response);
-                if (list != null) {
-                    try {
-                        JsonUtils.getList(list, new JSONObject(response), jsonKey);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (set_upListView.contains(tag)) {
-                            PostUser(url, Params, list, jsonKey, adapter, tag);
-                        }
-                    }
-                }, RETRY_TIME);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                return Params;
-            }
-        };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
-        stringRequest.setTag(url);
-        mRequestQueue.add(stringRequest);
-    }
-
     @Override
     public void upImageView(Context context, String url, ImageView iv) {
         upImageView(url, iv);
@@ -231,7 +198,7 @@ public class MyVolley implements IHttp {
     public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag, final HttpResult result) {
         //判断任务是否已取消
         set_upListView.add(tag);
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 sendResult(result, jsonObject.toString(), OK);
@@ -263,6 +230,40 @@ public class MyVolley implements IHttp {
         mRequestQueue.add(jsonObjectRequest);
     }
 
+    @Override
+    public void upMultiRLData(final String url, final List list, final HttpAdapter adapter, final Object tag) {
+        set_upListView.add(tag);
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    list.clear();
+                    list.addAll(JsonUtils.addList(new JSONArray(response)));
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String data = readDiskCache(url);
+                if (data != null) {
+                    try {
+                        list.clear();
+                        list.addAll(JsonUtils.addList(new JSONArray(data)));
+                        adapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
+        stringRequest.setTag(url);
+        mRequestQueue.add(stringRequest);
+    }
+
     public void cancelAll(Object tag) {
         FlyLog.i("<MyVolley>cancelAll:tag=" + tag);
         set_upListView.remove(tag);
@@ -289,7 +290,7 @@ public class MyVolley implements IHttp {
         if (!isAdd) {
             adapter.getList().clear();
         }
-        adapter.getList().addAll(JsonUtils.getList(jsonObject, jsonKey));
+        adapter.getList().addAll(JsonUtils.addList(jsonObject, jsonKey));
         adapter.notifyDataSetChanged();
     }
 

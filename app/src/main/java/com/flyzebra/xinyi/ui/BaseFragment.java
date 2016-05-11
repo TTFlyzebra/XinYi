@@ -1,6 +1,6 @@
 package com.flyzebra.xinyi.ui;
 
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
@@ -8,12 +8,12 @@ import com.flyzebra.xinyi.model.http.MyVolley;
 /**
  * Created by Administrator on 2016/5/8.
  */
-public abstract class BaseActivity extends AppCompatActivity{
-    protected String HTTPTAG = "Activity"+Math.random();
+public abstract class BaseFragment extends Fragment{
+    protected String HTTPTAG = "Fragment"+Math.random();
     protected IHttp iHttp = MyVolley.getInstance();
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         iHttp.cancelAll(HTTPTAG);
     }

@@ -20,13 +20,11 @@ import java.util.List;
 /**
  * Created by FlyZebra on 2016/4/2.
  */
-public class PoiFragment_type extends Fragment {
+public class PoiFragment_type extends BaseFragment {
     private static final String ARG_TYPE = "TYPE";
     private static final String ARG_ID = "RESID";
     private String type;
     private int ResID;
-    private String HTTPTAG_TYPE = "PoiFragment_type" + Math.random();
-    private IHttp iHttp = MyVolley.getInstance();
     private MainActivity activity;
     private RefreshRecyclerView mRecyclerView;
     private List list;
@@ -54,7 +52,7 @@ public class PoiFragment_type extends Fragment {
             type = bundle.getString(ARG_TYPE);
             ResID = bundle.getInt(ARG_ID);
         }
-        HTTPTAG_TYPE = HTTPTAG_TYPE + type;
+        HTTPTAG = HTTPTAG + type;
     }
 
     @Nullable
@@ -72,7 +70,7 @@ public class PoiFragment_type extends Fragment {
         mRecyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
-                iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG_TYPE, new IHttp.HttpResult() {
+                iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG, new IHttp.HttpResult() {
                     @Override
                     public void succeed(Object object) {
                         mRecyclerView.refreshSuccess();
@@ -95,12 +93,7 @@ public class PoiFragment_type extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG_TYPE);
+        iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", HTTPTAG);
     }
 
-    @Override
-    public void onStop() {
-        iHttp.cancelAll(HTTPTAG_TYPE);
-        super.onStop();
-    }
 }

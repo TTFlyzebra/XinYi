@@ -7,17 +7,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 
 /**
  * Created by FlyZebra on 2016/4/8.
  */
-public class ProductInfoActivity extends AppCompatActivity {
+public class ProductInfoActivity extends BaseActivity {
     public static final String IMG_URL = "BITMAP";
     public static final String TEXT = "TEXT";
-    private IHttp iHttp = MyVolley.getInstance();
-    private String HTTPTAG = "Fragment" + Math.random();
     private String imgUrl;
     private String text;
 
@@ -33,12 +32,9 @@ public class ProductInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             imgUrl = intent.getStringExtra(IMG_URL);
-            iHttp.upImageView(this, imgUrl, iv01);
+            iHttp.upImageView(this, Constant.URL+imgUrl, iv01);
             text = intent.getStringExtra(TEXT);
-            tv01.setText("深圳市在近日开启了一场史上最严的“禁摩限电”整治活动，" +
-                    "一方面对公交、地铁口等地区的非法拉客行为重点打击，另一方面也将查处严重超标" +
-                    "和没有牌照的电动车、摩托车。自4月11日起，北京长安街等十条大街禁行电动自行车。" +
-                    "对此规定，你怎么看？");
+            tv01.setText(text);
         }
     }
 }

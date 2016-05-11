@@ -171,6 +171,7 @@ public class RefreshRecyclerView extends ViewGroup {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+//        executors.execute(new SetMainViewState());
         if (TOP_MODE || BOT_MODE) {
             if (PerfromPullView(ev)) {
                 return true;
@@ -191,16 +192,17 @@ public class RefreshRecyclerView extends ViewGroup {
                     break;
                 }
                 //横向的划动冲突解决
-                if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y) && (TOP_MODE || BOT_MODE)) {
-                    if (SHOW == PULL.TOP) {
-                        mRecyclerView.scrollToPosition(0);
-                    }
-                    if (SHOW == PULL.BOTTOM) {
-                        mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
-                    }
-                    if (SHOW != PULL.TOP && SHOW != PULL.BOTTOM) {
-                        scrollTo(0, 0);
-                    }
+                if (Math.abs(ev.getX() - mv_x) > Math.abs(ev.getY() - mv_y) ) {
+//                    if (SHOW == PULL.TOP) {
+//                        mRecyclerView.scrollToPosition(0);
+//                    }
+//                    if (SHOW == PULL.BOTTOM) {
+//                        mRecyclerView.scrollToPosition(mLayout.getItemCount() - 1);
+//                    }
+//                    if (SHOW != PULL.TOP && SHOW != PULL.BOTTOM) {
+//                        scrollTo(0, 0);
+//                    }
+                    return false;
                 }
                 //BOT弹出处理
                 cancleSmooth.set(true);
@@ -318,6 +320,7 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
 //    /**
+
 //     用在ViewPager中不这样设置会提示找不到ID，解决方案1，如下所示，或者生成后重新分配ID
 //     java.lang.IllegalArgumentException: Wrong state class, expecting View State but received class
 //     android.support.v7.widget.RecyclerView$SavedState instead. This usually happens when two views
@@ -340,7 +343,7 @@ public class RefreshRecyclerView extends ViewGroup {
 
     private void smoothScrollToY(int sy, int dy, int times) {
         cancleSmooth.set(false);
-        FlyLog.i("<RefreshRecycleryView>animScrollTo");
+        FlyLog.i("<RefreshRecyclerView>animScrollTo");
         executors.submit(new SmoothScroll(sy, dy, times));
     }
 
@@ -460,6 +463,7 @@ public class RefreshRecyclerView extends ViewGroup {
             first = mGLayout.findFirstVisibleItemPosition();
             if (first == RecyclerView.NO_POSITION) {
                 RLIST = LIST.EMPTY;
+                FlyLog.i("<RefreshRecyclerView>-->SetMainViewState:RLIST=" + RLIST);
                 return;
             }
             last = mGLayout.findLastVisibleItemPosition();

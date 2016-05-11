@@ -26,6 +26,8 @@ public interface IHttp {
 
     void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, HttpResult result);
 
+    void upMultiRLData(String url,List list,HttpAdapter adapter,Object tag);
+
     void execute(Builder builder);
 
     void cancelAll(Object tag);

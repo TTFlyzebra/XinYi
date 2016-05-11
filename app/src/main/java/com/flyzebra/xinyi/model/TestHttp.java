@@ -15,8 +15,8 @@ public class TestHttp {
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
         for(int i= 1;i<=4;i++){
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put(IAdapter.P2_NAME, "测试图片1组" + i);
-            map.put(IAdapter.P2_IMG_URL, "http://192.168.1.88/ordermeal/images/aa" + i + ".jpg");
+            map.put(IAdapter.SHOP_NAME, "测试图片1组" + i);
+            map.put(IAdapter.SHOP_IMGURL, "http://192.168.1.88/ordermeal/images/aa" + i + ".jpg");
             list.add(map);
         }
         return list;
@@ -26,8 +26,8 @@ public class TestHttp {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (int i = 4; i >= 1; i--) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put(IAdapter.P2_NAME, "测试图片2组" + i);
-            map.put(IAdapter.P2_IMG_URL, "http://192.168.1.88/ordermeal/images/welcome" + i + ".jpg");
+            map.put(IAdapter.SHOP_NAME, "测试图片2组" + i);
+            map.put(IAdapter.SHOP_IMGURL, "http://192.168.1.88/ordermeal/images/welcome" + i + ".jpg");
             list.add(map);
         }
         return list;
@@ -37,8 +37,8 @@ public class TestHttp {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (int i = 6; i >= 1; i--) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put(IAdapter.P2_NAME, "测试图片2组" + i);
-            map.put(IAdapter.P2_IMG_URL, "http://192.168.1.88/ordermeal/images/s" + i + ".jpg");
+            map.put(IAdapter.SHOP_NAME, "测试图片2组" + i);
+            map.put(IAdapter.SHOP_IMGURL, "http://192.168.1.88/ordermeal/images/s" + i + ".jpg");
             list.add(map);
         }
         return list;
@@ -48,8 +48,8 @@ public class TestHttp {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         for (int i = 1; i <= 6; i++) {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put(IAdapter.P2_NAME, "测试图片3组" + i);
-            map.put(IAdapter.P2_IMG_URL, "http://192.168.1.88/ordermeal/images/wel" + i + ".jpg");
+            map.put(IAdapter.SHOP_NAME, "测试图片3组" + i);
+            map.put(IAdapter.SHOP_IMGURL, "http://192.168.1.88/ordermeal/images/wel" + i + ".jpg");
             list.add(map);
         }
         return list;

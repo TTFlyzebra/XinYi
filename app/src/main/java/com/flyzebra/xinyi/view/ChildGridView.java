@@ -45,9 +45,9 @@ public class ChildGridView extends LinearLayout {
 
     private int layoutResID = R.layout.child_gridview_item;
     private int[] textViewID = {R.id.child_gridview_item_tv01};
-    private String[] textViewKey = {IAdapter.P2_NAME};
+    private String[] textViewKey = {IAdapter.SHOP_NAME};
     private int[] imageViewID = {R.id.child_gridview_item_iv01};
-    private String[] imageViewKEY = {IAdapter.P2_IMG_URL};
+    private String[] imageViewKEY = {IAdapter.SHOP_IMGURL};
 
     public ChildGridView(Context context) {
         this(context, null);

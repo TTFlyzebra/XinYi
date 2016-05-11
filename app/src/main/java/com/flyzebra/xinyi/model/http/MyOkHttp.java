@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -81,6 +82,11 @@ public class MyOkHttp implements IHttp {
     }
 
     @Override
+    public void upMultiRLData(String url, List list,HttpAdapter adapter, Object tag) {
+
+    }
+
+    @Override
     public void getString(String url, Object tag, HttpResult result) {
 
     }
@@ -138,7 +144,7 @@ public class MyOkHttp implements IHttp {
 
     private void notifyListView(final HttpAdapter adapter, final String res, final String jsonKey) {
         try {
-            JsonUtils.getList(adapter.getList(), new JSONObject(res), jsonKey);
+            JsonUtils.addList(adapter.getList(), new JSONObject(res), jsonKey);
         } catch (JSONException e) {
             e.printStackTrace();
         }

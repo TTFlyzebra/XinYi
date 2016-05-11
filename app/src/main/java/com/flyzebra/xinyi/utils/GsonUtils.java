@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by FlyZebra on 2016/4/23.
  */
 public class GsonUtils {
-    public static <T> T jsonToObject(String jsonStr,Class<T> cls){
+    public static <T> T json2Object(String jsonStr, Class<T> cls){
         try {
             Gson gson = new Gson();
             return gson.fromJson(jsonStr,cls);

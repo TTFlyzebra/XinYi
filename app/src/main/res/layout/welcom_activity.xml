@@ -15,15 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentTop="true"
-        android:gravity="center"
+        android:gravity="right"
         android:orientation="horizontal">
 
-        <com.flyzebra.xinyi.view.FlashTextView
+        <TextView
             android:id="@+id/wel_bt_goHome"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:gravity="center"
-            android:text=""
+            android:text="跳过"
+            android:background="@drawable/welcome_text"
             android:textColor="@color/wel_bt"
             android:textSize="20sp" />
 

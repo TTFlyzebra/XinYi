@@ -1,13 +1,10 @@
 package com.flyzebra.xinyi.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,10 +14,7 @@ import android.widget.Toast;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.data.UserInfo;
-import com.flyzebra.xinyi.model.TestHttp;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.MyVolley;
-import com.flyzebra.xinyi.utils.DiskUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.GsonUtils;
 import com.flyzebra.xinyi.utils.ResUtils;
@@ -65,14 +59,14 @@ public class WelcomeActivity extends BaseActivity {
                 .setImageAlpha(0.95f)
                 .setImagePadding(ResUtils.getMetrices(WelcomeActivity.this).widthPixels / 10);
 
-        iHttp.getString(Constant.URL_WEL, HTTPTAG, new IHttp.HttpResult() {
+        iHttp.getString(Constant.URL_WL, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(Object object) {
                 startPlay(object);
             }
             @Override
-            public void readDiskCache(Object data) {
-                startPlay(data);
+            public void readDiskCache(Object object) {
+                startPlay(object);
             }
             @Override
             public void faild(Object object) {
@@ -83,6 +77,11 @@ public class WelcomeActivity extends BaseActivity {
 
     private void startPlay(Object object) {
         List<Map<String, Object>> list = GsonUtils.json2List(object.toString());
+        //如果没有广告信息，进入APP应用
+        if(list==null) {
+            goHome();
+            return;
+        }
         String imageArray[] = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
             imageArray[i] = Constant.URL + list.get(i).get("imageurl");
@@ -135,7 +134,7 @@ public class WelcomeActivity extends BaseActivity {
         welIvFore.setVisibility(visibility);
         welIvPasue.setVisibility(visibility);
         welIvNext.setVisibility(visibility);
-        welBtGoHome.setVisibility(visibility);
+//        welBtGoHome.setVisibility(visibility);
     }
 
     @Override
@@ -148,7 +147,6 @@ public class WelcomeActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         mHandler.removeCallbacks(hideViewTask);
-        iHttp.cancelAll(HTTPTAG);
     }
 
     @Override
@@ -207,7 +205,7 @@ public class WelcomeActivity extends BaseActivity {
                 return;
             }
             String result = object.toString();
-            UserInfo userInfo = GsonUtils.jsonToObject(result, UserInfo.class);
+            UserInfo userInfo = GsonUtils.json2Object(result, UserInfo.class);
             if(userInfo==null){
                 waitPlg.dismiss();
                 Toast.makeText(WelcomeActivity.this, "获取用户信息失败！", Toast.LENGTH_SHORT).show();

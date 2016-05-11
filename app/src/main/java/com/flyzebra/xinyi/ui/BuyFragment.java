@@ -30,13 +30,11 @@ import java.util.Map;
 /**
  * Created by FlyZebra on 2016/3/22.
  */
-public class BuyFragment extends Fragment {
-    private String HTTPTAG = "BuyFragment" + Math.random();
+public class BuyFragment extends BaseFragment {
     private MainActivity activity;
     private List<Map<String, Object>> list;
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
-    private IHttp iHttp = MyVolley.getInstance();
 
     public BuyFragment() {
     }
@@ -129,12 +127,6 @@ public class BuyFragment extends Fragment {
     public void onStart() {
         super.onStart();
         activity.setToolbar(2);
-    }
-
-    @Override
-    public void onDestroy() {
-        iHttp.cancelAll(HTTPTAG);
-        super.onDestroy();
     }
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {

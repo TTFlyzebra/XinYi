@@ -35,9 +35,8 @@ import java.util.List;
 /**
  * Created by FlyZebra on 2016/3/17.
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int AC_REQUESTCODE_01 = 88;
-    public IHttp iHttp = MyVolley.getInstance();
     public UserInfo userInfo;
     public SlidingTabLayout toolBar_stl;
     public String[] fragmentName = {"HomeFragment", "PoiFragment", "BuyFragment", "HomeFragment", "BuyFragment"};

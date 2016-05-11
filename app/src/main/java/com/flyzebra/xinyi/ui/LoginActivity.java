@@ -1,16 +1,10 @@
 package com.flyzebra.xinyi.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,12 +17,10 @@ import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.model.login.ILogin;
 import com.flyzebra.xinyi.model.login.MyLoginBaidu;
 import com.flyzebra.xinyi.model.login.MyLoginQQ;
 import com.flyzebra.xinyi.model.login.MyLoginSina;
-import com.flyzebra.xinyi.utils.DiskUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.GsonUtils;
 import com.flyzebra.xinyi.utils.MD5;
@@ -39,9 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private IHttp iHttp = MyVolley.getInstance();
-    private String HTTPTAG = "Fragment" + Math.random();
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private ILogin mLogin;
     private EditText lg_ed_us;
     private EditText lg_ed_ps;
@@ -98,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 return;
             }
 
-            UserInfo userInfo = GsonUtils.jsonToObject(result, UserInfo.class);
+            UserInfo userInfo = GsonUtils.json2Object(result, UserInfo.class);
             waitPlg.dismiss();
             if (userInfo != null) {
                 userInfo.saveLocalUserInfo(LoginActivity.this);
@@ -267,12 +257,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        iHttp.cancelAll(HTTPTAG);
     }
 
     private void startMainActivity(UserInfo userInfo) {
