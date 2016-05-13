@@ -81,7 +81,7 @@ public class DifrenceAdapter extends RecyclerView.Adapter<ViewHolder> implements
         if (type == null) {
             return TYPE_LISTVIE;
         }
-        if (type.equals(VIEWPAGER)) {
+        if (type.equals(TYPE_VIEWPAGER)) {
             return TYPE_VIEWPAGER;
         } else {
             return TYPE_LISTVIE;

@@ -12,20 +12,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.ui.IAdapter;
+import com.flyzebra.xinyi.ui.IHomeAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * Created by FlyZebra on 2016/3/31.
  */
 public class ChildGridView extends LinearLayout {
     private final String ROOT = "ROOT";
-    private Context context;
+    protected Context context;
     private LinearLayout titleView;
     private List<Map<String, View>> itemViewList;
     private ImageView titleImageView;
@@ -43,11 +42,14 @@ public class ChildGridView extends LinearLayout {
     private OnItemClick mOnItemClick;
     private ShowImageSrc mShowImageSrc;
 
+    /**
+     * 以下的数据初始化不是必要的，但是变更声明是必要的，如没初始化，必须要init
+     */
     private int layoutResID = R.layout.child_gridview_item;
     private int[] textViewID = {R.id.child_gridview_item_tv01};
-    private String[] textViewKey = {IAdapter.SHOP_NAME};
+    private String[] textViewKey = {IHomeAdapter.SHOP_NAME};
     private int[] imageViewID = {R.id.child_gridview_item_iv01};
-    private String[] imageViewKEY = {IAdapter.SHOP_IMGURL};
+    private String[] imageViewKEY = {IHomeAdapter.SHOP_IMGURL};
 
     public ChildGridView(Context context) {
         this(context, null);
@@ -79,24 +81,21 @@ public class ChildGridView extends LinearLayout {
         return this;
     }
 
-    private void initContext(Context context) {
+    protected void initContext(Context context) {
         this.setOrientation(VERTICAL);
         this.context = context;
-
         titleView = new LinearLayout(context);
         LinearLayout.LayoutParams lpL = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, dip2px(TitleHeight));
         lpL.gravity = Gravity.CENTER;
         titleView.setLayoutParams(lpL);
         titleView.setOrientation(HORIZONTAL);
         titleView.setBackgroundColor(0xffffffff);
-
         createTitleImage(android.R.drawable.star_big_on);
         createTitleTitle("最新产品");
         createTitleButton("查看更多");
-
+        titleView.setVisibility(GONE);
         this.addView(titleView);
     }
-
     public ChildGridView setTitleImage(@DrawableRes int ResID) {
         if (titleImageView != null) {
             titleImageView.setImageResource(ResID);
@@ -153,7 +152,6 @@ public class ChildGridView extends LinearLayout {
         titleButton.setTextColor(textColor);
         titleButton.setGravity(Gravity.RIGHT);
         titleView.addView(titleButton);
-
     }
 
     @Override
@@ -184,8 +182,15 @@ public class ChildGridView extends LinearLayout {
             FlyLog.i("<ChildGridView>onMeasure:childHeight=" + childHeight);
             mBigChildHeight = Math.max(totalLength, childHeight);
         }
-        int number = itemViewList == null ? 0 : itemViewList.size() % column > 0 ? itemViewList.size() / column + 1 : itemViewList.size() / column;
-        int mMaxHeight = titleView.getMeasuredHeight() + number * mBigChildHeight;
+        int visibleNum = 0;
+        if (itemViewList != null) {
+            for (int i = 0; i < itemViewList.size(); i++) {
+                if (itemViewList.get(i).get(ROOT).getVisibility() == GONE) continue;
+                visibleNum++;
+            }
+        }
+        int number = visibleNum % column > 0 ? visibleNum / column + 1 : visibleNum / column;
+        int mMaxHeight = titleView.getVisibility() == GONE ? 0 : titleView.getMeasuredHeight() + number * mBigChildHeight;
 //        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), mMaxHeight);//此处设置的值为控件将要显示的高度和宽度
         FlyLog.i("<ChildGridView>setMeasuredDimension:width=" + MeasureSpec.getSize(widthMeasureSpec) + ",height=" + mMaxHeight);
@@ -194,6 +199,7 @@ public class ChildGridView extends LinearLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         FlyLog.i("<ChildGridView>onLayout:l=" + l + ",t=" + t + ",r=" + r + ",b=" + b);
+        if (titleView.getVisibility() == GONE) return;
         int top = 0;
         if (isAttach) {
             if (titleView != null) {
@@ -205,6 +211,8 @@ public class ChildGridView extends LinearLayout {
             int width = r / column;
             for (int i = 0; i < num; i++) {
                 View view = itemViewList.get(i).get(ROOT);
+                //如果子控件不可见，可见的已经放置完了，所以直接退出
+                if (view.getVisibility() == GONE) break;
                 int ctop = top + (i / column * mBigChildHeight);
                 int left = (i % column) * (width);
                 view.layout(left + childMargin, ctop + childMargin, left + width - childMargin, ctop + mBigChildHeight - childMargin);
@@ -225,8 +233,7 @@ public class ChildGridView extends LinearLayout {
         isAttach = false;
     }
 
-    public void addItemView(Context context, final int num) {
-        Map map = new HashMap();
+    private void addItemView(Context context, final int num) {
         View root = LayoutInflater.from(context).inflate(layoutResID, null);
         root.setOnClickListener(new OnClickListener() {
             @Override
@@ -237,8 +244,20 @@ public class ChildGridView extends LinearLayout {
                 }
             }
         });
+        Map map = new HashMap();
         map.put(ROOT, root);
+        bindView(root, map);
+        itemViewList.add(map);
+        this.addView(root);
+    }
 
+    /**
+     * 绑定子控件(findViewByID并存储)
+     *
+     * @param root
+     * @param map
+     */
+    protected void bindView(View root, Map map) {
         for (int n = 0; n < textViewID.length; n++) {
             TextView tv = (TextView) root.findViewById(textViewID[n]);
             map.put(textViewID[n], tv);
@@ -248,15 +267,20 @@ public class ChildGridView extends LinearLayout {
             ImageView iv = (ImageView) root.findViewById(imageViewID[n]);
             map.put(imageViewID[n], iv);
         }
-        itemViewList.add(map);
-        this.addView(root);
     }
+
+    /**
+     * 设置要显示的数据，根据数据添加删除子控件
+     * @param list
+     */
 
     public void setData(List<Map<String, Object>> list) {
         this.list = list;
         if (itemViewList == null) {
             itemViewList = new ArrayList<>();
         }
+        if (list.size() == 0) return;
+        titleView.setVisibility(VISIBLE);
         for (int i = 0; i < list.size(); i++) {
             if (itemViewList.size() == i) {
                 addItemView(context, i);
@@ -265,22 +289,28 @@ public class ChildGridView extends LinearLayout {
             if (root.getVisibility() == GONE) {
                 root.setVisibility(VISIBLE);
             }
-            ShowItemViewData(itemViewList.get(i), list.get(i));
+            SetItemViewData(itemViewList.get(i), list.get(i));
         }
         //隐藏多余的列表
         if (itemViewList.size() > list.size()) {
             for (int i = list.size(); i < itemViewList.size(); i++) {
                 itemViewList.get(i).get(ROOT).setVisibility(GONE);
+//                this.removeView(itemViewList.get(i).get(ROOT));
             }
         }
 
     }
 
-    public void ShowItemViewData(Map<String, View> itemView, Map<String, Object> data) {
+    /**
+     * 设置子控件显示内容
+     *
+     * @param itemView
+     * @param data
+     */
+    protected void SetItemViewData(Map<String, View> itemView, Map<String, Object> data) {
         for (int i = 0; i < textViewID.length; i++) {
             TextView tv = (TextView) itemView.get(textViewID[i]);
             tv.setText((String) data.get(textViewKey[i]));
-            tv.setTextColor(textColor);
         }
         for (int i = 0; i < imageViewID.length; i++) {
             ImageView iv = (ImageView) itemView.get(imageViewID[i]);
@@ -288,7 +318,6 @@ public class ChildGridView extends LinearLayout {
                 mShowImageSrc.setImageSrcWithUrl((String) data.get(imageViewKEY[i]), iv);
             }
         }
-        postInvalidate();
     }
 
     public int px2dip(float pxValue) {

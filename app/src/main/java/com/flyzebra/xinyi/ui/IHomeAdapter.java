@@ -7,16 +7,17 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/4/3.
  */
-public interface IAdapter<T extends List> extends IHttp.HttpAdapter {
+public interface IHomeAdapter<T extends List> extends IHttp.HttpAdapter {
     String DATA = "DATA";
     String TYPE = "TYPE";
 
-    String VIEWPAGER = "1";
-    String GRIDVIEW = "2";
+//    String VIEWPAGER = "1";
+//    String GRIDVIEW = "2";
 
     //RecyclearView TYPE
-    int H_VIEWPAGER = 1;
-    int H_GRIDVIEW = 2;
+    int H_VIEWPAGER_SHOP = 1;
+    int H_GRIDVIEW_HOTS = 2;
+    int H_GRIDVIEW_NEWS = 3;
     int H_RCLIST = 100;
 
     String P1_NAME = "mealname";
@@ -27,6 +28,9 @@ public interface IAdapter<T extends List> extends IHttp.HttpAdapter {
     String SHOP_IMGURL = "imgurl";
 
     String PR1_NAME = "name";
+    String PR1_TYPE = "ptype_name";
+    String PR1_DESCRIBE = "describe";
     String PR1_IMGURL = "imgurl";
+    String PR1_PRICE = "price";
 
 }

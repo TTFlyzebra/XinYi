@@ -3,7 +3,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:layout_margin="10dp"
     android:background="@color/back03"
     android:gravity="center"
     android:orientation="horizontal">
@@ -13,27 +12,65 @@
         android:id="@+id/p_item_01_iv_01"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:padding="10dp"
+        android:padding="5dp"
         android:scaleType="fitCenter" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="1dp">
 
         <TextView
             android:id="@+id/p_item_01_tv_01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:text="产品名称" />
+            android:singleLine="true"
+            android:text="产品名称"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/p_item_01_tv_02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:gravity="left"
-            android:text="价格" />
+            android:lines="2"
+            android:text="产品介绍"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="￥"
+                android:textColor="@color/price"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/p_item_01_tv_03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="8888.88"
+                android:textColor="@color/price"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/p_item_01_ll_01"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|center_vertical"
+                android:orientation="horizontal" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

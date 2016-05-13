@@ -3,7 +3,6 @@ package com.flyzebra.xinyi.model.http;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -15,24 +14,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.utils.FlyLog;
-import com.flyzebra.xinyi.utils.GsonUtils;
 import com.flyzebra.xinyi.utils.JsonUtils;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -111,15 +104,30 @@ public class MyVolley implements IHttp {
         iv.setImageUrl(url, mImageLoader);
     }
 
-    public static void upImageView(String url, ImageView iv) {
-        FlyLog.i("<MyVolley>upImageView->url=" + url + ",iv=" + iv.getId());
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, R.drawable.image, R.drawable.image);
-        mImageLoader.get(url, listener);
+    public static String readDiskCache(String url) {
+        String data = null;
+        Cache.Entry entry = mRequestQueue.getCache().get(url);
+        if (entry != null) {
+            try {
+                data = new String(entry.data, HttpHeaderParser.parseCharset(entry.responseHeaders, "UTF-8"));
+            } catch (Exception e) {
+                FlyLog.i("<MyVolley>upListView->readDiskCache Error");
+                return null;
+            }
+        }
+        return data;
     }
 
     @Override
     public void upImageView(Context context, String url, ImageView iv) {
-        upImageView(url, iv);
+        upImageView(context, url, iv, R.drawable.image);
+    }
+
+    @Override
+    public void upImageView(Context context, String url, ImageView iv, int LoadResId) {
+        FlyLog.i("<MyVolley>upImageView->url=" + url + ",iv=" + iv.getId());
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, LoadResId, LoadResId);
+        mImageLoader.get(url, listener);
     }
 
     @Override
@@ -161,7 +169,14 @@ public class MyVolley implements IHttp {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                sendResult(result, error, FAIL);
+                String data = readDiskCache(url);
+                if (data != null) {
+                    sendResult(result, data, DISK);
+                    FlyLog.i("<MyVolley>postString->readDiskCache data=" + data);
+                } else {
+                    sendResult(result, error, FAIL);
+                    FlyLog.i("<MyVolley>postString->onErrorResponse:tag=" + tag);
+                }
             }
         }) {
             @Override
@@ -236,9 +251,11 @@ public class MyVolley implements IHttp {
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                FlyLog.i("<MyVolley>upMultiRLData->onResponse:response=" + response);
                 try {
                     list.clear();
-                    list.addAll(JsonUtils.addList(new JSONArray(response)));
+                    list.addAll(JsonUtils.json2List(new JSONArray(response)));
+                    FlyLog.i("<MyVolley>upMultiRLData->onResponse:list=" + list.toString());
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -251,7 +268,7 @@ public class MyVolley implements IHttp {
                 if (data != null) {
                     try {
                         list.clear();
-                        list.addAll(JsonUtils.addList(new JSONArray(data)));
+                        list.addAll(JsonUtils.json2List(new JSONArray(data)));
                         adapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -290,22 +307,8 @@ public class MyVolley implements IHttp {
         if (!isAdd) {
             adapter.getList().clear();
         }
-        adapter.getList().addAll(JsonUtils.addList(jsonObject, jsonKey));
+        adapter.getList().addAll(JsonUtils.json2List(jsonObject, jsonKey));
         adapter.notifyDataSetChanged();
-    }
-
-    public static String readDiskCache(String url) {
-        String data = null;
-        Cache.Entry entry = mRequestQueue.getCache().get(url);
-        if (entry != null) {
-            try {
-                data = new String(entry.data, HttpHeaderParser.parseCharset(entry.responseHeaders, "UTF-8"));
-            } catch (Exception e) {
-                FlyLog.i("<MyVolley>upListView->readDiskCache Error");
-                return null;
-            }
-        }
-        return data;
     }
 
     private static class MyVolleyHolder {

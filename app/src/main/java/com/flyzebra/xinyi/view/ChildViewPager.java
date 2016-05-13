@@ -14,16 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
-import com.flyzebra.xinyi.ui.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.List;
 import java.util.Map;
 
 /**
+ * FlyZebra
  * Created by FlyZebra on 2016/3/25.
  */
 public class ChildViewPager extends BaseChildView {
@@ -49,7 +48,9 @@ public class ChildViewPager extends BaseChildView {
             FlyLog.i("<ChildViewPager>playsTask running.currentItem=" + current_item);
         }
     };
+
     private ShowImageSrc mShowImageSrc;
+    private OnItemClick mOnItemClick;
     public ChildViewPager(Context context) {
         super(context);
     }
@@ -119,6 +120,22 @@ public class ChildViewPager extends BaseChildView {
         return data;
     }
 
+    public void setShowImageSrc(ShowImageSrc mShowImageSrc) {
+        this.mShowImageSrc = mShowImageSrc;
+    }
+
+    public void setOnItemkClick(OnItemClick mOnItemClick) {
+        this.mOnItemClick = mOnItemClick;
+    }
+
+    public interface ShowImageSrc {
+        void setImageSrcWithUrl(Map data, ImageView iv);
+    }
+
+    public interface OnItemClick {
+        void onTimeClick(Map data, View iv);
+    }
+
     public class PlaysAdapter extends PagerAdapter {
         @Override
         public int getCount() {
@@ -155,13 +172,9 @@ public class ChildViewPager extends BaseChildView {
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    int i = (int) v.getTag();
-//                    //从list中判断点击的图片名称，执行相应动作，执行相应动作，下面为测试，从列表中删除点击的图片
-////                    list.get(i).put("path", "http://192.168.1.88/ordermeal/images/aa4.jpg");
-//                    list.remove(i);
-//                    countVP.setSumItem(list.size());
-//                    notifyDataSetChanged();
-//                    FlyLog.i("<ChildViewPager><PlaysAdapter>instantiateItem->onClick:i=" + i + ",list.size()=" + list.size());
+                    if (mOnItemClick != null) {
+                        mOnItemClick.onTimeClick(list.get((Integer) v.getTag()), v);
+                    }
                 }
             });
             container.addView(iv);
@@ -174,13 +187,5 @@ public class ChildViewPager extends BaseChildView {
             current_item = position;
             super.setPrimaryItem(container, position, object);
         }
-    }
-
-    public interface ShowImageSrc {
-        void setImageSrcWithUrl(Map data, ImageView iv);
-    }
-
-    public void setShowImageSrc(ShowImageSrc mShowImageSrc) {
-        this.mShowImageSrc = mShowImageSrc;
     }
 }

@@ -9,7 +9,6 @@
     </string-array>
     <!-- 给下面的数组配置ID-->
     <string-array name="poi_type">
-        <item>三大件</item>
         <item>主板</item>
         <item>显示器</item>
         <item>网络产品</item>

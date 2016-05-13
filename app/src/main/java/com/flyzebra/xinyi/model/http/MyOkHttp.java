@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.flyzebra.xinyi.ui.IAdapter;
+import com.flyzebra.xinyi.ui.IHomeAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
@@ -58,6 +58,11 @@ public class MyOkHttp implements IHttp {
     @Override
     public void upImageView(Context context, String url, ImageView iv) {
         Picasso.with(context).load(url).into(iv);
+    }
+
+    @Override
+    public void upImageView(Context context, String url, ImageView iv, int LoadResId) {
+
     }
 
     @Override
@@ -124,15 +129,15 @@ public class MyOkHttp implements IHttp {
                 if (builder.view != null) {
                     if (builder.view instanceof ListView) {
                         final ListView listView = (ListView) builder.view;
-                        final IAdapter adapter = (IAdapter) listView.getAdapter();
+                        final IHomeAdapter adapter = (IHomeAdapter) listView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
                     } else if (builder.view instanceof RecyclerView) {
                         final RecyclerView recyclerView = (RecyclerView) builder.view;
-                        final IAdapter adapter = (IAdapter) recyclerView.getAdapter();
+                        final IHomeAdapter adapter = (IHomeAdapter) recyclerView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
                     } else if (builder.view instanceof RefreshRecyclerView) {
                         final RefreshRecyclerView recyclerView = (RefreshRecyclerView) builder.view;
-                        final IAdapter adapter = (IAdapter) recyclerView.getAdapter();
+                        final IHomeAdapter adapter = (IHomeAdapter) recyclerView.getAdapter();
                         notifyListView(adapter, res, builder.jsonKey);
                     }
                 } else if (builder.adapter != null) {
@@ -144,7 +149,7 @@ public class MyOkHttp implements IHttp {
 
     private void notifyListView(final HttpAdapter adapter, final String res, final String jsonKey) {
         try {
-            JsonUtils.addList(adapter.getList(), new JSONObject(res), jsonKey);
+            JsonUtils.json2List(adapter.getList(), new JSONObject(res), jsonKey);
         } catch (JSONException e) {
             e.printStackTrace();
         }

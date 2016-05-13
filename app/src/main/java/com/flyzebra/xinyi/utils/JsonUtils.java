@@ -1,10 +1,5 @@
 package com.flyzebra.xinyi.utils;
 
-import android.os.Build;
-
-import com.flyzebra.xinyi.data.UserInfo;
-import com.google.gson.JsonArray;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +25,7 @@ public class JsonUtils {
      * @param jsonObject
      * @param jsonKey
      */
-    public static void addList(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey) {
+    public static void json2List(List<Map<String, Object>> list, JSONObject jsonObject, String jsonKey) {
         try {
             JSONArray jsonArray = null;
             if (jsonKey == null) {
@@ -63,7 +58,7 @@ public class JsonUtils {
      * @param jsonKey
      * @return
      */
-    public static List<Map<String, Object>> addList(JSONObject jsonObject, String jsonKey) {
+    public static List<Map<String, Object>> json2List(JSONObject jsonObject, String jsonKey) {
         List list = new ArrayList();
         JSONArray jsonArray;
         try {
@@ -92,7 +87,7 @@ public class JsonUtils {
         return list;
     }
 
-    public static List<Map<String, Object>> addList(JSONArray jsonArray) {
+    public static List<Map<String, Object>> json2List(JSONArray jsonArray) {
         List list = new ArrayList();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -104,6 +99,9 @@ public class JsonUtils {
                     Object json_value = jsonObject2.get(json_key);
                     if (json_value == null) {
                         json_value = "";
+                    }
+                    if (json_value instanceof JSONArray) {
+                        json_value = json2List((JSONArray) json_value);
                     }
                     map.put(json_key, json_value);
                 }
@@ -141,26 +139,6 @@ public class JsonUtils {
         return map;
     }
 
-    /**
-     * List按给定键值排序
-     * @param list
-     * @param KEY
-     */
-    private void sortList(List<Map<String, Object>> list, final String KEY) {
-        Collections.sort(list, new Comparator<Map<String, Object>>() {
-            @Override
-            public int compare(Map<String, Object> map1, Map<String, Object> map2) {
-                if ((Integer) map1.get(KEY) > (Integer) map2.get(KEY)) {
-                    return 1;
-                } else if ((Integer) map1.get(KEY) < (Integer) map2.get(KEY)) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-    }
-
     public static Object jsonArrayToObject(Class<?> cls, String jsonString) {
         Object obj = null;
         try {
@@ -184,5 +162,26 @@ public class JsonUtils {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    /**
+     * List按给定键值排序
+     *
+     * @param list
+     * @param KEY
+     */
+    private void sortList(List<Map<String, Object>> list, final String KEY) {
+        Collections.sort(list, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> map1, Map<String, Object> map2) {
+                if ((Integer) map1.get(KEY) > (Integer) map2.get(KEY)) {
+                    return 1;
+                } else if ((Integer) map1.get(KEY) < (Integer) map2.get(KEY)) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
     }
 }

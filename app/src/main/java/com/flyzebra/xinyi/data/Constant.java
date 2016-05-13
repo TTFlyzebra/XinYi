@@ -10,6 +10,8 @@ public class Constant {
     public static final String URL = "http://192.168.1.88/XinYi";
     //进入应用轮播图片的存放位置
     public static final String URL_WL = URL + "/API/Welcome";
+    //推荐商店
     public static final String URL_HS = URL + "/API/HomeShop";
+    //推荐产品
     public static final String URL_PR = URL + "/API/HomeProduct";
 }
