@@ -54,48 +54,48 @@ public class WelcomeActivity extends BaseActivity {
         waitPlg.setMessage("正在读取信息.....");
         waitPlg.setCancelable(false);
         waitPlg.show();
+
+        //初始化轮播
         welPlay3d.setDuration(1000)
                 .setShowMillis(2000)
                 .setImageAlpha(0.95f)
                 .setImagePadding(ResUtils.getMetrices(WelcomeActivity.this).widthPixels / 10);
 
-        iHttp.getString(Constant.URL_WL, HTTPTAG, new IHttp.HttpResult() {
+        iHttp.getString(Constant.URL_WEL, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(Object object) {
-                startPlay(object);
+                List<Map<String, Object>> list = GsonUtils.json2List(object.toString());
+                //如果没有广告信息，进入APP应用
+                if (list == null) {
+                    goHome();
+                }else{
+                    setWelPlay3d(list);
+                }
             }
             @Override
-            public void readDiskCache(Object object) {
-                startPlay(object);
-            }
-            @Override
-            public void faild(Object object) {
-                waitPlg.dismiss();
+            public void failed(Object object) {
+                //从磁盘读取轮播数据
+                List<Map<String, Object>> imgList = iHttp.readListFromCache(Constant.URL_WEL);
+                if(imgList!=null){
+                    setWelPlay3d(imgList);
+                }else{
+                    goHome();
+                }
             }
         });
     }
 
-    private void startPlay(Object object) {
-        List<Map<String, Object>> list = GsonUtils.json2List(object.toString());
-        //如果没有广告信息，进入APP应用
-        if(list==null) {
-            goHome();
-            return;
-        }
-        String imageArray[] = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            imageArray[i] = Constant.URL + list.get(i).get("imageurl");
-        }
+
+    public void setWelPlay3d(List<Map<String, Object>> imgList) {
         //旋转动画初始化
-        welPlay3d.setImageUrlArray(imageArray).Init();
+        welPlay3d.setImageUrlList(imgList).Init();
         waitPlg.dismiss();
         welPlay3d.setOnItemClick(new Play3DImages.OnItemClick(){
             @Override
             public void onItemClick(int position) {
                 if (welIvFore.getVisibility() == View.VISIBLE) {
                     FlyLog.i("<WelcomeActivity> setOnItemClick position=" + position);
-                    //                    goHome();
-                    Toast.makeText(WelcomeActivity.this, "Click " + position, Toast.LENGTH_SHORT);
+                    Toast.makeText(WelcomeActivity.this, "Click " + position, Toast.LENGTH_SHORT).show();
                     delayHideView(0);
                     setViewVisble(View.GONE);
                 } else {
@@ -218,17 +218,9 @@ public class WelcomeActivity extends BaseActivity {
                 startMainActivity(userInfo);
             }
         }
-
         @Override
-        public void readDiskCache(Object data) {
-            FlyLog.i("<WelcomeActivity>upLoginInfo->readDiskCache:data-->" + data.toString());
-            waitPlg.setMessage("连接服务器超时.....");
-            waitPlg.setCancelable(true);
-        }
-
-        @Override
-        public void faild(Object object) {
-            FlyLog.i("<WelcomeActivity>upLoginInfo->faild:object-->" + object.toString());
+        public void failed(Object object) {
+            FlyLog.i("<WelcomeActivity>upLoginInfo->failed:object-->" + object.toString());
             waitPlg.setMessage("连接服务器超时.....");
             waitPlg.setCancelable(true);
         }
@@ -251,7 +243,6 @@ public class WelcomeActivity extends BaseActivity {
 
     @OnClick(R.id.wel_bt_goHome)
     public void goHome() {
-
         /**
          * 如果本地没有缓存用户登陆信息，需要重新登陆或注册用户
          */

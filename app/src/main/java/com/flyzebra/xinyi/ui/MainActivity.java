@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int AC_REQUESTCODE_01 = 88;
     public UserInfo userInfo;
     public SlidingTabLayout toolBar_stl;
-    public String[] fragmentName = {"HomeFragment", "PoiFragment", "BuyFragment", "HomeFragment", "BuyFragment"};
+    public String[] fragmentName = {"HomeFragment", "ProductFragment", "BuyFragment", "HomeFragment", "BuyFragment"};
     public String[] fragmentTitle = {"首页", "商城", "订单", "我的", "设置"};
     public DrawerLayout mDrawerLayout;
     private Toolbar toolBar;

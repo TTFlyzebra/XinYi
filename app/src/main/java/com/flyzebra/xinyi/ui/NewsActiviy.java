@@ -49,7 +49,7 @@ public class NewsActiviy extends BaseActivity {
             @Override
             public void succeed(Object object) {
                 try {
-                    JsonUtils.addList(childGridViewList1, new JSONObject(object.toString()), "mealinfo");
+                    JsonUtils.json2List(childGridViewList1, new JSONObject(object.toString()), "mealinfo");
                     childGridViewList1.addAll(childGridViewList1);
                     childGridView.setData(childGridViewList1);
                 } catch (JSONException e) {
@@ -58,18 +58,7 @@ public class NewsActiviy extends BaseActivity {
             }
 
             @Override
-            public void readDiskCache(Object data) {
-                try {
-                    JsonUtils.addList(childGridViewList1, new JSONObject(data.toString()), "mealinfo");
-                    childGridViewList1.addAll(childGridViewList1);
-                    childGridView.setData(childGridViewList1);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void faild(Object object) {
+            public void failed(Object object) {
             }
         });
     }

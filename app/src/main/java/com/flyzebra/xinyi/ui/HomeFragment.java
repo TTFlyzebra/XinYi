@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
 
 import java.util.ArrayList;
@@ -19,17 +20,18 @@ import java.util.Map;
  * 主页
  * Created by FlyZebra on 2016/2/29.
  */
-public class HomeFragment extends BaseFragment {
-    //ViewPager自动轮播
-
-    private static List RLList;
-    private static List HomeShopsList;
-    private static List homeHotsList;
-    private static List homeNewsList;
+public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
+    private List RLList;
+    private List homeShopsList;//ViewPager商店展示
+    private List homeHotsList;//首页热销产品推荐
+    private List homeNewsList;//新品上架
+    private List homeTimeShopList;//限时抢购
     private MainActivity activity;
     private View view;
     private RefreshRecyclerView recyclerView;
     private HomeRLAdapter mAdapter;
+
+    private int httpNum = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,11 @@ public class HomeFragment extends BaseFragment {
         recyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
-                iHttp.upMultiRLData(Constant.URL_HS, HomeShopsList, mAdapter, HTTPTAG);
-                iHttp.upMultiRLData(Constant.URL_PR, homeHotsList, mAdapter, HTTPTAG);
-                iHttp.upMultiRLData(Constant.URL_PR, homeNewsList, mAdapter, HTTPTAG);
-                recyclerView.refreshSuccess();
+                httpNum = 4;
+                iHttp.upRecyclerViewData(Constant.URL_HHS, homeShopsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(Constant.URL_HPR, homeHotsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(Constant.URL_HPR, homeNewsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(Constant.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG, HomeFragment.this);
             }
         });
 
@@ -66,46 +69,50 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-        //添加ViewPager//商店展示
-        if (HomeShopsList == null) {
-            //添加个不存在的图像占位
-            HomeShopsList = new ArrayList<Map<String, Object>>();
-            Map<String, Object> map = new HashMap<>();
-            map.put(IHomeAdapter.SHOP_IMGURL, "");
-            map.put(IHomeAdapter.SHOP_NAME, "");
-            HomeShopsList.add(map);
-            Map shops = new HashMap();
-            shops.put(IHomeAdapter.DATA, HomeShopsList);
-            shops.put(IHomeAdapter.TYPE, IHomeAdapter.H_VIEWPAGER_SHOP);
-            RLList.add(shops);
-            //更新数据
-            iHttp.upMultiRLData(Constant.URL_HS, HomeShopsList, mAdapter, HTTPTAG);
-
+        homeShopsList = iHttp.readListFromCache(Constant.URL_HHS);
+        if (homeShopsList == null) {
+            homeShopsList = new ArrayList<Map<String, Object>>();
         }
+        Map shops = new HashMap();
+        shops.put(IAdapter.DATA, homeShopsList);
+        shops.put(IAdapter.TYPE, IAdapter.H_VIEWPAGER_SHOP);
+        RLList.add(shops);
         //更新数据
-        //添加热销产品//产品展示
+        iHttp.upRecyclerViewData(Constant.URL_HHS, homeShopsList, mAdapter, HTTPTAG);
+
+        homeHotsList = iHttp.readListFromCache(Constant.URL_HPR);
         if (homeHotsList == null) {
             homeHotsList = new ArrayList();
-            Map hots = new HashMap();
-            hots.put(IHomeAdapter.DATA, homeHotsList);
-            hots.put(IHomeAdapter.TYPE, IHomeAdapter.H_GRIDVIEW_HOTS);
-            RLList.add(hots);
-            iHttp.upMultiRLData(Constant.URL_PR, homeHotsList, mAdapter, HTTPTAG);
         }
-
-
+        Map hots = new HashMap();
+        hots.put(IAdapter.DATA, homeHotsList);
+        hots.put(IAdapter.TYPE, IAdapter.H_GRIDVIEW_HOTS);
+        RLList.add(hots);
         //更新数据
-        //添加热销产品//产品展示
+        iHttp.upRecyclerViewData(Constant.URL_HPR, homeHotsList, mAdapter, HTTPTAG);
+
+
+        homeNewsList = iHttp.readListFromCache(Constant.URL_HPR);
         if (homeNewsList == null) {
             homeNewsList = new ArrayList();
-            Map news = new HashMap();
-            news.put(IHomeAdapter.DATA, homeNewsList);
-            news.put(IHomeAdapter.TYPE, IHomeAdapter.H_GRIDVIEW_NEWS);
-            RLList.add(news);
-            iHttp.upMultiRLData(Constant.URL_PR, homeNewsList, mAdapter, HTTPTAG);
         }
+        Map news = new HashMap();
+        news.put(IAdapter.DATA, homeNewsList);
+        news.put(IAdapter.TYPE, IAdapter.H_GRIDVIEW_NEWS);
+        RLList.add(news);
+        //更新数据
+        iHttp.upRecyclerViewData(Constant.URL_HPR, homeNewsList, mAdapter, HTTPTAG);
 
-        //添加最新产品
+        homeTimeShopList = iHttp.readListFromCache(Constant.URL_HPR);
+        if (homeTimeShopList == null) {
+            homeTimeShopList = new ArrayList();
+        }
+        Map timeShop = new HashMap();
+        timeShop.put(IAdapter.DATA, homeTimeShopList);
+        timeShop.put(IAdapter.TYPE, IAdapter.H_GRIDVIEW_TIMESHOP);
+        RLList.add(timeShop);
+        //更新数据
+        iHttp.upRecyclerViewData(Constant.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG);
 
         //recyclerViewList按类型排序
 //        Collections.sort(recyclerViewList, new Comparator<Map<String, Object>>() {
@@ -123,4 +130,19 @@ public class HomeFragment extends BaseFragment {
         activity.setToolbar(0);
     }
 
+    @Override
+    public void succeed(Object object) {
+        httpNum--;
+        if (httpNum <= 0) {
+            recyclerView.refreshSuccess();
+        }
+    }
+
+    @Override
+    public void failed(Object object) {
+        httpNum--;
+        if (httpNum <= 0) {
+            recyclerView.refreshFailed();
+        }
+    }
 }

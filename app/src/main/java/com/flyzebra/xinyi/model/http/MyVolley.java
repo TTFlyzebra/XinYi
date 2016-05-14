@@ -32,18 +32,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
  * Created by FlyZebra on 2016/3/20.
  */
 public class MyVolley implements IHttp {
     private static final int OK = 1;
-    private static final int DISK = 2;
-    private static final int FAIL = 3;
+    private static final int FAIL = 2;
     public static Set<Object> set_upListView = new HashSet<>();
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
+    private static Context mContext;
     private static Handler mHandler = new Handler(Looper.getMainLooper());
-    private static int RETRY_TIME = 10000;
+    private static int RETRY_TIME = 12000;
     private static int RETRY_NUM = 0;
 
     public static MyVolley getInstance() {
@@ -51,18 +50,19 @@ public class MyVolley implements IHttp {
     }
 
     public static RequestQueue Init(Context context) {
+        mContext = context;
         mRequestQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
         return mRequestQueue;
     }
 
-    public static void getString(final IHttp.Builder info, final HttpResult result) {
+    public void getString(final IHttp.Builder info, final HttpResult result) {
         set_upListView.add(info.tag);
         StringRequest stringRequest = new StringRequest(info.method, info.url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 FlyLog.i("<MyVolley>getString->onResponse:response=" + response);
-                result.succeed(response);
+                sendResult(result, response, OK);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -86,6 +86,7 @@ public class MyVolley implements IHttp {
                         }
                     }, RETRY_TIME);
                 }
+                sendResult(result, error, FAIL);
             }
         }) {
             @Override
@@ -96,6 +97,186 @@ public class MyVolley implements IHttp {
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
         stringRequest.setTag(info.tag);
         mRequestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void getString(final String url, final Object tag, final HttpResult result) {
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                FlyLog.i("<MyVolley>getString:response=" + response);
+                sendResult(result, response, OK);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                sendResult(result, error, FAIL);
+                FlyLog.i("<MyVolley>getString->onErrorResponse:tag=" + tag);
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
+        stringRequest.setTag(url);
+        mRequestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void postString(final String url, final Map<String, String> Params, final Object tag, final HttpResult result) {
+        FlyLog.i("<MyVolley>postString->response:url=" + url + ",Params=" + Params.toString());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                sendResult(result, response, OK);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                sendResult(result, error, FAIL);
+                FlyLog.i("<MyVolley>postString->onErrorResponse:tag=" + tag);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return Params;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
+        stringRequest.setTag(url);
+        mRequestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void upImageView(Context context, String url, ImageView iv) {
+        upImageView(context, url, iv, R.drawable.image);
+    }
+
+    @Override
+    public void upImageView(Context context, String url, ImageView iv, int LoadResId) {
+//        FlyLog.i("<MyVolley>upImageView->url=" + url + ",iv=" + iv.getId());
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, LoadResId, LoadResId);
+        mImageLoader.get(url, listener);
+    }
+
+    @Override
+    public void execute(Builder builder) {
+    }
+
+    //*ListView RecyclearView调用部分
+    @Override
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag) {
+        upListView(url, adapter, jsonKey, false, tag);
+    }
+
+    @Override
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, HttpResult result) {
+        upListView(url, adapter, jsonKey, false, tag, result);
+    }
+
+    @Override
+    public void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag) {
+        upListView(url, adapter, jsonKey, isAdd, tag, null);
+    }
+
+    @Override
+    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag, final HttpResult result) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                sendResult(result, jsonObject.toString(), OK);
+                notifyData(isAdd, adapter, jsonObject, jsonKey);
+                FlyLog.i("<MyVolley>upListView->onResponse:tag=" + tag);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                //尝试读取先前保存在硬盘中的数据
+                sendResult(result, volleyError, FAIL);
+                FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
+        jsonObjectRequest.setTag(tag);
+        mRequestQueue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void upRecyclerViewData(String url, List list, HttpAdapter adapter, Object tag) {
+        upRecyclerViewData(url, list, adapter, tag, null);
+    }
+
+    @Override
+    public void upRecyclerViewData(final String url, final List list, final HttpAdapter adapter, Object tag, final HttpResult result) {
+        FlyLog.i("<MyVolley>upRecyclerViewData->response:url=" + url);
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                FlyLog.i("<MyVolley>upRecyclerViewData->onResponse:response=" + response);
+                sendResult(result, response, OK);
+                try {
+                    list.clear();
+                    list.addAll(JsonUtils.json2List(new JSONArray(response)));
+                    FlyLog.i("<MyVolley>upRecyclerViewData->onResponse:list=" + list.toString());
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                sendResult(result, error, FAIL);
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
+        stringRequest.setTag(url);
+        mRequestQueue.add(stringRequest);
+    }
+
+    /**
+     * 从磁盘缓存读取数据(数据必须为JSONArray)并转换成list
+     * @param url
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> readListFromCache(String url) {
+        String data = readDiskCache(url);
+        if (data != null) {
+            try {
+                return JsonUtils.json2List(new JSONArray(data));
+            } catch (JSONException e) {
+            }
+        }
+        return null;
+    }
+
+    public void cancelAll(Object tag) {
+        FlyLog.i("<MyVolley>cancelAll:tag=" + tag);
+        set_upListView.remove(tag);
+        mRequestQueue.cancelAll(tag);
+    }
+
+    public void sendResult(HttpResult result, Object object, int type) {
+        if (result != null) {
+            switch (type) {
+                case OK:
+                    result.succeed(object);
+                    break;
+                case FAIL:
+                    result.failed(object);
+                    break;
+            }
+        }
+    }
+
+    private void notifyData(boolean isAdd, HttpAdapter adapter, JSONObject jsonObject, String jsonKey) {
+        if (!isAdd) {
+            adapter.getList().clear();
+        }
+        adapter.getList().addAll(JsonUtils.json2List(jsonObject, jsonKey));
+        adapter.notifyDataSetChanged();
+    }
+
+    private static class MyVolleyHolder {
+        public static final MyVolley sInstance = new MyVolley();
     }
 
     public static void upImageView(String url, NetworkImageView iv, int res1, int res2) {
@@ -116,203 +297,6 @@ public class MyVolley implements IHttp {
             }
         }
         return data;
-    }
-
-    @Override
-    public void upImageView(Context context, String url, ImageView iv) {
-        upImageView(context, url, iv, R.drawable.image);
-    }
-
-    @Override
-    public void upImageView(Context context, String url, ImageView iv, int LoadResId) {
-        FlyLog.i("<MyVolley>upImageView->url=" + url + ",iv=" + iv.getId());
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, LoadResId, LoadResId);
-        mImageLoader.get(url, listener);
-    }
-
-    @Override
-    public void getString(final String url, final Object tag, final HttpResult result) {
-        set_upListView.add(tag);
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                FlyLog.i("<MyVolley>getString:response=" + response);
-                sendResult(result, response, OK);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String data = readDiskCache(url);
-                if (data != null) {
-                    sendResult(result, data, DISK);
-                    FlyLog.i("<MyVolley>getString->readDiskCache data=" + data);
-                } else {
-                    sendResult(result, error, FAIL);
-                    FlyLog.i("<MyVolley>getString->onErrorResponse:tag=" + tag);
-                }
-            }
-        });
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
-        stringRequest.setTag(url);
-        mRequestQueue.add(stringRequest);
-    }
-
-    @Override
-    public void postString(final String url, final Map<String, String> Params, final Object tag, final HttpResult result) {
-        set_upListView.add(tag);
-        FlyLog.i("<MyVolley>postString->response:url=" + url + ",Params=" + Params.toString());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                sendResult(result, response, OK);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String data = readDiskCache(url);
-                if (data != null) {
-                    sendResult(result, data, DISK);
-                    FlyLog.i("<MyVolley>postString->readDiskCache data=" + data);
-                } else {
-                    sendResult(result, error, FAIL);
-                    FlyLog.i("<MyVolley>postString->onErrorResponse:tag=" + tag);
-                }
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                return Params;
-            }
-        };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
-        stringRequest.setTag(url);
-        mRequestQueue.add(stringRequest);
-    }
-
-    @Override
-    public void execute(Builder builder) {
-    }
-
-    //*ListView RecyclearView调用部分
-    @Override
-    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final Object tag) {
-        upListView(url, adapter, jsonKey, false, tag);
-    }
-
-    @Override
-    public void upListView(String url, HttpAdapter adapter, String jsonKey, Object tag, HttpResult result) {
-        upListView(url, adapter, jsonKey, false, tag, result);
-    }
-
-    @Override
-    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag) {
-        upListView(url, adapter, jsonKey, isAdd, tag, null);
-    }
-
-    @Override
-    public void upListView(final String url, final HttpAdapter adapter, final String jsonKey, final boolean isAdd, final Object tag, final HttpResult result) {
-        //判断任务是否已取消
-        set_upListView.add(tag);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                sendResult(result, jsonObject.toString(), OK);
-                notifyData(isAdd, adapter, jsonObject, jsonKey);
-                FlyLog.i("<MyVolley>upListView->onResponse:tag=" + tag);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                //尝试读取先前保存在硬盘中的数据
-                String data = readDiskCache(url);
-                if (data != null) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(data);
-                        notifyData(isAdd, adapter, jsonObject, jsonKey);
-                        sendResult(result, data, DISK);
-                        FlyLog.i("<MyVolley>upListView->readDiskCache data=" + data);
-                    } catch (JSONException e) {
-                        sendResult(result, volleyError, FAIL);
-                    }
-                } else {
-                    sendResult(result, volleyError, FAIL);
-                    FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
-                }
-            }
-        });
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
-        jsonObjectRequest.setTag(tag);
-        mRequestQueue.add(jsonObjectRequest);
-    }
-
-    @Override
-    public void upMultiRLData(final String url, final List list, final HttpAdapter adapter, final Object tag) {
-        set_upListView.add(tag);
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                FlyLog.i("<MyVolley>upMultiRLData->onResponse:response=" + response);
-                try {
-                    list.clear();
-                    list.addAll(JsonUtils.json2List(new JSONArray(response)));
-                    FlyLog.i("<MyVolley>upMultiRLData->onResponse:list=" + list.toString());
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                String data = readDiskCache(url);
-                if (data != null) {
-                    try {
-                        list.clear();
-                        list.addAll(JsonUtils.json2List(new JSONArray(data)));
-                        adapter.notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
-        stringRequest.setTag(url);
-        mRequestQueue.add(stringRequest);
-    }
-
-    public void cancelAll(Object tag) {
-        FlyLog.i("<MyVolley>cancelAll:tag=" + tag);
-        set_upListView.remove(tag);
-        mRequestQueue.cancelAll(tag);
-    }
-
-    public void sendResult(HttpResult result, Object object, int type) {
-        if (result != null) {
-            switch (type) {
-                case OK:
-                    result.succeed(object);
-                    break;
-                case DISK:
-                    result.readDiskCache(object);
-                    break;
-                case FAIL:
-                    result.faild(object);
-                    break;
-            }
-        }
-    }
-
-    private void notifyData(boolean isAdd, HttpAdapter adapter, JSONObject jsonObject, String jsonKey) {
-        if (!isAdd) {
-            adapter.getList().clear();
-        }
-        adapter.getList().addAll(JsonUtils.json2List(jsonObject, jsonKey));
-        adapter.notifyDataSetChanged();
-    }
-
-    private static class MyVolleyHolder {
-        public static final MyVolley sInstance = new MyVolley();
     }
 
 }

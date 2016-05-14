@@ -1,6 +1,7 @@
 package com.flyzebra.xinyi;
 
 import com.baidu.frontia.FrontiaApplication;
+import com.flyzebra.xinyi.model.http.MyOkHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 
 /**
@@ -16,6 +17,7 @@ public class MyApp extends FrontiaApplication {
 //        UILImageUtils.initImageLoader(getApplicationContext());
         //初始化Volley
         MyVolley.Init(getApplicationContext());
+        MyOkHttp.Init(getApplicationContext());
     }
 }
 

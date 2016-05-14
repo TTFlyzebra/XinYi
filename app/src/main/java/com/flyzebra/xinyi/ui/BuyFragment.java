@@ -87,12 +87,7 @@ public class BuyFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void faild(Object object) {
-                        listView.onRefreshComplete();
-                    }
-
-                    @Override
-                    public void readDiskCache(Object data) {
+                    public void failed(Object object) {
                         listView.onRefreshComplete();
                     }
                 });

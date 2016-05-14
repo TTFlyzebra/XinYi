@@ -12,13 +12,14 @@ public class FlyLog {
             "<ChildViewPager>",
             "<ChildGridView>",
             "<DrawerLayoutUtils>",
-            "<PoiFragment>",
+            "<ProductFragment>",
             "<HomeFragment>",
             "<RefreshRecyclerView>",
             "<MainActivity>",
-//            "<MyVolley>",
+            "<MyVolley>",
             "<StarLevel>",
-            "<Play3DImages>"
+            "<Play3DImages>",
+//            "<WelcomeActivity>"
     };
     public static void i(String logString) {
         for (int i = 0; i < filter.length; i++) {

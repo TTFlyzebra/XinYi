@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="最新的"
+        android:singleLine="true"
         android:textColor="@color/day_text" />
 
 </LinearLayout>

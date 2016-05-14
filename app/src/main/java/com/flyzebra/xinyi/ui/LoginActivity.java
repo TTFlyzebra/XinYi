@@ -98,13 +98,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         }
         @Override
-        public void readDiskCache(Object data) {
-            FlyLog.i("<LoginActivity>loginUser->readDiskCache:data-->" + data.toString());
-            waitPlg.dismiss();
-        }
-        @Override
-        public void faild(Object object) {
-            FlyLog.i("<LoginActivity>loginUser->faild:object-->" + object.toString());
+        public void failed(Object object) {
+            FlyLog.i("<LoginActivity>loginUser->failed:object-->" + object.toString());
             waitPlg.dismiss();
         }
     };

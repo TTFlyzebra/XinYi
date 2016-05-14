@@ -28,7 +28,17 @@ public interface IHttp {
 
     void upListView(String url, HttpAdapter adapter, String jsonKey, boolean isAdd, Object tag, HttpResult result);
 
-    void upMultiRLData(String url,List list,HttpAdapter adapter,Object tag);
+    void upRecyclerViewData(String url, List list, HttpAdapter adapter, Object tag);
+
+    void upRecyclerViewData(String url, List list, HttpAdapter adapter, Object tag, HttpResult result);
+
+    /**
+     * NOTE:磁盘缓存的内容必须为JSONArray
+     * 功能：从磁盘读取缓存数据并转换成list
+     * @param url
+     * @return
+     */
+    List<Map<String,Object>> readListFromCache(String url);
 
     void execute(Builder builder);
 
@@ -36,8 +46,7 @@ public interface IHttp {
 
     interface HttpResult {
         void succeed(Object object);
-        void readDiskCache(Object data);
-        void faild(Object object);
+        void failed(Object object);
     }
 
     interface Method {

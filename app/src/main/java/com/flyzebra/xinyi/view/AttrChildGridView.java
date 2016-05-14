@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
+import com.flyzebra.xinyi.ui.IAdapter;
 
 import java.util.List;
 import java.util.Map;
@@ -34,19 +35,19 @@ public class AttrChildGridView extends ChildGridView {
     protected void bindView(View root, Map map) {
         super.bindView(root, map);
         LinearLayout ll = (LinearLayout) root.findViewById(R.id.p_item_01_ll_01);
-        map.put("addattr", ll);
+        map.put("addview", ll);
     }
 
     @Override
     protected void SetItemViewData(Map<String, View> itemView, Map<String, Object> data) {
         super.SetItemViewData(itemView, data);
-        LinearLayout ll = (LinearLayout) itemView.get("addattr");
-        List<Map<String, Object>> attr = (List) data.get("attr");
+        LinearLayout ll = (LinearLayout) itemView.get("addview");
         ll.removeAllViews();
-        for (int i = 0; i < attr.size(); i++) {
-            String name = (String) attr.get(i).get("name");
-            String color = (String) attr.get(i).get("color");
-
+        List<Map<String, Object>> pattr = (List) data.get(IAdapter.PR1_PATTR);
+        if (pattr==null) return;
+        for (int i = 0; i < pattr.size(); i++) {
+            String name = (String) pattr.get(i).get(IAdapter.PR1_PATTR_NAME);
+            String color = (String) pattr.get(i).get(IAdapter.PR1_PATTR_COLOR);
             TextView tv = new TextView(context);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             lp.gravity = Gravity.CENTER;

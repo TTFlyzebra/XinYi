@@ -469,18 +469,9 @@ public class RefreshRecyclerView extends ViewGroup {
             last = mGLayout.findLastVisibleItemPosition();
             firstView = mGLayout.findViewByPosition(0);
             lastView = mGLayout.findViewByPosition(mLayout.getItemCount() - 1);
-            if (first == 0 && !isGetChildMargin.get()) {
-                View secondView = mGLayout.findViewByPosition(1);
-                if (secondView != null && firstView != null) {
-                    int firstBootm = firstView.getBottom();
-                    int secondTop = secondView.getTop();
-                    childMargin = (secondTop - firstBootm) / 2;
-                    isGetChildMargin.set(true);
-                }
-            }
-            if (first == 0 && firstView.getTop() == childMargin) {
+            if (first == 0 && firstView.getTop() == ((MarginLayoutParams) firstView.getLayoutParams()).topMargin) {
                 RLIST = LIST.TOP;
-            } else if ((last == mLayout.getItemCount() - 1) && (lastView.getBottom() == getHeight() - childMargin)) {
+            } else if ((last == mLayout.getItemCount() - 1) && (lastView.getBottom() == getHeight() - ((MarginLayoutParams) lastView.getLayoutParams()).bottomMargin)) {
                 RLIST = LIST.BOTTOM;
             } else if (last > mLayout.getItemCount() - 2) {
                 if (RLIST != LIST.LAST) {

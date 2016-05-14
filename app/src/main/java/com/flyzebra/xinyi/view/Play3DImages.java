@@ -21,8 +21,12 @@ import android.view.animation.Transformation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.FlyLog;
+
+import java.util.List;
+import java.util.Map;
 
 import butterknife.OnClick;
 
@@ -195,6 +199,14 @@ public class Play3DImages extends FrameLayout {
         return this;
     }
 
+    public Play3DImages setImageUrlList(List<Map<String, Object>> list) {
+        this.urlArray = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            this.urlArray[i] = Constant.URL + list.get(i).get("imageurl");
+        }
+        return this;
+    }
+
     /**
      * 设置图片间的间隔
      *
@@ -230,6 +242,7 @@ public class Play3DImages extends FrameLayout {
     }
 
     private void initImageViews() {
+        this.removeAllViews();
         imageView = new ImageView[urlArray.length];
         for (int i = 0; i < urlArray.length; i++) {
             ImageView iv = new ImageView(context);

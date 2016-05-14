@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.ui.IHomeAdapter;
+import com.flyzebra.xinyi.ui.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class ChildGridView extends LinearLayout {
     private List<Map<String, Object>> list;
 
     private int column = 2;
-    private int childMargin = 3;
+    private int childMargin = 4;
     private int TitleHeight = 48;
     private float textSize = 18;
     private int textColor = 0xff000000;
@@ -47,9 +47,9 @@ public class ChildGridView extends LinearLayout {
      */
     private int layoutResID = R.layout.child_gridview_item;
     private int[] textViewID = {R.id.child_gridview_item_tv01};
-    private String[] textViewKey = {IHomeAdapter.SHOP_NAME};
+    private String[] textViewKey = {IAdapter.SHOP_NAME};
     private int[] imageViewID = {R.id.child_gridview_item_iv01};
-    private String[] imageViewKEY = {IHomeAdapter.SHOP_IMGURL};
+    private String[] imageViewKEY = {IAdapter.SHOP_IMGURL};
 
     public ChildGridView(Context context) {
         this(context, null);
@@ -108,7 +108,7 @@ public class ChildGridView extends LinearLayout {
         LinearLayout.LayoutParams lpI = new LinearLayout.LayoutParams(0, dip2px(TitleHeight), 0.1f);
         lpI.gravity = Gravity.CENTER;
         titleImageView.setLayoutParams(lpI);
-        int padding = dip2px(5);
+        int padding = dip2px(6);
         titleImageView.setPadding(padding, padding, padding, padding);
         titleImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         titleImageView.setImageResource(ResID);

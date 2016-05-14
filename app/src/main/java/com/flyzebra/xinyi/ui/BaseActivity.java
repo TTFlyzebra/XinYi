@@ -3,6 +3,7 @@ package com.flyzebra.xinyi.ui;
 import android.support.v7.app.AppCompatActivity;
 
 import com.flyzebra.xinyi.model.http.IHttp;
+import com.flyzebra.xinyi.model.http.MyOkHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 
 /**
@@ -10,7 +11,7 @@ import com.flyzebra.xinyi.model.http.MyVolley;
  */
 public abstract class BaseActivity extends AppCompatActivity{
     protected String HTTPTAG = "Activity"+Math.random();
-    protected IHttp iHttp = MyVolley.getInstance();
+    protected IHttp iHttp = MyOkHttp.getInstance();
 
     @Override
     protected void onStop() {
