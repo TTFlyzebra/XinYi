@@ -36,8 +36,6 @@ public class RefreshRecyclerView extends ViewGroup {
     private LayoutManager mLayout;
     private View topView;
     private View botView;
-    private int childMargin = 0;
-    private AtomicBoolean isGetChildMargin = new AtomicBoolean(false);
 
     private int RLIST = LIST.SCROLL;
     private int SHOW = PULL.NORMAL;
@@ -112,11 +110,11 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     private View createPullTextView(Context context) {
-        TextView topView = new TextView(context);
-        topView.setTextSize(20);
-        topView.setGravity(Gravity.CENTER);
-        topView.setTextColor(0xFF000000);
-        return topView;
+        TextView textView = new TextView(context);
+        textView.setTextSize(18);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(0xFF000000);
+        return textView;
     }
 
     public void setLayoutManager(LayoutManager layout) {
@@ -300,7 +298,9 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     private void perfromRefreshTop() {
-        ((TextView) topView).setText("正在刷新...");
+        if (getScrollY() < (-pull_Height)) {
+            ((TextView) topView).setText("正在刷新...");
+        }
         //执行刷新任务
         if (listenerTopRefresh != null && isNeedRefresh.get()) {
             listenerTopRefresh.onRefrsh(topView);
@@ -310,7 +310,9 @@ public class RefreshRecyclerView extends ViewGroup {
     }
 
     private void perfromRefreshBottom() {
-        ((TextView) botView).setText("正在加载...");
+        if (getScrollY() > (pull_Height)) {
+            ((TextView) botView).setText("正在加载...");
+        }
         //执行刷新任务
         if (listenerBottomRefresh != null && isNeedRefresh.get()) {
             listenerBottomRefresh.onRefrsh(topView);
@@ -364,29 +366,30 @@ public class RefreshRecyclerView extends ViewGroup {
 
     public void refreshSuccess() {
         if (SHOW == PULL.TOP) {
-            ((TextView) topView).setText("更新数据成功...");
+            ((TextView) topView).setText("√.更新数据成功.");
         } else if (SHOW == PULL.BOTTOM) {
-            ((TextView) botView).setText("更新数据成功...");
+            ((TextView) botView).setText("√.更新数据成功...");
         }
-        isNeedRefresh.set(false);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isNeedRefresh.set(false);
+            }
+        },animScoller_time);
     }
 
     public void refreshFailed() {
         if (SHOW == PULL.TOP) {
-            ((TextView) topView).setText("网络连接失败...");
+            ((TextView) topView).setText("网络连接失败.");
         } else if (SHOW == PULL.BOTTOM) {
-            ((TextView) botView).setText("网络连接失败...");
+            ((TextView) botView).setText("网络连接失败.");
         }
-        isNeedRefresh.set(false);
-    }
-
-    public void refreshDisk() {
-        if (SHOW == PULL.TOP) {
-            ((TextView) topView).setText("网络连接失败，读取缓存数据...");
-        } else if (SHOW == PULL.BOTTOM) {
-            ((TextView) botView).setText("网络连接失败，读取缓存数据...");
-        }
-        isNeedRefresh.set(false);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isNeedRefresh.set(false);
+            }
+        }, animScoller_time);
     }
 
     public void setListenerLastItem(ListenerLastItem listenerLastItem) {

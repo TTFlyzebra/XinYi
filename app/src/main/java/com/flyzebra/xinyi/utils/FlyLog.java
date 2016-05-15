@@ -16,10 +16,11 @@ public class FlyLog {
             "<HomeFragment>",
             "<RefreshRecyclerView>",
             "<MainActivity>",
-            "<MyVolley>",
+//            "<MyVolley>",
+//            "<MyOkHttp>",
             "<StarLevel>",
             "<Play3DImages>",
-//            "<WelcomeActivity>"
+            "<WelcomeActivity>"
     };
     public static void i(String logString) {
         for (int i = 0; i < filter.length; i++) {

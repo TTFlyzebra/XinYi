@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * Created by FlyZebra on 2016/3/26.
  */
 public class ProductFragment extends BaseFragment {
@@ -83,8 +84,12 @@ public class ProductFragment extends BaseFragment {
                 if (tempList != null) {
                     list.clear();
                     list.addAll(tempList);
-                    mPagerAdapter.notifyDataSetChanged();
-                    activity.toolBar_stl.setViewPager(viewPager);
+                    if(getActivity()!=null){
+                        mPagerAdapter.notifyDataSetChanged();
+                    }
+                    if (getActivity()!=null){
+                        activity.toolBar_stl.setViewPager(viewPager);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -199,10 +199,10 @@ public class Play3DImages extends FrameLayout {
         return this;
     }
 
-    public Play3DImages setImageUrlList(List<Map<String, Object>> list) {
+    public Play3DImages setImageUrlList(List<Map<String, Object>> list,String key) {
         this.urlArray = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            this.urlArray[i] = Constant.URL + list.get(i).get("imageurl");
+            this.urlArray[i] = Constant.URL + list.get(i).get(key);
         }
         return this;
     }

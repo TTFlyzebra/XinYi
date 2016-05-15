@@ -186,7 +186,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void loginLocal() {
         Map<String, String> params = getSendParames();
         if (params != null) {
-            waitPlg.setMessage("正请验证登陆信息.....");
+            waitPlg.setMessage("正在验证登陆信息.....");
             waitPlg.setCancelable(false);
             waitPlg.show();
             iHttp.postString(Constant.URL + "/API/User/login", params, HTTPTAG, loginUser);

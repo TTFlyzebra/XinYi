@@ -88,7 +88,7 @@ public class WelcomeActivity extends BaseActivity {
 
     public void setWelPlay3d(List<Map<String, Object>> imgList) {
         //旋转动画初始化
-        welPlay3d.setImageUrlList(imgList).Init();
+        welPlay3d.setImageUrlList(imgList,"imageurl").Init();
         waitPlg.dismiss();
         welPlay3d.setOnItemClick(new Play3DImages.OnItemClick(){
             @Override
