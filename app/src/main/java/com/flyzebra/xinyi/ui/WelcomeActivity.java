@@ -47,7 +47,7 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcom_activity);
+        setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
 
         waitPlg = new ProgressDialog(this);

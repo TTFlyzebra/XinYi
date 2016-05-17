@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
@@ -16,19 +18,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * 主页
  * Created by FlyZebra on 2016/2/29.
  */
 public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
+    @Bind(R.id.home_rv_01)
+    RefreshRecyclerView homeRv01;
+    @Bind(R.id.newwork_error)
+    LinearLayout newworkError;
     private List RLList;
     private List homeShopsList;//ViewPager商店展示
     private List homeHotsList;//首页热销产品推荐
     private List homeNewsList;//新品上架
     private List homeTimeShopList;//限时抢购
     private MainActivity activity;
-    private View view;
-    private RefreshRecyclerView recyclerView;
+    private View rootView;
     private HomeRLAdapter mAdapter;
 
     private int httpNum = 0;
@@ -41,17 +49,17 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.home_fragment, container, false);
-        recyclerView = (RefreshRecyclerView) view.findViewById(R.id.home_lv_01);
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this, rootView);
+        homeRv01.setLayoutManager(new LinearLayoutManager(activity));
         if (RLList == null) {
             RLList = new ArrayList<Map<String, Object>>();
         }
         mAdapter = new HomeRLAdapter(activity, RLList);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setHasFixedSize(true);
+        homeRv01.setAdapter(mAdapter);
+        homeRv01.setHasFixedSize(true);
         //下拉刷新
-        recyclerView.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
+        homeRv01.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
                 httpNum = 4;
@@ -62,7 +70,7 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
             }
         });
 
-        recyclerView.setListenerLastItem(new RefreshRecyclerView.ListenerLastItem() {
+        homeRv01.setListenerLastItem(new RefreshRecyclerView.ListenerLastItem() {
             @Override
             public void onLastItem() {
 //                iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", true, HTTPTAG);
@@ -121,7 +129,18 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
 //                return ((String) map1.get(IAdapter.TYPE)).compareToIgnoreCase((String) map2.get(IAdapter.TYPE));
 //            }
 //        });
-        return view;
+        //网络连接失败的重试按钮
+        newworkError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iHttp.upRecyclerViewData(Constant.URL_HHS, homeShopsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(Constant.URL_HPR, homeHotsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(Constant.URL_HPR, homeNewsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(Constant.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG, HomeFragment.this);
+            }
+        });
+
+        return rootView;
     }
 
     @Override
@@ -134,15 +153,25 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
     public void succeed(Object object) {
         httpNum--;
         if (httpNum <= 0) {
-            recyclerView.refreshSuccess();
+            homeRv01.refreshSuccess();
         }
+        homeRv01.setVisibility(View.VISIBLE);
+        newworkError.setVisibility(View.GONE);
     }
 
     @Override
     public void failed(Object object) {
         httpNum--;
         if (httpNum <= 0) {
-            recyclerView.refreshFailed();
+            homeRv01.refreshFailed();
         }
+        newworkError.setVisibility(View.VISIBLE);
+        homeRv01.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

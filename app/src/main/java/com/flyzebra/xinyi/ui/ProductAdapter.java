@@ -1,7 +1,12 @@
 package com.flyzebra.xinyi.ui;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.Gravity;
@@ -18,6 +23,7 @@ import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.DisplayUtils;
 import com.flyzebra.xinyi.utils.ResUtils;
+import com.flyzebra.xinyi.utils.SerializableMap;
 
 import java.util.List;
 import java.util.Map;
@@ -43,7 +49,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewHolder> implements 
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();
-//                        list.remove(position);
+                Intent intent = new Intent(context, ProductInfoActivity.class);
+                SerializableMap serializableMap = new SerializableMap();
+                serializableMap.setMap(list.get(position));
+                intent.putExtra(ProductInfoActivity.PRODUCT, serializableMap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, v, "IMAGE01").toBundle());
+                } else {
+                    context.startActivity(intent);
+                }
             }
         });
         return hodler;
@@ -64,7 +78,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewHolder> implements 
                 TextView tv = new TextView(context);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 lp.gravity = Gravity.CENTER;
-                lp.setMargins(DisplayUtils.dip2px(context,1), 0, DisplayUtils.dip2px(context, 1), 0);
+                lp.setMargins(DisplayUtils.dip2px(context, 1), 0, DisplayUtils.dip2px(context, 1), 0);
                 tv.setPadding(DisplayUtils.dip2px(context, 5), 0, DisplayUtils.dip2px(context, 5), 0);
                 tv.setLayoutParams(lp);
                 tv.setText(name);

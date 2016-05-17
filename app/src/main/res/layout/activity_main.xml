@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/main_toolbar" />
+        <include layout="@layout/toolbar_main" />
 
         <FrameLayout
             android:id="@+id/main_fl_01"

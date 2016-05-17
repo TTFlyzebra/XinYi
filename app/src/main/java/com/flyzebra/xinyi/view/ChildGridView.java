@@ -240,7 +240,7 @@ public class ChildGridView extends LinearLayout {
             public void onClick(View v) {
                 if (mOnItemClick != null) {
                     //为了图元共亨动画，传入VIEW
-                    mOnItemClick.OnItemClidk(list.get(num), v);
+                    mOnItemClick.onItemClidk(list.get(num), v);
                 }
             }
         });
@@ -366,7 +366,7 @@ public class ChildGridView extends LinearLayout {
     }
 
     public interface OnItemClick {
-        void OnItemClidk(Map<String, Object> data, View v);
+        void onItemClidk(Map<String, Object> data, View v);
     }
 
     public interface ShowImageSrc {

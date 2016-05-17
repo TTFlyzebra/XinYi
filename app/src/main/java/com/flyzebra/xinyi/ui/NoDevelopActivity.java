@@ -14,6 +14,6 @@ public class NoDevelopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setEnterTransition(new Slide());
-        setContentView(R.layout.nofinish);
+        setContentView(R.layout.activity_nofinish);
     }
 }

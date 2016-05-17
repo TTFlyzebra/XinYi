@@ -8,12 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,8 +19,6 @@ import android.widget.TextView;
 import com.flyzebra.googleui.SlidingTabLayout;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
-import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResUtils;
@@ -63,7 +57,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.activity_main);
         textColer_Off = ResUtils.getColorStateList(this, R.color.home_select);
         textColor_On = ResUtils.getColor(this, R.color.menu_select_on);
 

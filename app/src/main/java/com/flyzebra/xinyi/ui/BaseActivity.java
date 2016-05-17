@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyOkHttp;
+import com.flyzebra.xinyi.model.http.MyVolley;
 
 /**
  *

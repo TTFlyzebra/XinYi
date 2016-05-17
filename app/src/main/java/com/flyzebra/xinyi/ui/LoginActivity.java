@@ -1,9 +1,9 @@
 package com.flyzebra.xinyi.ui;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +44,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
         lg_ed_ps = (EditText) findViewById(R.id.lg_ed_ps);
         lg_ed_us = (EditText) findViewById(R.id.lg_ed_us);
         lg_bt_lg = (Button) findViewById(R.id.lg_bt_lg);

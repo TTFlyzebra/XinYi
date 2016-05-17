@@ -54,7 +54,7 @@ public class ProductFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FlyLog.i("<ProductFragment>onCreateView");
-        View view = View.inflate(activity, R.layout.product_fragment, null);
+        View view = View.inflate(activity, R.layout.fragment_product, null);
         viewPager = (ViewPager) view.findViewById(R.id.poi_vp_01);
         mPagerAdapter = new MyFragmentPagerAdapter(activity.getSupportFragmentManager());
         list = iHttp.readListFromCache(Constant.URL_PTYPE);

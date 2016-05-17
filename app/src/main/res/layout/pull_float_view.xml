@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#f96f2a"
+        android:orientation="horizontal"
+        android:divider="@drawable/ic_img_line_v"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/prod_tv01"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="价格"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/prod_tv02"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="购物车"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/prod_tv03"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="立即购买"
+            android:textSize="20sp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -5,6 +5,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.flyzebra.xinyi.data.Constant;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.MyVolley;
 import com.flyzebra.xinyi.utils.FlyLog;
+import com.flyzebra.xinyi.utils.SerializableMap;
 import com.flyzebra.xinyi.view.AttrChildGridView;
 import com.flyzebra.xinyi.view.ChildGridView;
 import com.flyzebra.xinyi.view.ChildViewPager;
@@ -37,19 +39,17 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
         this.list = list;
         this.context = context;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder hodler = null;
         switch (viewType) {
             case H_VIEWPAGER_SHOP:
-                ChildViewPager childViewPager = new ChildViewPager(context);
+                final ChildViewPager childViewPager = new ChildViewPager(context);
                 childViewPager.setOnItemkClick(new ChildViewPager.OnItemClick() {
                     @Override
-                    public void onTimeClick(Map data, View v) {
-                        Intent intent = new Intent(context, ShopInfoActivity.class);
-                        intent.putExtra(ShopInfoActivity.IMG_URL, (String) data.get(SHOP_IMGURL));
-                        intent.putExtra(ShopInfoActivity.TEXT, (String) data.get(SHOP_NAME));
-                        context.startActivity(intent);
+                    public void onItemClick(Map<String, Object> data, View v) {
+                        startIntent(context, ShopInfoActivity.class, data, ShopInfoActivity.SHOP, childViewPager);
                     }
                 });
                 hodler = new ViewPageHolder(childViewPager);
@@ -61,23 +61,17 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
                                 new String[]{IAdapter.PR1_NAME},
                                 new int[]{R.id.p_item_02_iv_01},
                                 new String[]{IAdapter.PR1_IMGURL})
-                        .setColumn(3)
+                        .setColumn(2)
                         .setTitle("热销产品")
-                        .setTitleImage(R.drawable.ic_hot)
-                        .setOnItemClick(new ChildGridView.OnItemClick() {
-                            @Override
-                            public void OnItemClidk(Map<String, Object> data, View v) {
+                        .setTitleImage(R.drawable.ic_hot);
+
+                hotsGridView.setOnItemClick(new ChildGridView.OnItemClick() {
+                    @Override
+                    public void onItemClidk(Map<String, Object> data, View v) {
 //                                FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
-                                Intent intent = new Intent(context, ProductInfoActivity.class);
-                                intent.putExtra(ProductInfoActivity.IMG_URL, (String) data.get(PR1_IMGURL));
-                                intent.putExtra(ProductInfoActivity.TEXT, (String) data.get(PR1_NAME));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, v, "IMAGE01").toBundle());
-                                } else {
-                                    context.startActivity(intent);
-                                }
-                            }
-                        });
+                        startIntent(context, ProductInfoActivity.class, data, ProductInfoActivity.PRODUCT, v);
+                    }
+                });
                 hodler = new GridViewHolder(hotsGridView);
                 break;
             case H_GRIDVIEW_NEWS:
@@ -88,21 +82,14 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
                         new int[]{R.id.p_item_01_iv_01},
                         new String[]{IAdapter.PR1_IMGURL})
                         .setColumn(1)
-                        .setTitle("新品上市")
-                        .setOnItemClick(new ChildGridView.OnItemClick() {
-                            @Override
-                            public void OnItemClidk(Map<String, Object> data, View v) {
+                        .setTitle("新品上市");
+                attrChildGridView.setOnItemClick(new ChildGridView.OnItemClick() {
+                    @Override
+                    public void onItemClidk(Map<String, Object> data, View v) {
 //                                FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
-                                Intent intent = new Intent(context, ProductInfoActivity.class);
-                                intent.putExtra(ProductInfoActivity.IMG_URL, (String) data.get(PR1_IMGURL));
-                                intent.putExtra(ProductInfoActivity.TEXT, (String) data.get(PR1_NAME));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, v, "IMAGE01").toBundle());
-                                } else {
-                                    context.startActivity(intent);
-                                }
-                            }
-                        });
+                        startIntent(context, ProductInfoActivity.class, data, ProductInfoActivity.PRODUCT, v);
+                    }
+                });
                 hodler = new GridViewHolder(attrChildGridView);
                 break;
             case H_GRIDVIEW_TIMESHOP:
@@ -114,31 +101,15 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
                                 new String[]{IAdapter.PR1_IMGURL})
                         .setColumn(1)
                         .setTitle("限时抢购")
-                        .setTitleImage(R.drawable.ic_hot)
-                        .setOnItemClick(new ChildGridView.OnItemClick() {
-                            @Override
-                            public void OnItemClidk(Map<String, Object> data, View v) {
-//                                FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
-                                Intent intent = new Intent(context, ProductInfoActivity.class);
-                                intent.putExtra(ProductInfoActivity.IMG_URL, (String) data.get(PR1_IMGURL));
-                                intent.putExtra(ProductInfoActivity.TEXT, (String) data.get(PR1_NAME));
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, v, "IMAGE01").toBundle());
-                                } else {
-                                    context.startActivity(intent);
-                                }
-                            }
-                        });
-                hodler = new GridViewHolder(timeShopGridView);
-                break;
-            case H_RCLIST:
-                View view = LayoutInflater.from(context).inflate(R.layout.product_item_01, parent, false);
-                view.setOnClickListener(new View.OnClickListener() {
+                        .setTitleImage(R.drawable.ic_hot);
+                timeShopGridView.setOnItemClick(new ChildGridView.OnItemClick() {
                     @Override
-                    public void onClick(View v) {
+                    public void onItemClidk(Map<String, Object> data, View v) {
+//                                FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
+                        startIntent(context, ProductInfoActivity.class, data, ProductInfoActivity.PRODUCT, v);
                     }
                 });
-                hodler = new Product01(view);
+                hodler = new GridViewHolder(timeShopGridView);
                 break;
         }
         return hodler;
@@ -146,7 +117,7 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-       if (holder instanceof ViewPageHolder) {
+        if (holder instanceof ViewPageHolder) {
             ChildViewPager view = ((ChildViewPager) holder.itemView);
             view.setShowImageSrc(new ChildViewPager.ShowImageSrc() {
                 @Override
@@ -166,11 +137,6 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
                 }
             });
             view.setData((List<Map<String, Object>>) list.get(position).get(DATA));
-        }else if (holder instanceof Product01) {
-            ((Product01) holder).tv01.setText(String.valueOf(list.get(position).get(P1_NAME)));
-            ((Product01) holder).tv02.setText(String.valueOf(list.get(position).get(P1_PRICE)));
-//            iHttp.upImageView(context, "http://192.168.1.88/ordermeal" + list.get(position).get(P1_IMG_URL), ((Product01) holder).iv01);
-            holder.itemView.setTag(position);
         }
     }
 
@@ -181,25 +147,12 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
 
     @Override
     public int getItemViewType(int position) {
-       return (Integer) list.get(position).get(TYPE);
+        return (Integer) list.get(position).get(TYPE);
     }
 
     @Override
     public List getList() {
         return list;
-    }
-
-    public class Product01 extends ViewHolder {
-        TextView tv01;
-        TextView tv02;
-        ImageView iv01;
-
-        public Product01(View itemView) {
-            super(itemView);
-            tv01 = (TextView) itemView.findViewById(R.id.p_item_01_tv_01);
-            tv02 = (TextView) itemView.findViewById(R.id.p_item_01_tv_02);
-            iv01 = (ImageView) itemView.findViewById(R.id.p_item_01_iv_01);
-        }
     }
 
     public class ViewPageHolder extends ViewHolder {
@@ -211,6 +164,21 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
     public class GridViewHolder extends ViewHolder {
         public GridViewHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    private void startIntent(Context context, Class cls, Map map, String key, View view) {
+        FlyLog.i("<HomeRLAdapter>startIntent:map"+map.toString());
+        Intent intent = new Intent(context, cls);
+        SerializableMap serializableMap = new SerializableMap();
+        serializableMap.setMap(map);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(key, serializableMap);
+        intent.putExtras(bundle);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
+            context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, view, "IMAGE01").toBundle());
+        } else {
+            context.startActivity(intent);
         }
     }
 

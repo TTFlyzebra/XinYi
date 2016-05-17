@@ -27,7 +27,7 @@ public class NewsActiviy extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getWindow().setEnterTransition(new Explode());
-        setContentView(R.layout.news_activity);
+        setContentView(R.layout.activity_news);
         childGridView = (ChildGridView) findViewById(R.id.news_cgv_01);
         childGridView.setTitleImage(R.drawable.ic_hot).setTitle("最新消息").setTitleButtonName("查看更多");
         childGridView.init(R.layout.product_item_01,

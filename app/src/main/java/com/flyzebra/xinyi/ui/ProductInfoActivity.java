@@ -2,23 +2,22 @@ package com.flyzebra.xinyi.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.Constant;
-import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.utils.JsonUtils;
+import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResUtils;
-import com.flyzebra.xinyi.view.Play3DImages;
+import com.flyzebra.xinyi.utils.SerializableMap;
+import com.flyzebra.xinyi.view.pullzoom.PullToZoomScrollViewEx;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,57 +26,90 @@ import butterknife.ButterKnife;
  * Created by FlyZebra on 2016/4/8.
  */
 public class ProductInfoActivity extends BaseActivity {
-    public static final String IMG_URL = "BITMAP";
-    public static final String TEXT = "TEXT";
-    @Bind(R.id.pinfo_play3d)
-    Play3DImages pinfoPlay3d;
-    @Bind(R.id.pinfo_iv_01)
-    ImageView pinfoIv01;
-    @Bind(R.id.pinfo_tv_01)
-    TextView pinfoTv01;
-    private String imgUrl;
-    private String text;
+    public static final String PRODUCT = "PRODUCT";
+    @Bind(R.id.scroll_view)
+    PullToZoomScrollViewEx scrollView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    private Map<String,Object> product;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.productinfo_activity);
+        setContentView(R.layout.activity_productinfo);
         ButterKnife.bind(this);
         //初始化轮播
-        pinfoPlay3d.setDuration(1000)
-                .setShowMillis(2000);
-//                .setImagePadding(ResUtils.getMetrices(ProductInfoActivity.this).widthPixels / 10);
-        iHttp.getString(Constant.URL_HPR, HTTPTAG, new IHttp.HttpResult() {
-            @Override
-            public void succeed(Object object) {
-                try {
-                    List<Map<String, Object>> list = JsonUtils.json2List(new JSONArray(object.toString()));
-                    List<String> imgList = new ArrayList<String>();
-                    for (Map<String, Object> map :list) {
-                        imgList.add((String) map.get(IAdapter.PR1_IMGURL));
-                    }
-                    pinfoPlay3d.setImageUrlList(list,IAdapter.PR1_IMGURL).Init();
-                    pinfoPlay3d.setOnItemClick(new Play3DImages.OnItemClick() {
-                        @Override
-                        public void onItemClick(int position) {
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void failed(Object object) {
-            }
-        });
         Intent intent = getIntent();
         if (intent != null) {
-            imgUrl = intent.getStringExtra(IMG_URL);
-            iHttp.upImageView(this, Constant.URL + imgUrl, pinfoIv01);
-            text = intent.getStringExtra(TEXT);
-            pinfoTv01.setText(text);
+            SerializableMap serializableMap = (SerializableMap) intent.getSerializableExtra(PRODUCT);
+            product = serializableMap.getMap();
         }
+        toolbar.setTitle(ResUtils.getString(this, R.string.product_info));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        loadViewForCode();
+
+        scrollView = (PullToZoomScrollViewEx) findViewById(R.id.scroll_view);
+        scrollView.getPullRootView().findViewById(R.id.tv_test1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FlyLog.i("zhuwenwu, onClick -->");
+            }
+        });
+
+        scrollView.getPullRootView().findViewById(R.id.tv_test2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FlyLog.i("zhuwenwu, onClick -->");
+            }
+        });
+
+        scrollView.getPullRootView().findViewById(R.id.tv_test3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FlyLog.i("zhuwenwu, onClick -->");
+            }
+        });
+        DisplayMetrics localDisplayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
+        int mScreenHeight = localDisplayMetrics.heightPixels;
+        int mScreenWidth = localDisplayMetrics.widthPixels;
+        LinearLayout.LayoutParams localObject = new LinearLayout.LayoutParams(mScreenWidth, (int) (mScreenWidth * 0.75f));
+        scrollView.setHeaderLayoutParams(localObject);
+
+    }
+
+    private void loadViewForCode() {
+        PullToZoomScrollViewEx scrollView = (PullToZoomScrollViewEx) findViewById(R.id.scroll_view);
+
+        View headView = LayoutInflater.from(this).inflate(R.layout.pull_head_view, null, false);
+        TextView textView01 = (TextView) headView.findViewById(R.id.pull_head_tv01);
+        textView01.setText((CharSequence) product.get(IAdapter.PR1_NAME));
+
+        View zoomView = LayoutInflater.from(this).inflate(R.layout.pull_zoom_view, null, false);
+        iHttp.upImageView(this, Constant.URL + product.get(IAdapter.PR1_IMGURL), (ImageView) zoomView);
+
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pull_content_view, null, false);
+
+        View floatView = LayoutInflater.from(this).inflate(R.layout.pull_float_view, null, false);
+
+        scrollView.setHeaderView(headView);
+        scrollView.setZoomView(zoomView);
+        scrollView.setFloatView(floatView);
+        scrollView.setScrollContentView(contentView);
+    }
+
+    @Override
+    protected void onDestroy() {
+        ButterKnife.unbind(this);
+        super.onDestroy();
     }
 }

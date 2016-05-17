@@ -1,9 +1,8 @@
 package com.flyzebra.xinyi.utils;
 
 import android.util.Log;
-
-
 /**
+ *
  * Created by FlyZebra on 2016/3/24.
  */
 public class FlyLog {

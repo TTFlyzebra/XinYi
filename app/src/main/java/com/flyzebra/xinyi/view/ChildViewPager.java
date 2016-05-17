@@ -133,7 +133,7 @@ public class ChildViewPager extends BaseChildView {
     }
 
     public interface OnItemClick {
-        void onTimeClick(Map data, View iv);
+        void onItemClick(Map<String, Object> data, View v);
     }
 
     public class PlaysAdapter extends PagerAdapter {
@@ -173,7 +173,7 @@ public class ChildViewPager extends BaseChildView {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClick != null) {
-                        mOnItemClick.onTimeClick(list.get((Integer) v.getTag()), v);
+                        mOnItemClick.onItemClick(list.get((Integer) v.getTag()), v);
                     }
                 }
             });

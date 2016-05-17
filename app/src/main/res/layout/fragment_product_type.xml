@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/home_rl_01"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="@color/back01"
-    android:orientation="vertical">
+    android:background="@color/back01">
 
     <com.flyzebra.xinyi.view.RefreshRecyclerView
-        android:id="@+id/home_lv_01"
+        android:id="@+id/poi_type_rv_01"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
-</LinearLayout>
+
+    <include layout="@layout/network_error" />
+</RelativeLayout>

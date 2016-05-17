@@ -24,7 +24,7 @@ public class ScanRQCodeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.scanrqcode_activity);
+        setContentView(R.layout.activity_scanrqcode);
         scan_rq_tv01 = (TextView) this.findViewById(R.id.scan_rq_tv01);
         scan_rq_iv01 = (ImageView) this.findViewById(R.id.scan_rq_iv01);
         scan_rq_iv01.setOnClickListener(new OnClickListener() {
