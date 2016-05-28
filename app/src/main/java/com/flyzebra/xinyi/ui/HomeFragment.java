@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
 
@@ -63,21 +62,21 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
             @Override
             public void onRefrsh(View view) {
                 httpNum = 4;
-                iHttp.upRecyclerViewData(Constant.URL_HHS, homeShopsList, mAdapter, HTTPTAG, HomeFragment.this);
-                iHttp.upRecyclerViewData(Constant.URL_HPR, homeHotsList, mAdapter, HTTPTAG, HomeFragment.this);
-                iHttp.upRecyclerViewData(Constant.URL_HPR, homeNewsList, mAdapter, HTTPTAG, HomeFragment.this);
-                iHttp.upRecyclerViewData(Constant.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HHS, homeShopsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HPR, homeHotsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HPR, homeNewsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG, HomeFragment.this);
             }
         });
 
         homeRv01.setListenerLastItem(new RefreshRecyclerView.ListenerLastItem() {
             @Override
             public void onLastItem() {
-//                iHttp.upListView(Constant.URL_TABLE_1, mAdapter, "mealinfo", true, HTTPTAG);
+//                iHttp.upListView(URLS.URL_TABLE_1, mAdapter, "mealinfo", true, HTTPTAG);
             }
         });
 
-        homeShopsList = iHttp.readListFromCache(Constant.URL_HHS);
+        homeShopsList = iHttp.readListFromCache(URLS.URL_HHS);
         if (homeShopsList == null) {
             homeShopsList = new ArrayList<Map<String, Object>>();
         }
@@ -86,9 +85,9 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
         shops.put(IAdapter.TYPE, IAdapter.H_VIEWPAGER_SHOP);
         RLList.add(shops);
         //更新数据
-        iHttp.upRecyclerViewData(Constant.URL_HHS, homeShopsList, mAdapter, HTTPTAG);
+        iHttp.upRecyclerViewData(URLS.URL_HHS, homeShopsList, mAdapter, HTTPTAG);
 
-        homeHotsList = iHttp.readListFromCache(Constant.URL_HPR);
+        homeHotsList = iHttp.readListFromCache(URLS.URL_HPR);
         if (homeHotsList == null) {
             homeHotsList = new ArrayList();
         }
@@ -97,10 +96,10 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
         hots.put(IAdapter.TYPE, IAdapter.H_GRIDVIEW_HOTS);
         RLList.add(hots);
         //更新数据
-        iHttp.upRecyclerViewData(Constant.URL_HPR, homeHotsList, mAdapter, HTTPTAG);
+        iHttp.upRecyclerViewData(URLS.URL_HPR, homeHotsList, mAdapter, HTTPTAG);
 
 
-        homeNewsList = iHttp.readListFromCache(Constant.URL_HPR);
+        homeNewsList = iHttp.readListFromCache(URLS.URL_HPR);
         if (homeNewsList == null) {
             homeNewsList = new ArrayList();
         }
@@ -109,9 +108,9 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
         news.put(IAdapter.TYPE, IAdapter.H_GRIDVIEW_NEWS);
         RLList.add(news);
         //更新数据
-        iHttp.upRecyclerViewData(Constant.URL_HPR, homeNewsList, mAdapter, HTTPTAG);
+        iHttp.upRecyclerViewData(URLS.URL_HPR, homeNewsList, mAdapter, HTTPTAG);
 
-        homeTimeShopList = iHttp.readListFromCache(Constant.URL_HPR);
+        homeTimeShopList = iHttp.readListFromCache(URLS.URL_HPR);
         if (homeTimeShopList == null) {
             homeTimeShopList = new ArrayList();
         }
@@ -120,7 +119,7 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
         timeShop.put(IAdapter.TYPE, IAdapter.H_GRIDVIEW_TIMESHOP);
         RLList.add(timeShop);
         //更新数据
-        iHttp.upRecyclerViewData(Constant.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG);
+        iHttp.upRecyclerViewData(URLS.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG);
 
         //recyclerViewList按类型排序
 //        Collections.sort(recyclerViewList, new Comparator<Map<String, Object>>() {
@@ -133,10 +132,10 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
         newworkError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iHttp.upRecyclerViewData(Constant.URL_HHS, homeShopsList, mAdapter, HTTPTAG, HomeFragment.this);
-                iHttp.upRecyclerViewData(Constant.URL_HPR, homeHotsList, mAdapter, HTTPTAG, HomeFragment.this);
-                iHttp.upRecyclerViewData(Constant.URL_HPR, homeNewsList, mAdapter, HTTPTAG, HomeFragment.this);
-                iHttp.upRecyclerViewData(Constant.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HHS, homeShopsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HPR, homeHotsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HPR, homeNewsList, mAdapter, HTTPTAG, HomeFragment.this);
+                iHttp.upRecyclerViewData(URLS.URL_HPR, homeTimeShopList, mAdapter, HTTPTAG, HomeFragment.this);
             }
         });
 

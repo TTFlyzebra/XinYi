@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.ui.IAdapter;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
@@ -21,8 +22,18 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,17 +45,18 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CipherSuite;
+import okhttp3.ConnectionSpec;
 import okhttp3.FormBody;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.internal.DiskLruCache;
-import okhttp3.internal.Util;
+import okhttp3.TlsVersion;
 
 /**
- *
  * Created by FlyZebra on 2016/3/30.
  */
 public class MyOkHttp implements IHttp {
@@ -56,13 +68,45 @@ public class MyOkHttp implements IHttp {
     //初始化OkHttpClient
     private static OkHttpClient mOkHttpClient;
 
-    public static Map<Object,Set<Call>> map_Call = new HashMap<>();
+    public static Map<Object, Set<Call>> map_Call = new HashMap<>();
     private static final int OK = 1;
     private static final int FAIL = 2;
-    public static final MediaType JSON  = MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
     private MyOkHttp() {
     }
 
+    /**
+     * 拦截器
+     */
+    private class LoggingInterceptor implements Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request();
+            long t1 = System.nanoTime();
+            FlyLog.i(String.format("Sending request %s on %s%n%s", request.url(), chain.connection(), request.headers()));
+            Response response = chain.proceed(request);
+            long t2 = System.nanoTime();
+            FlyLog.i(String.format("Received response for %s in %.1fms%n%s", response.request().url(), (t2 - t1) / 1e6d, response.headers()));
+            return response;
+        }
+    }
+
+    /**
+     * SSL
+     */
+    private ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+            .tlsVersions(TlsVersion.TLS_1_2)
+            .cipherSuites(
+                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                    CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                    CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+            .build();
+
+    /**
+     * 在全局App中传入context初始化
+     * @param context
+     */
     public static void Init(Context context) {
         mContext = context;
     }
@@ -78,6 +122,8 @@ public class MyOkHttp implements IHttp {
                         .cache(new Cache(getDiskCacheDir("okhttp"), 50 * 1024 * 1024))
                         .connectTimeout(12, TimeUnit.SECONDS)
                         .readTimeout(12, TimeUnit.SECONDS);
+//                builder.connectionSpecs(Collections.singletonList(spec));
+                builder.sslSocketFactory(FlySSLSocketFactory.getStringCertificates().getSocketFactory());
                 mOkHttpClient = builder.build();
             }
         }
@@ -92,7 +138,7 @@ public class MyOkHttp implements IHttp {
                 .url(url)
                 .build();
         Call call = getHttpClient().newCall(request);
-        addCallSet(call,tag);
+        addCallSet(call, tag);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -125,7 +171,7 @@ public class MyOkHttp implements IHttp {
                 .post(formBody)
                 .build();
         Call call = getHttpClient().newCall(request);
-        addCallSet(call,tag);
+        addCallSet(call, tag);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -144,11 +190,15 @@ public class MyOkHttp implements IHttp {
 
     @Override
     public void upImageView(Context context, String url, ImageView iv) {
+        url=url.replaceFirst("https://", "http://");
+        FlyLog.i("<MyOkHttp>upImageView1:url="+url);
         Picasso.with(context).load(url).into(iv);
     }
 
     @Override
     public void upImageView(Context context, String url, ImageView iv, int LoadResId) {
+        url=url.replaceFirst("https://","http://");
+        FlyLog.i("<MyOkHttp>upImageView2:url=" + url);
         Picasso.with(context).load(url).placeholder(LoadResId).error(LoadResId).into(iv);
     }
 
@@ -176,7 +226,7 @@ public class MyOkHttp implements IHttp {
                 .url(url)
                 .build();
         Call call = getHttpClient().newCall(request);
-        addCallSet(call,tag);
+        addCallSet(call, tag);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -212,7 +262,7 @@ public class MyOkHttp implements IHttp {
                 .url(url)
                 .build();
         Call call = getHttpClient().newCall(request);
-        addCallSet(call,tag);
+        addCallSet(call, tag);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -237,14 +287,13 @@ public class MyOkHttp implements IHttp {
     }
 
     /**
-     *
      * @param url
      * @return
      */
     @Override
     public List<Map<String, Object>> readListFromCache(String url) {
         String res = readDiskCache(url);
-        if(res!=null){
+        if (res != null) {
             try {
                 return JsonUtils.json2List(new JSONArray(res));
             } catch (JSONException e) {
@@ -256,8 +305,8 @@ public class MyOkHttp implements IHttp {
     @Override
     public void cancelAll(Object tag) {
         Set<Call> set = map_Call.get(tag);
-        if(set!=null){
-            for(Iterator<Call> it = set.iterator();it.hasNext();){
+        if (set != null) {
+            for (Iterator<Call> it = set.iterator(); it.hasNext(); ) {
                 it.next().cancel();
             }
             set.clear();
@@ -265,19 +314,20 @@ public class MyOkHttp implements IHttp {
         set = null;
     }
 
-    private void addCallSet(Call call,Object tag){
+    private void addCallSet(Call call, Object tag) {
         Set<Call> set = map_Call.get(tag);
-        if(set==null){
-            set = new HashSet<Call>();;
+        if (set == null) {
+            set = new HashSet<Call>();
+            ;
         }
         set.add(call);
     }
 
-    private void removeCallSet(Call call,Object tag){
+    private void removeCallSet(Call call, Object tag) {
         Set<Call> set = map_Call.get(tag);
-        if(set!=null){
+        if (set != null) {
             set.remove(call);
-            if(set.isEmpty()){
+            if (set.isEmpty()) {
                 set = null;
             }
         }
@@ -290,7 +340,7 @@ public class MyOkHttp implements IHttp {
                 .url(builder.url)
                 .build();
         Call call = getHttpClient().newCall(request);
-        addCallSet(call,builder.tag);
+        addCallSet(call, builder.tag);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -359,7 +409,7 @@ public class MyOkHttp implements IHttp {
         return new File(cachePath + File.separator + uniqueName);
     }
 
-    public void sendResult(final HttpResult result,final  Object object, int type) {
+    public void sendResult(final HttpResult result, final Object object, int type) {
         if (result != null) {
             switch (type) {
                 case OK:
@@ -375,14 +425,14 @@ public class MyOkHttp implements IHttp {
                         @Override
                         public void run() {
                             result.failed(object);
-                       }
-                   });
+                        }
+                    });
                     break;
             }
         }
     }
 
-    private void notifyData(final boolean isAdd, final List list ,final List jsonList,final HttpAdapter adapter) {
+    private void notifyData(final boolean isAdd, final List list, final List jsonList, final HttpAdapter adapter) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -397,6 +447,7 @@ public class MyOkHttp implements IHttp {
 
     /**
      * 使用反射读取磁盘缓存
+     *
      * @param url
      * @return
      */
@@ -408,7 +459,7 @@ public class MyOkHttp implements IHttp {
             Class cls = getHttpClient().cache().getClass();
             get = cls.getDeclaredMethod("get", Request.class);
             get.setAccessible(true);
-            response = (Response)get.invoke(getHttpClient().cache(), request);
+            response = (Response) get.invoke(getHttpClient().cache(), request);
         } catch (NoSuchMethodException e) {
             FlyLog.i("<MyOkHttp>-->readListFromCache->NoSuchMethodException");
         } catch (InvocationTargetException e) {

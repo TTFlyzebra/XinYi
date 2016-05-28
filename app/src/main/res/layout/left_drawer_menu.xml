@@ -198,14 +198,15 @@
 
         <LinearLayout
             android:id="@+id/left_drawer_menu_day_switch"
-            style="@style/left_drawer_menu_ll_02">
+            style="@style/left_drawer_menu_ll_02"
+            android:visibility="invisible">
 
 
             <ImageView
                 style="@style/left_drawer_menu_image"
                 android:src="@drawable/ic_brightness_2_18dp" />
 
-            <LinearLayout style="@style/left_drawer_menu_ll_01">
+            <LinearLayout style="@style/left_drawer_menu_ll_01" >
 
                 <TextView
                     style="@style/left_drawer_menu_text"

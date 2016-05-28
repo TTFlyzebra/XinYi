@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.RefreshRecyclerView;
@@ -74,7 +74,7 @@ public class ProductFragment_type extends BaseFragment {
 
         poiTypeRv01.setId(ResID);
         poiTypeRv01.setLayoutManager(new LinearLayoutManager(activity));
-        list = iHttp.readListFromCache(Constant.URL_PRT + "/type/" + ptype_id);
+        list = iHttp.readListFromCache(URLS.URL_PRT + "/type/" + ptype_id);
         if (list == null) {
             list = new ArrayList<>();
         }
@@ -82,7 +82,7 @@ public class ProductFragment_type extends BaseFragment {
         poiTypeRv01.setAdapter(mAdapter);
         //从磁盘读出数据
         //从网络更新数据
-        iHttp.upRecyclerViewData(Constant.URL_PRT + "/type/" + ptype_id, list, mAdapter, HTTPTAG);
+        iHttp.upRecyclerViewData(URLS.URL_PRT + "/type/" + ptype_id, list, mAdapter, HTTPTAG);
         poiTypeRv01.setListenerTopRefresh(new RefreshRecyclerView.ListenerTopRefresh() {
             @Override
             public void onRefrsh(View view) {
@@ -105,7 +105,7 @@ public class ProductFragment_type extends BaseFragment {
     }
 
     private void upThisFragmentData() {
-        iHttp.getString(Constant.URL_PRT + "/type/" + ptype_id, HTTPTAG, new IHttp.HttpResult() {
+        iHttp.getString(URLS.URL_PRT + "/type/" + ptype_id, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(Object object) {
                 if (object != null && !object.equals("")) {

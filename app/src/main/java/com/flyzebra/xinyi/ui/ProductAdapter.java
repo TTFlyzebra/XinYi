@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.Gravity;
@@ -18,11 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.model.http.SelectHttp;
 import com.flyzebra.xinyi.utils.DisplayUtils;
-import com.flyzebra.xinyi.utils.ResUtils;
 import com.flyzebra.xinyi.utils.SerializableMap;
 
 import java.util.List;
@@ -34,7 +32,7 @@ import java.util.Map;
 public class ProductAdapter extends RecyclerView.Adapter<ViewHolder> implements IAdapter {
     private List<Map<String, Object>> list;
     private Context context;
-    private IHttp iHttp = MyVolley.getInstance();
+    private IHttp iHttp = SelectHttp.getIHttp();
 
     public ProductAdapter(Context context, List<Map<String, Object>> list) {
         this.list = list;
@@ -69,7 +67,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ViewHolder> implements 
             ((ListViewHolder) holder).tv01.setText(String.valueOf(list.get(position).get(PR1_NAME)));
             ((ListViewHolder) holder).tv02.setText(String.valueOf(list.get(position).get(PR1_DESCRIBE)));
             ((ListViewHolder) holder).tv03.setText(String.valueOf(list.get(position).get(PR1_PRICE)));
-            iHttp.upImageView(context, Constant.URL + list.get(position).get(PR1_IMGURL), ((ListViewHolder) holder).iv01);
+            iHttp.upImageView(context, URLS.URL + list.get(position).get(PR1_IMGURL), ((ListViewHolder) holder).iv01);
             List<Map<String, Object>> attr = (List<Map<String, Object>>) list.get(position).get(PR1_PATTR);
             ((ListViewHolder) holder).ll01.removeAllViews();
             for (int i = 0; i < attr.size(); i++) {

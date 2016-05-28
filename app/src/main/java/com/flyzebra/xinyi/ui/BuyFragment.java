@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -76,7 +76,7 @@ public class BuyFragment extends BaseFragment {
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                iHttp.upListView(Constant.URL_TABLE_1, adapter, "mealinfo", HTTPTAG, new IHttp.HttpResult() {
+                iHttp.upListView(URLS.URL_TABLE_1, adapter, "mealinfo", HTTPTAG, new IHttp.HttpResult() {
                     @Override
                     public void succeed(Object object) {
                         listView.onRefreshComplete();
@@ -110,8 +110,8 @@ public class BuyFragment extends BaseFragment {
             }
         });
         Map<String, String> params = new HashMap<>();
-//        iHttp.execute(IHttp.Builder.getInstance().setUrl(Constant.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
-        iHttp.upListView(Constant.URL_TABLE + "?get=mealinfo", adapter, "mealinfo", HTTPTAG);
+//        iHttp.execute(IHttp.Builder.getInstance().setUrl(URLS.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
+        iHttp.upListView(URLS.URL_TABLE + "?get=mealinfo", adapter, "mealinfo", HTTPTAG);
     }
 
     @Override

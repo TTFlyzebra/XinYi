@@ -18,29 +18,42 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        debug {
+            storeFile file("D:\\ASPro\\weixin_pay\\debug.keystore")
+        }
+    }
+
+
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile 'com.android.support:cardview-v7:23.2.1'
     compile project(':pulltorefresh')
     compile project(':volley')
     compile project(':googleui')
-    compile 'com.commit451:PhotoView:1.2.5'
-    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile project(':swipemenulistview')
+    //    compile project(':okhttp')
     compile files('libs/mta-sdk-1.6.2.jar')
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     compile files('libs/universal-image-loader-1.9.5.jar')
-    compile 'com.android.support:recyclerview-v7:23.2.0'
-    compile 'com.android.support:cardview-v7:23.2.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
     compile files('libs/nineoldandroids-2.4.0.jar')
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile files('libs/Baidu-Frontia-Android-2.0.6.jar')
     compile files('libs/core-3.2.0.jar')
-    compile 'com.jakewharton:butterknife:7.0.1'
     compile files('libs/gson-2.6.2.jar')
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    compile 'com.commit451:PhotoView:1.2.5'
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxjava:1.1.5'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile files('libs/libammsdk.jar')
 }

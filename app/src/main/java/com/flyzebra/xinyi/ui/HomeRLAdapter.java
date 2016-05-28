@@ -8,16 +8,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.model.http.SelectHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.SerializableMap;
 import com.flyzebra.xinyi.view.AttrChildGridView;
@@ -28,12 +26,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * Created by FlyZebra on 2016/3/26.
  */
 public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements IAdapter {
     private List<Map<String, Object>> list;
     private Context context;
-    private IHttp iHttp = MyVolley.getInstance();
+    private IHttp iHttp = SelectHttp.getIHttp();
 
     public HomeRLAdapter(Context context, List<Map<String, Object>> list) {
         this.list = list;
@@ -122,7 +121,7 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
             view.setShowImageSrc(new ChildViewPager.ShowImageSrc() {
                 @Override
                 public void setImageSrcWithUrl(Map data, ImageView iv) {
-                    iHttp.upImageView(context, Constant.URL + data.get(IAdapter.SHOP_IMGURL), iv, R.drawable.load_480_320);
+                    iHttp.upImageView(context, URLS.URL + data.get(IAdapter.SHOP_IMGURL), iv, R.drawable.load_480_320);
                 }
             });
             view.setData((List<Map<String, Object>>) list.get(position).get(DATA));
@@ -133,7 +132,7 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
             view.setShowImageSrc(new ChildGridView.ShowImageSrc() {
                 @Override
                 public void setImageSrcWithUrl(String url, ImageView iv) {
-                    iHttp.upImageView(context, Constant.URL + url, iv);
+                    iHttp.upImageView(context, URLS.URL + url, iv);
                 }
             });
             view.setData((List<Map<String, Object>>) list.get(position).get(DATA));

@@ -3,37 +3,46 @@
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="#f96f2a"
+        android:layout_height="40dp"
+        android:background="#c6cc4a"
         android:orientation="horizontal"
         android:divider="@drawable/ic_img_line_v"
         android:weightSum="3">
 
         <TextView
-            android:id="@+id/prod_tv01"
+            android:id="@+id/prod_float_tv01"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="1dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="价格"
+            android:background="#fcd40c"
+            android:textColor="@color/price"
+            android:text="￥88.8888"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/prod_tv02"
+            android:id="@+id/prod_float_tv02"
+            android:layout_margin="1dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="购物车"
-            android:textSize="20sp" />
+            android:background="#f96f2a"
+            android:textColor="@color/white"
+            android:text="加入购物车"
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/prod_tv03"
+            android:id="@+id/prod_float_tv03"
             android:layout_width="0dp"
+            android:layout_margin="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:background="#f22404"
+            android:textColor="@color/white"
             android:text="立即购买"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>

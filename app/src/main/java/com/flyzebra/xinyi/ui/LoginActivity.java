@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.login.ILogin;
@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         waitPlg.setMessage("正请求通过第三方完成登陆.....");
         waitPlg.setCancelable(false);
         waitPlg.show();
-        iHttp.postString(Constant.URL + "/API/User/login", userInfo.toMap(), HTTPTAG, loginUser);
+        iHttp.postString(URLS.URL + "/API/User/login", userInfo.toMap(), HTTPTAG, loginUser);
         FlyLog.i("<LoginActivity>loginWithOther"+ userInfo.toMap());
     }
 
@@ -189,7 +189,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             waitPlg.setMessage("正在验证登陆信息.....");
             waitPlg.setCancelable(false);
             waitPlg.show();
-            iHttp.postString(Constant.URL + "/API/User/login", params, HTTPTAG, loginUser);
+            iHttp.postString(URLS.URL + "/API/User/login", params, HTTPTAG, loginUser);
         }
     }
 
@@ -218,7 +218,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     waitPlg.setMessage("正在向服务器提交申请.....");
                     waitPlg.setCancelable(false);
                     waitPlg.show();
-                    iHttp.postString(Constant.URL + "/API/User/register", params, HTTPTAG, loginUser);
+                    iHttp.postString(URLS.URL + "/API/User/register", params, HTTPTAG, loginUser);
                     dlg.dismiss();
                 }
             });

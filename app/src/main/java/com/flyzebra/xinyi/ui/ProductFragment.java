@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.JsonUtils;
@@ -57,7 +57,7 @@ public class ProductFragment extends BaseFragment {
         View view = View.inflate(activity, R.layout.fragment_product, null);
         viewPager = (ViewPager) view.findViewById(R.id.poi_vp_01);
         mPagerAdapter = new MyFragmentPagerAdapter(activity.getSupportFragmentManager());
-        list = iHttp.readListFromCache(Constant.URL_PTYPE);
+        list = iHttp.readListFromCache(URLS.URL_PTYPE);
         if(list==null){
             list = new ArrayList<>();
         }
@@ -65,7 +65,7 @@ public class ProductFragment extends BaseFragment {
         viewPager.setCurrentItem(currentItem);
         activity.toolBar_stl.setViewPager(viewPager);
 //        slidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.poi_stl_01);
-        iHttp.getString(Constant.URL_PTYPE, HTTPTAG, new IHttp.HttpResult() {
+        iHttp.getString(URLS.URL_PTYPE, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(Object object) {
                 upData(object);

@@ -11,11 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResUtils;
 import com.flyzebra.xinyi.utils.SerializableMap;
 import com.flyzebra.xinyi.view.pullzoom.PullToZoomScrollViewEx;
+
+import net.sourceforge.simcpux.PayActivity;
 
 import java.util.Map;
 
@@ -56,28 +58,8 @@ public class ProductInfoActivity extends BaseActivity {
         });
 
         loadViewForCode();
-
         scrollView = (PullToZoomScrollViewEx) findViewById(R.id.scroll_view);
-        scrollView.getPullRootView().findViewById(R.id.tv_test1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FlyLog.i("zhuwenwu, onClick -->");
-            }
-        });
 
-        scrollView.getPullRootView().findViewById(R.id.tv_test2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FlyLog.i("zhuwenwu, onClick -->");
-            }
-        });
-
-        scrollView.getPullRootView().findViewById(R.id.tv_test3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FlyLog.i("zhuwenwu, onClick -->");
-            }
-        });
         DisplayMetrics localDisplayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
         int mScreenHeight = localDisplayMetrics.heightPixels;
@@ -95,11 +77,23 @@ public class ProductInfoActivity extends BaseActivity {
         textView01.setText((CharSequence) product.get(IAdapter.PR1_NAME));
 
         View zoomView = LayoutInflater.from(this).inflate(R.layout.pull_zoom_view, null, false);
-        iHttp.upImageView(this, Constant.URL + product.get(IAdapter.PR1_IMGURL), (ImageView) zoomView);
+        iHttp.upImageView(this, URLS.URL + product.get(IAdapter.PR1_IMGURL), (ImageView) zoomView);
 
-        View contentView = LayoutInflater.from(this).inflate(R.layout.pull_content_view, null, false);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pull_content_prod_iew, null, false);
+        ((TextView) contentView.findViewById(R.id.prod_cont_tv01)).setText((String) product.get(IAdapter.PR1_NAME));
+        ((TextView) contentView.findViewById(R.id.prod_cont_tv02)).setText((String) product.get(IAdapter.PR1_DESCRIBE));
 
+        //浮动菜单
         View floatView = LayoutInflater.from(this).inflate(R.layout.pull_float_view, null, false);
+       ((TextView) floatView.findViewById(R.id.prod_float_tv01)).setText("￥" + product.get(IAdapter.PR1_PRICE) + "元");
+//        TextView tv02 = (TextView) floatView.findViewById(R.id.prod_float_tv02);
+        TextView tv03 = (TextView) floatView.findViewById(R.id.prod_float_tv03);
+        tv03.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProductInfoActivity.this, PayActivity.class));
+            }
+        });
 
         scrollView.setHeaderView(headView);
         scrollView.setZoomView(zoomView);

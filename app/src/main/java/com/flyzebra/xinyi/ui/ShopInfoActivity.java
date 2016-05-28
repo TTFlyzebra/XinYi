@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.SerializableMap;
 import com.flyzebra.xinyi.view.pullzoom.PullToZoomScrollViewEx;
@@ -46,26 +46,7 @@ public class ShopInfoActivity extends BaseActivity {
 
         loadViewForCode();
         scrollView = (PullToZoomScrollViewEx) findViewById(R.id.scroll_view);
-        scrollView.getPullRootView().findViewById(R.id.tv_test1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FlyLog.i("zhuwenwu, onClick -->");
-            }
-        });
 
-        scrollView.getPullRootView().findViewById(R.id.tv_test2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FlyLog.i("zhuwenwu, onClick -->");
-            }
-        });
-
-        scrollView.getPullRootView().findViewById(R.id.tv_test3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               FlyLog.i("zhuwenwu, onClick -->");
-            }
-        });
         DisplayMetrics localDisplayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(localDisplayMetrics);
         int mScreenHeight = localDisplayMetrics.heightPixels;
@@ -82,9 +63,9 @@ public class ShopInfoActivity extends BaseActivity {
         textView01.setText((CharSequence) shop.get(IAdapter.SHOP_NAME));
 
         View zoomView = LayoutInflater.from(this).inflate(R.layout.pull_zoom_view, null, false);
-        iHttp.upImageView(this, Constant.URL+shop.get(IAdapter.SHOP_IMGURL),(ImageView)zoomView);
+        iHttp.upImageView(this, URLS.URL+shop.get(IAdapter.SHOP_IMGURL),(ImageView)zoomView);
 
-        View contentView = LayoutInflater.from(this).inflate(R.layout.pull_content_view, null, false);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pull_content_prod_iew, null, false);
         scrollView.setHeaderView(headView);
         scrollView.setZoomView(zoomView);
         scrollView.setScrollContentView(contentView);

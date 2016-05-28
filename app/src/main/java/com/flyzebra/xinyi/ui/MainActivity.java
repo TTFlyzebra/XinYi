@@ -1,10 +1,13 @@
 package com.flyzebra.xinyi.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -66,6 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         //恢复保存的状态，保存的数据为当前打开的是那个页面(fragment)，按钮选中状态
         if (savedInstanceState != null) {
+            
             cerrent_fragment = savedInstanceState.getInt("cerrent_fragment");
             for (int i = 0; i < ll_list.size(); i++) {
                 if (cerrent_fragment == i) {
@@ -246,4 +250,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     }
+
 }

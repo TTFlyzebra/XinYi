@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.data.UserInfo;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
@@ -61,7 +61,7 @@ public class WelcomeActivity extends BaseActivity {
                 .setImageAlpha(0.95f)
                 .setImagePadding(ResUtils.getMetrices(WelcomeActivity.this).widthPixels / 10);
 
-        iHttp.getString(Constant.URL_WEL, HTTPTAG, new IHttp.HttpResult() {
+        iHttp.getString(URLS.URL_WEL, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(Object object) {
                 List<Map<String, Object>> list = GsonUtils.json2List(object.toString());
@@ -75,7 +75,7 @@ public class WelcomeActivity extends BaseActivity {
             @Override
             public void failed(Object object) {
                 //从磁盘读取轮播数据
-                List<Map<String, Object>> imgList = iHttp.readListFromCache(Constant.URL_WEL);
+                List<Map<String, Object>> imgList = iHttp.readListFromCache(URLS.URL_WEL);
                 if(imgList!=null){
                     setWelPlay3d(imgList);
                 }else{
@@ -238,7 +238,7 @@ public class WelcomeActivity extends BaseActivity {
         waitPlg.setCancelable(false);
         waitPlg.show();
         FlyLog.i("<WelcomeActivity>upLoignInfo:id=" + userInfo.getId());
-        iHttp.postString(Constant.URL + "/API/User/upLoginInfo", params, HTTPTAG, upLoginInfo);
+        iHttp.postString(URLS.URL + "/API/User/upLoginInfo", params, HTTPTAG, upLoginInfo);
     }
 
     @OnClick(R.id.wel_bt_goHome)

@@ -6,39 +6,20 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_test1"
+        android:id="@+id/prod_cont_tv01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test1"
+        android:padding="5dp"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/tv_test2"
+        android:id="@+id/prod_cont_tv02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test1"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/tv_test3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test1"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test1"
-        android:textSize="20sp" />
+        android:padding="5dp"
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -49,7 +30,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
+        android:padding="5dp"
+        android:background="#d2777d"
+        android:textColor="@color/white"
+        android:text="参数说明"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="5dp"
         android:text="test2"
         android:textSize="20sp" />
 
@@ -57,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
+        android:padding="5dp"
         android:text="test2"
         android:textSize="20sp" />
 
@@ -65,15 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test2"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
+        android:padding="5dp"
         android:text="test2"
         android:textSize="20sp" />
 
@@ -86,69 +69,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test3"
+        android:padding="5dp"
+        android:background="#59e6a9"
+        android:textColor="@color/white"
+        android:text="评论"
         android:textSize="20sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test3"
-        android:textSize="20sp" />
+        android:padding="5dp"
+        android:text="飞翔的猪：在旺盛的需求驱动下，“地下”售彩行为仍难断绝。目前，在监管层的三令五申之下，有的平台已停止售彩，有的平台上，网络售彩行为仍在暗中进行。21世纪经济报道记者留意到，淘宝、微信等平台上仍有彩票入口，淘宝彩票的购彩已暂停，仅具备结果公示作用，但微信彩票仍可通过“金豆”购彩。"
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test3"
-        android:textSize="20sp" />
+        android:padding="5dp"
+        android:text="飞翔的猪：在旺盛的需求驱动下，“地下”售彩行为仍难断绝。目前，在监管层的三令五申之下，有的平台已停止售彩，有的平台上，网络售彩行为仍在暗中进行。21世纪经济报道记者留意到，淘宝、微信等平台上仍有彩票入口，淘宝彩票的购彩已暂停，仅具备结果公示作用，但微信彩票仍可通过“金豆”购彩。"
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test3"
-        android:textSize="20sp" />
+        android:padding="5dp"
+        android:text="飞翔的猪：在旺盛的需求驱动下，“地下”售彩行为仍难断绝。目前，在监管层的三令五申之下，有的平台已停止售彩，有的平台上，网络售彩行为仍在暗中进行。21世纪经济报道记者留意到，淘宝、微信等平台上仍有彩票入口，淘宝彩票的购彩已暂停，仅具备结果公示作用，但微信彩票仍可通过“金豆”购彩。"
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test4"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test4"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test4"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test4"
+        android:gravity="right"
+        android:padding="5dp"
+        android:text="点击查看更多...."
         android:textSize="20sp" />
 
     <TextView
@@ -160,31 +116,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test5"
+        android:padding="5dp"
+        android:background="#e990dd"
+        android:textColor="@color/white"
+        android:text="同类产品推荐"
         android:textSize="20sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test5"
+        android:padding="5dp"
+        android:text="test4"
         android:textSize="20sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test5"
+        android:padding="5dp"
+        android:text="test4"
         android:textSize="20sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="20dp"
-        android:text="test5"
+        android:padding="5dp"
+        android:text="test4"
         android:textSize="20sp" />
 </LinearLayout>

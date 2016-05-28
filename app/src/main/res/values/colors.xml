@@ -20,8 +20,6 @@
     <color name="night_back">#000</color>
     <color name="day_text">#000</color>
     <color name="day_night">#BBBBBB</color>
-    <color name="white">#FFF</color>
-    <color name="black">#000</color>
     <color name="gray">#7F7F7F</color>
     <color name="price">#36B9AF</color>
     <color name="product_toolbar">#f58c3c</color>

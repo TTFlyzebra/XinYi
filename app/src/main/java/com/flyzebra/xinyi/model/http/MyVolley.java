@@ -1,6 +1,7 @@
 package com.flyzebra.xinyi.model.http;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
@@ -32,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ *
  * Created by FlyZebra on 2016/3/20.
  */
 public class MyVolley implements IHttp {
@@ -51,8 +54,14 @@ public class MyVolley implements IHttp {
 
     public static RequestQueue Init(Context context) {
         mContext = context;
-        mRequestQueue = Volley.newRequestQueue(context);
-        mImageLoader = new ImageLoader(mRequestQueue, new BitmapCache());
+        if (Build.VERSION.SDK_INT >= 9) {
+            mRequestQueue = Volley.newRequestQueue(context, new HurlStack(new VolleyUrlReWriter(), FlySSLSocketFactory.buildSSLSocketFactory(context, R.raw.server)));
+        } else {
+            //版本小于9要支持https需要修改，重新写个HttpClientStack,判断是否https，因为现在2.3以下版本已很少使用，暂不深入
+            mRequestQueue = Volley.newRequestQueue(context);
+//            mRequestQueue = Volley.newRequestQueue(context, new HttpClientStack(FlySSLSocketFactory.getHttpClient(context,R.raw.server)));
+        }
+        mImageLoader = new ImageLoader(mRequestQueue, new VolleyBitmapCache());
         return mRequestQueue;
     }
 
@@ -111,7 +120,7 @@ public class MyVolley implements IHttp {
             @Override
             public void onErrorResponse(VolleyError error) {
                 sendResult(result, error, FAIL);
-                FlyLog.i("<MyVolley>getString->onErrorResponse:tag=" + tag);
+                FlyLog.i("<MyVolley>getString->onErrorResponse:error=" + error);
             }
         });
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(RETRY_TIME, RETRY_NUM, 1f));
@@ -131,7 +140,7 @@ public class MyVolley implements IHttp {
             @Override
             public void onErrorResponse(VolleyError error) {
                 sendResult(result, error, FAIL);
-                FlyLog.i("<MyVolley>postString->onErrorResponse:tag=" + tag);
+                FlyLog.i("<MyVolley>postString->onErrorResponse:error=" + error);
             }
         }) {
             @Override
@@ -151,7 +160,8 @@ public class MyVolley implements IHttp {
 
     @Override
     public void upImageView(Context context, String url, ImageView iv, int LoadResId) {
-//        FlyLog.i("<MyVolley>upImageView->url=" + url + ",iv=" + iv.getId());
+//        url = url.replaceFirst("https://","http://");
+        FlyLog.i("<MyVolley>upImageView->url=" + url + "[iv=" + iv.getId());
         ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, LoadResId, LoadResId);
         mImageLoader.get(url, listener);
     }
@@ -188,7 +198,6 @@ public class MyVolley implements IHttp {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                //尝试读取先前保存在硬盘中的数据
                 sendResult(result, volleyError, FAIL);
                 FlyLog.i("<MyVolley>upListView->onErrorResponse:tag=" + tag);
             }

@@ -13,7 +13,6 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
@@ -21,14 +20,12 @@ import android.view.animation.Transformation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.flyzebra.xinyi.data.Constant;
-import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.data.URLS;
+import com.flyzebra.xinyi.model.http.SelectHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.List;
 import java.util.Map;
-
-import butterknife.OnClick;
 
 
 /**
@@ -202,7 +199,7 @@ public class Play3DImages extends FrameLayout {
     public Play3DImages setImageUrlList(List<Map<String, Object>> list,String key) {
         this.urlArray = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            this.urlArray[i] = Constant.URL + list.get(i).get(key);
+            this.urlArray[i] = URLS.URL + list.get(i).get(key);
         }
         return this;
     }
@@ -237,7 +234,7 @@ public class Play3DImages extends FrameLayout {
         initAnimatios();
         initDegrees();
         for (int i = 0; i < urlArray.length; i++) {
-            MyVolley.getInstance().upImageView(context, urlArray[i], imageView[i]);
+            SelectHttp.getIHttp().upImageView(context, urlArray[i], imageView[i]);
         }
     }
 

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.data.Constant;
+import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.utils.JsonUtils;
 import com.flyzebra.xinyi.view.ChildGridView;
@@ -45,7 +45,7 @@ public class NewsActiviy extends BaseActivity {
         });
 
         childGridViewList1 = new ArrayList();
-        iHttp.getString(Constant.URL_TABLE_1, HTTPTAG, new IHttp.HttpResult() {
+        iHttp.getString(URLS.URL_TABLE_1, HTTPTAG, new IHttp.HttpResult() {
             @Override
             public void succeed(Object object) {
                 try {

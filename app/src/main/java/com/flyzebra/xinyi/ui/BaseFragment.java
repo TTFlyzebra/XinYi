@@ -3,8 +3,7 @@ package com.flyzebra.xinyi.ui;
 import android.support.v4.app.Fragment;
 
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.MyOkHttp;
-import com.flyzebra.xinyi.model.http.MyVolley;
+import com.flyzebra.xinyi.model.http.SelectHttp;
 
 /**
  *
@@ -12,7 +11,7 @@ import com.flyzebra.xinyi.model.http.MyVolley;
  */
 public abstract class BaseFragment extends Fragment{
     protected String HTTPTAG = "Fragment"+Math.random();
-    protected IHttp iHttp = MyOkHttp.getInstance();
+    protected IHttp iHttp = SelectHttp.getIHttp();
 
     @Override
     public void onStop() {
