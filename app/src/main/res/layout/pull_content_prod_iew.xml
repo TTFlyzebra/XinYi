@@ -39,30 +39,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:text="test2"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:text="test2"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:text="test2"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:background="#eeeeee" />
 
     <TextView
@@ -120,29 +96,5 @@
         android:background="#e990dd"
         android:textColor="@color/white"
         android:text="同类产品推荐"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:text="test4"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:text="test4"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:text="test4"
         android:textSize="20sp" />
 </LinearLayout>

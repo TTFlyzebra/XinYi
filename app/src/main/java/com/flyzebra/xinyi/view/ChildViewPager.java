@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.SelectHttp;
+import com.flyzebra.xinyi.model.http.GetHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class ChildViewPager extends BaseChildView {
 
     private int current_item = 0;
-    private IHttp iHttp = SelectHttp.getIHttp();
+    private IHttp iHttp = GetHttp.getIHttp();
     private long delayMillis = 5000;
     private ViewPager viewPager;
     private NaviForViewPager countVP;

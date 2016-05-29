@@ -16,10 +16,10 @@
             android:layout_margin="1dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:background="#fcd40c"
-            android:textColor="@color/price"
+            android:background="#d978ec"
+            android:textColor="@color/white"
             android:text="￥88.8888"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/prod_float_tv02"

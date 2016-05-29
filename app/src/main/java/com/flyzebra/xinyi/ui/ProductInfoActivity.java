@@ -1,11 +1,16 @@
 package com.flyzebra.xinyi.ui;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,10 +20,14 @@ import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResUtils;
 import com.flyzebra.xinyi.utils.SerializableMap;
+import com.flyzebra.xinyi.view.AttrChildGridView;
+import com.flyzebra.xinyi.view.ChildGridView;
+import com.flyzebra.xinyi.view.ChildViewPager;
 import com.flyzebra.xinyi.view.pullzoom.PullToZoomScrollViewEx;
+import com.flyzebra.xinyi.wxapi.PayActivity;
 
-import net.sourceforge.simcpux.PayActivity;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -33,7 +42,7 @@ public class ProductInfoActivity extends BaseActivity {
     PullToZoomScrollViewEx scrollView;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    private Map<String,Object> product;
+    private Map<String, Object> product;
 
 
     @Override
@@ -47,7 +56,7 @@ public class ProductInfoActivity extends BaseActivity {
             SerializableMap serializableMap = (SerializableMap) intent.getSerializableExtra(PRODUCT);
             product = serializableMap.getMap();
         }
-        toolbar.setTitle(ResUtils.getString(this, R.string.product_info));
+        toolbar.setTitle((String) product.get(IAdapter.PR1_NAME));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -83,9 +92,40 @@ public class ProductInfoActivity extends BaseActivity {
         ((TextView) contentView.findViewById(R.id.prod_cont_tv01)).setText((String) product.get(IAdapter.PR1_NAME));
         ((TextView) contentView.findViewById(R.id.prod_cont_tv02)).setText((String) product.get(IAdapter.PR1_DESCRIBE));
 
+        AttrChildGridView attrChildGridView = new AttrChildGridView(ProductInfoActivity.this);
+        attrChildGridView.init(R.layout.product_item_01,
+                new int[]{R.id.p_item_01_tv_01, R.id.p_item_01_tv_02, R.id.p_item_01_tv_03},
+                new String[]{IAdapter.PR1_NAME, IAdapter.PR1_DESCRIBE, IAdapter.PR1_PRICE},
+                new int[]{R.id.p_item_01_iv_01},
+                new String[]{IAdapter.PR1_IMGURL})
+                .setColumn(1)
+                .setTitle("新品上市");
+
+        attrChildGridView.setShowImageSrc(new ChildGridView.ShowImageSrc() {
+            @Override
+            public void setImageSrcWithUrl(String url, ImageView iv) {
+                iHttp.upImageView(ProductInfoActivity.this, URLS.URL + url, iv);
+            }
+        });
+        attrChildGridView.setOnItemClick(new ChildGridView.OnItemClick() {
+            @Override
+            public void onItemClidk(Map<String, Object> data, View v) {
+//                                FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
+                startIntent(ProductInfoActivity.this, ProductInfoActivity.class, data, ProductInfoActivity.PRODUCT, v);
+                finish();
+            }
+        });
+
+        List<Map<String, Object>> otherList = iHttp.readListFromCache(URLS.URL_HPR);
+        if (otherList == null) {
+            otherList = new ArrayList();
+        }
+        attrChildGridView.setData(otherList);
+        ((ViewGroup) contentView).addView(attrChildGridView);
+
         //浮动菜单
         View floatView = LayoutInflater.from(this).inflate(R.layout.pull_float_view, null, false);
-       ((TextView) floatView.findViewById(R.id.prod_float_tv01)).setText("￥" + product.get(IAdapter.PR1_PRICE) + "元");
+        ((TextView) floatView.findViewById(R.id.prod_float_tv01)).setText("￥" + product.get(IAdapter.PR1_PRICE) + "元");
 //        TextView tv02 = (TextView) floatView.findViewById(R.id.prod_float_tv02);
         TextView tv03 = (TextView) floatView.findViewById(R.id.prod_float_tv03);
         tv03.setOnClickListener(new View.OnClickListener() {
@@ -105,5 +145,18 @@ public class ProductInfoActivity extends BaseActivity {
     protected void onDestroy() {
         ButterKnife.unbind(this);
         super.onDestroy();
+    }
+
+    private void startIntent(Context context, Class cls, Map map, String key, View view) {
+        FlyLog.i("<HomeRLAdapter>startIntent:map" + map.toString());
+        Intent intent = new Intent(context, cls);
+        SerializableMap serializableMap = new SerializableMap();
+        serializableMap.setMap(map);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(key, serializableMap);
+        intent.putExtras(bundle);
+        overridePendingTransition(android.support.v7.appcompat.R.anim.abc_fade_in, android.support.v7.appcompat.R.anim.abc_fade_out);
+        context.startActivity(intent);
+        finish();
     }
 }

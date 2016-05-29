@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.SelectHttp;
+import com.flyzebra.xinyi.model.http.GetHttp;
 import com.flyzebra.xinyi.utils.DisplayUtils;
 import com.flyzebra.xinyi.utils.SerializableMap;
 
@@ -27,12 +27,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * Created by FlyZebra on 2016/3/26.
  */
 public class ProductAdapter extends RecyclerView.Adapter<ViewHolder> implements IAdapter {
     private List<Map<String, Object>> list;
     private Context context;
-    private IHttp iHttp = SelectHttp.getIHttp();
+    private IHttp iHttp = GetHttp.getIHttp();
 
     public ProductAdapter(Context context, List<Map<String, Object>> list) {
         this.list = list;

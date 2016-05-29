@@ -1,4 +1,4 @@
-package net.sourceforge.simcpux;
+package com.flyzebra.xinyi.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

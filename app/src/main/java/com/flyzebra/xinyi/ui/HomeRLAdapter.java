@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.URLS;
 import com.flyzebra.xinyi.model.http.IHttp;
-import com.flyzebra.xinyi.model.http.SelectHttp;
+import com.flyzebra.xinyi.model.http.GetHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.SerializableMap;
 import com.flyzebra.xinyi.view.AttrChildGridView;
@@ -32,7 +32,7 @@ import java.util.Map;
 public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements IAdapter {
     private List<Map<String, Object>> list;
     private Context context;
-    private IHttp iHttp = SelectHttp.getIHttp();
+    private IHttp iHttp = GetHttp.getIHttp();
 
     public HomeRLAdapter(Context context, List<Map<String, Object>> list) {
         this.list = list;

@@ -34,7 +34,6 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
     private List homeHotsList;//首页热销产品推荐
     private List homeNewsList;//新品上架
     private List homeTimeShopList;//限时抢购
-    private MainActivity activity;
     private View rootView;
     private HomeRLAdapter mAdapter;
 
@@ -43,7 +42,6 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActivity) getActivity();
     }
 
     @Override

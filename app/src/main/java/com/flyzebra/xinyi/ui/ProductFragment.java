@@ -28,7 +28,6 @@ import java.util.Map;
  * Created by FlyZebra on 2016/3/26.
  */
 public class ProductFragment extends BaseFragment {
-    private MainActivity activity;
     private ViewPager viewPager;
     private MyFragmentPagerAdapter mPagerAdapter;
     private List<Map<String, Object>> list;
@@ -39,9 +38,7 @@ public class ProductFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        FlyLog.i("<ProductFragment>onCreate");
         super.onCreate(savedInstanceState);
-        activity = (MainActivity) getActivity();
     }
 
     @Override

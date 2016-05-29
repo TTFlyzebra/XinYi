@@ -15,3 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#微信支付
+-keep class com.tencent.mm.sdk.** {
+   *;
+}

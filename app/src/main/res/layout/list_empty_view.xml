@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <ImageView
+        android:visibility="gone"
         android:id="@+id/empty_view_iv"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -17,6 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="努力加载数据中......" />
+        android:text="你的购物车空空如也......" />
 </LinearLayout>
 

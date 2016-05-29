@@ -129,7 +129,7 @@
                 <TextView
                     android:id="@+id/main_tv_more"
                     style="@style/main_menu_text"
-                    android:text="@string/more"
+                    android:text="@string/set"
                     android:textColor="@color/home_select" />
             </LinearLayout>
         </LinearLayout>

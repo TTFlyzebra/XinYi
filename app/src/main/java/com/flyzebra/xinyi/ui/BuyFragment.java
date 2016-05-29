@@ -27,7 +27,6 @@ import java.util.Map;
  * Created by FlyZebra on 2016/3/22.
  */
 public class BuyFragment extends BaseFragment {
-    private MainActivity activity;
     private List<Map<String, Object>> list;
     private PullToRefreshListView listView;
     private TvIvAdapter adapter;
@@ -38,7 +37,6 @@ public class BuyFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActivity) getActivity();
     }
 
     @Nullable
@@ -102,13 +100,13 @@ public class BuyFragment extends BaseFragment {
         listView.setEmptyView(list_empty);
         ImageView list_empty_iv = (ImageView) view.findViewById(R.id.empty_view_iv);
 
-        final AnimationDrawable animationDrawable = (AnimationDrawable) list_empty_iv.getDrawable();
-        list_empty_iv.post(new Runnable() {
-            @Override
-            public void run() {
-                animationDrawable.start();
-            }
-        });
+//        final AnimationDrawable animationDrawable = (AnimationDrawable) list_empty_iv.getDrawable();
+//        list_empty_iv.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                animationDrawable.start();
+//            }
+//        });
         Map<String, String> params = new HashMap<>();
 //        iHttp.execute(IHttp.Builder.getInstance().setUrl(URLS.URL_TABLE + "?get=mealinfo").setView(listView).setJsonKey("mealinfo").setTag(HTTPTAG));
         iHttp.upListView(URLS.URL_TABLE + "?get=mealinfo", adapter, "mealinfo", HTTPTAG);

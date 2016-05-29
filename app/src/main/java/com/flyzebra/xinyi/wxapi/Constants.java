@@ -1,4 +1,4 @@
-package net.sourceforge.simcpux;
+package com.flyzebra.xinyi.wxapi;
 
 public class Constants {
 	// APP_ID 替换为你的应用从官方网站申请到的合法appId

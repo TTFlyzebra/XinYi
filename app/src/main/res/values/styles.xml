@@ -94,6 +94,14 @@
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowAnimationStyle">@style/activity_fade</item>
+    </style>
+
+    <style name="activity_fade">
+        <item name="android:activityOpenEnterAnimation">@anim/fate_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/fate_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fate_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/fate_out</item>
     </style>
 
     <style name="TextTitle">

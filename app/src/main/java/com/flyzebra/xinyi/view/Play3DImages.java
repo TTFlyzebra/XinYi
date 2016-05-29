@@ -21,7 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.flyzebra.xinyi.data.URLS;
-import com.flyzebra.xinyi.model.http.SelectHttp;
+import com.flyzebra.xinyi.model.http.GetHttp;
 import com.flyzebra.xinyi.utils.FlyLog;
 
 import java.util.List;
@@ -234,7 +234,7 @@ public class Play3DImages extends FrameLayout {
         initAnimatios();
         initDegrees();
         for (int i = 0; i < urlArray.length; i++) {
-            SelectHttp.getIHttp().upImageView(context, urlArray[i], imageView[i]);
+            GetHttp.getIHttp().upImageView(context, urlArray[i], imageView[i]);
         }
     }
 

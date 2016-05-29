@@ -20,8 +20,21 @@ android {
     }
 
     signingConfigs {
+        release {
+            storeFile file("D:\\ASPro\\XinYi\\flyzebra.jks")
+            storePassword "jiansheng8R"
+            keyAlias "RedMaple"
+            keyPassword "jiansheng88"
+        }
+    }
+
+
+    buildTypes {
         debug {
-            storeFile file("D:\\ASPro\\weixin_pay\\debug.keystore")
+            signingConfig signingConfigs.release
+        }
+        release {
+            signingConfig signingConfigs.release
         }
     }
 

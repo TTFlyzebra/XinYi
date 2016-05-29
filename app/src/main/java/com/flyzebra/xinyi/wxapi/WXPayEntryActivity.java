@@ -1,6 +1,4 @@
-package net.sourceforge.simcpux.wxapi;
-
-import net.sourceforge.simcpux.Constants;
+package com.flyzebra.xinyi.wxapi;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.utils.FlyLog;

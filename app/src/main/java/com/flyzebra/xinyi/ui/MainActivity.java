@@ -30,14 +30,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by FlyZebra on 2016/3/17.
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int AC_REQUESTCODE_01 = 88;
     public UserInfo userInfo;
     public SlidingTabLayout toolBar_stl;
-    public String[] fragmentName = {"HomeFragment", "ProductFragment", "BuyFragment", "HomeFragment", "BuyFragment"};
-    public String[] fragmentTitle = {"首页", "商城", "订单", "我的", "设置"};
+    public String[] fragmentName = {"HomeFragment", "ProductFragment", "BuyFragment", "SetFragment", "SetFragment"};
+    public String[] fragmentTitle = {"首页", "商城", "购物车", "我的", "设置"};
     public DrawerLayout mDrawerLayout;
     private Toolbar toolBar;
     private TextView toolBar_title;
@@ -216,6 +217,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 toolBar_scan.setVisibility(View.GONE);
                 break;
             case 2:
+                toolBar_stl.setVisibility(View.GONE);
+                toolBar_searth.setVisibility(View.GONE);
+                toolBar_title.setVisibility(View.VISIBLE);
+                toolBar_scan.setVisibility(View.GONE);
+                break;
+            case 4:
                 toolBar_stl.setVisibility(View.GONE);
                 toolBar_searth.setVisibility(View.GONE);
                 toolBar_title.setVisibility(View.VISIBLE);
