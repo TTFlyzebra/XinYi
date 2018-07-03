@@ -32,6 +32,28 @@
             android:textSize="18sp"
             android:background="@color/white"
             android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/set_tv_03"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="我的主页"
+            android:gravity="left|center"
+            android:layout_margin="2dp"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:background="@color/white"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/set_tv_04"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="百度地图"
+            android:gravity="left|center"
+            android:layout_margin="2dp"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:background="@color/white"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 </ScrollView>

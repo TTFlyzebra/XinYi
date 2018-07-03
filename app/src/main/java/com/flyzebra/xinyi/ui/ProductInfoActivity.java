@@ -99,7 +99,8 @@ public class ProductInfoActivity extends BaseActivity {
                 new int[]{R.id.p_item_01_iv_01},
                 new String[]{IAdapter.PR1_IMGURL})
                 .setColumn(1)
-                .setTitle("新品上市");
+                .setTitleImage(R.drawable.qq_ico01)
+                .setTitle("同类产品");
 
         attrChildGridView.setShowImageSrc(new ChildGridView.ShowImageSrc() {
             @Override
@@ -110,8 +111,13 @@ public class ProductInfoActivity extends BaseActivity {
         attrChildGridView.setOnItemClick(new ChildGridView.OnItemClick() {
             @Override
             public void onItemClidk(Map<String, Object> data, View v) {
-//                                FlyLog.i("<MultiRListAdapter> childGridView.setOnItemClick:data=" + data);
-                startIntent(ProductInfoActivity.this, ProductInfoActivity.class, data, ProductInfoActivity.PRODUCT, v);
+                Intent intent = new Intent(ProductInfoActivity.this, ProductInfoActivity.class);
+                SerializableMap serializableMap = new SerializableMap();
+                serializableMap.setMap(data);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(PRODUCT, serializableMap);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 finish();
             }
         });
@@ -126,7 +132,16 @@ public class ProductInfoActivity extends BaseActivity {
         //浮动菜单
         View floatView = LayoutInflater.from(this).inflate(R.layout.pull_float_view, null, false);
         ((TextView) floatView.findViewById(R.id.prod_float_tv01)).setText("￥" + product.get(IAdapter.PR1_PRICE) + "元");
-//        TextView tv02 = (TextView) floatView.findViewById(R.id.prod_float_tv02);
+        //加入购物车
+        TextView tv02 = (TextView) floatView.findViewById(R.id.prod_float_tv02);
+        tv02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //立即购买
         TextView tv03 = (TextView) floatView.findViewById(R.id.prod_float_tv03);
         tv03.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,18 +160,5 @@ public class ProductInfoActivity extends BaseActivity {
     protected void onDestroy() {
         ButterKnife.unbind(this);
         super.onDestroy();
-    }
-
-    private void startIntent(Context context, Class cls, Map map, String key, View view) {
-        FlyLog.i("<HomeRLAdapter>startIntent:map" + map.toString());
-        Intent intent = new Intent(context, cls);
-        SerializableMap serializableMap = new SerializableMap();
-        serializableMap.setMap(map);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(key, serializableMap);
-        intent.putExtras(bundle);
-        overridePendingTransition(android.support.v7.appcompat.R.anim.abc_fade_in, android.support.v7.appcompat.R.anim.abc_fade_out);
-        context.startActivity(intent);
-        finish();
     }
 }

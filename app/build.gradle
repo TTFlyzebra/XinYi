@@ -21,7 +21,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("D:\\ASPro\\XinYi\\flyzebra.jks")
+            storeFile file("/home/flyzebra/key/flyzebra.jks")
             storePassword "jiansheng8R"
             keyAlias "RedMaple"
             keyPassword "jiansheng88"
@@ -69,4 +69,10 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile files('libs/libammsdk.jar')
+    compile files('libs/baidumapapi_base_v3_7_3.jar')
+    compile files('libs/baidumapapi_cloud_v3_7_3.jar')
+    compile files('libs/baidumapapi_map_v3_7_3.jar')
+    compile files('libs/baidumapapi_radar_v3_7_3.jar')
+    compile files('libs/baidumapapi_search_v3_7_3.jar')
+    compile files('libs/baidumapapi_util_v3_7_3.jar')
 }

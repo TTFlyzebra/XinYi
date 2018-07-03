@@ -104,7 +104,8 @@ public class MyLoginQQ implements ILogin {
         }
     };
 
-    public MyLoginQQ(Context context, LoginResult mLoginResult) {
+    public
+    MyLoginQQ(Context context, LoginResult mLoginResult) {
         this.context = context;
         this.mLoginResult = mLoginResult;
         if (mTencent == null) {

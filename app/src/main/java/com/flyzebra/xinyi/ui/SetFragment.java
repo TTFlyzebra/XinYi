@@ -1,6 +1,7 @@
 package com.flyzebra.xinyi.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -71,7 +72,7 @@ public class SetFragment extends BaseFragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick({R.id.set_tv_01, R.id.set_tv_02})
+    @OnClick({R.id.set_tv_01, R.id.set_tv_02,R.id.set_tv_03,R.id.set_tv_04})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.set_tv_01:
@@ -93,6 +94,14 @@ public class SetFragment extends BaseFragment {
                     iHttp = GetHttp.getIHttp();
                     setTv02.setText("切换使用Volley（当前使用OkHttp）");
                 }
+                break;
+            case R.id.set_tv_03:
+                Intent intent1 = new Intent(activity,MywebActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.set_tv_04:
+                Intent intent2 = new Intent(activity,BaiduMapActivity.class);
+                startActivity(intent2);
                 break;
         }
     }

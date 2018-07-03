@@ -174,11 +174,13 @@ public class HomeRLAdapter extends RecyclerView.Adapter<ViewHolder> implements I
         Bundle bundle = new Bundle();
         bundle.putSerializable(key, serializableMap);
         intent.putExtras(bundle);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
-            context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, view, "IMAGE01").toBundle());
-        } else {
-            context.startActivity(intent);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && view != null) {
+//            context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context, view, "IMAGE01").toBundle());
+//        } else {
+//            context.startActivity(intent);
+//        }
+
+        context.startActivity(intent);
     }
 
 }

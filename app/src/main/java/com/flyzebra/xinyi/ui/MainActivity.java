@@ -18,10 +18,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyzebra.googleui.SlidingTabLayout;
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.UserInfo;
+import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.utils.DrawerLayoutUtils;
 import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.ResUtils;
@@ -37,7 +39,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int AC_REQUESTCODE_01 = 88;
     public UserInfo userInfo;
     public SlidingTabLayout toolBar_stl;
-    public String[] fragmentName = {"HomeFragment", "ProductFragment", "BuyFragment", "SetFragment", "SetFragment"};
+    public String[] fragmentName = {"HomeFragment", "ProductFragment", "BuyFragment", "AboutmeFragment", "SetFragment"};
     public String[] fragmentTitle = {"首页", "商城", "购物车", "我的", "设置"};
     public DrawerLayout mDrawerLayout;
     private Toolbar toolBar;
@@ -57,6 +59,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private int cerrent_fragment = 0;
     private boolean isOpen_left = false;
+    private boolean exitstate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +93,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             userInfo = (UserInfo) intent.getSerializableExtra("UserInfo");
         }
 
+        iHttp.getString("https://api.github.com/", HTTPTAG, new IHttp.HttpResult() {
+            @Override
+            public void succeed(Object object) {
+                FlyLog.i("FFFFhttps://api.github.com/"+object.toString());
+            }
+
+            @Override
+            public void failed(Object object) {
+
+            }
+        });
+
         //DrawerLayout
         DrawerLayoutUtils.setDrawerLeftEdgeSize(this, mDrawerLayout, 0.1f);
+
+        //设置阴影
         mDrawerLayout.setScrimColor(ResUtils.getColor(this, R.color.drawerscrimColor));
 //        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolBar, R.string.abc_action_bar_home_description, R.string.abc_action_bar_home_description_format);
 //        mDrawerToggle.syncState();
@@ -222,6 +239,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 toolBar_title.setVisibility(View.VISIBLE);
                 toolBar_scan.setVisibility(View.GONE);
                 break;
+            case 3:
+                toolBar_stl.setVisibility(View.GONE);
+                toolBar_searth.setVisibility(View.GONE);
+                toolBar_title.setVisibility(View.VISIBLE);
+                toolBar_scan.setVisibility(View.GONE);
+                break;
             case 4:
                 toolBar_stl.setVisibility(View.GONE);
                 toolBar_searth.setVisibility(View.GONE);
@@ -258,4 +281,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (exitstate) {
+            exitstate = false;
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "再按一次退出!", Toast.LENGTH_SHORT).show();
+            exitstate = true;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    exitstate = false;
+                }
+            }).start();
+        }
+    }
 }

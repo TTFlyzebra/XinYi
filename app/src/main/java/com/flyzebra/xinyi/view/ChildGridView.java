@@ -96,6 +96,12 @@ public class ChildGridView extends LinearLayout {
         titleView.setVisibility(GONE);
         this.addView(titleView);
     }
+
+    /**
+     * 设置标题图标
+     * @param ResID
+     * @return
+     */
     public ChildGridView setTitleImage(@DrawableRes int ResID) {
         if (titleImageView != null) {
             titleImageView.setImageResource(ResID);

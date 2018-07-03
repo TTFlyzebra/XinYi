@@ -170,7 +170,8 @@
 
         <LinearLayout
             android:id="@+id/left_drawer_menu_image_switch"
-            style="@style/left_drawer_menu_ll_02">
+            style="@style/left_drawer_menu_ll_02"
+            android:visibility="invisible">
 
             <ImageView
                 style="@style/left_drawer_menu_image"
