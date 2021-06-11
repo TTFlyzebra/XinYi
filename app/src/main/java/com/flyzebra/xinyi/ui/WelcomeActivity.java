@@ -24,31 +24,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-
 /**
  * by FlyZebra on 2016/3/27.
  */
-public class WelcomeActivity extends BaseActivity {
-    @Bind(R.id.wel_play3d)
-    Play3DImages welPlay3d;
-    @Bind(R.id.wel_iv_fore)
-    ImageView welIvFore;
-    @Bind(R.id.wel_iv_pasue)
-    ImageView welIvPasue;
-    @Bind(R.id.wel_iv_next)
-    ImageView welIvNext;
-    @Bind(R.id.wel_bt_goHome)
-    TextView welBtGoHome;
+public class WelcomeActivity extends BaseActivity implements View.OnClickListener {
+    private Play3DImages welPlay3d;
+    private ImageView welIvFore;
+    private ImageView welIvPasue;
+    private ImageView welIvNext;
+    private TextView welBtGoHome;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        ButterKnife.bind(this);
+
+        welPlay3d = (Play3DImages) findViewById(R.id.wel_play3d);
+        welIvFore = (ImageView) findViewById(R.id.wel_iv_fore);
+        welIvPasue = (ImageView) findViewById(R.id.wel_iv_pasue);
+        welIvNext = (ImageView) findViewById(R.id.wel_iv_next);
+        welBtGoHome = (TextView) findViewById(R.id.wel_bt_goHome);
 
         waitPlg = new ProgressDialog(this);
         waitPlg.setMessage("正在读取信息.....");
@@ -68,17 +63,18 @@ public class WelcomeActivity extends BaseActivity {
                 //如果没有广告信息，进入APP应用
                 if (list == null) {
                     goHome();
-                }else{
+                } else {
                     setWelPlay3d(list);
                 }
             }
+
             @Override
             public void failed(Object object) {
                 //从磁盘读取轮播数据
                 List<Map<String, Object>> imgList = iHttp.readListFromCache(URLS.URL_WEL);
-                if(imgList!=null){
+                if (imgList != null) {
                     setWelPlay3d(imgList);
-                }else{
+                } else {
                     goHome();
                 }
             }
@@ -88,9 +84,9 @@ public class WelcomeActivity extends BaseActivity {
 
     public void setWelPlay3d(List<Map<String, Object>> imgList) {
         //旋转动画初始化
-        welPlay3d.setImageUrlList(imgList,"imageurl").Init();
+        welPlay3d.setImageUrlList(imgList, "imageurl").Init();
         waitPlg.dismiss();
-        welPlay3d.setOnItemClick(new Play3DImages.OnItemClick(){
+        welPlay3d.setOnItemClick(new Play3DImages.OnItemClick() {
             @Override
             public void onItemClick(int position) {
                 if (welIvFore.getVisibility() == View.VISIBLE) {
@@ -151,45 +147,18 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        ButterKnife.unbind(this);
         super.onDestroy();
     }
 
     /**
      * 延时关闭轮播菜单
+     *
      * @param delayMillis
      */
     private void delayHideView(long delayMillis) {
         mHandler.removeCallbacks(hideViewTask);
         mHandler.postDelayed(hideViewTask, delayMillis);
     }
-
-    @OnClick(R.id.wel_iv_pasue)
-    public void submitPasue() {
-        delayHideView(10000);
-        if (!welPlay3d.isPlay()) {
-            welPlay3d.playAnimition(0);
-            welIvPasue.setImageResource(R.drawable.ic_pause_48dp);
-        } else {
-            welPlay3d.finishAnimition(300);
-            welIvPasue.setImageResource(R.drawable.ic_play_48dp);
-        }
-    }
-
-    @OnClick(R.id.wel_iv_next)
-    public void submitNext() {
-        delayHideView(10000);
-        welIvPasue.setImageResource(R.drawable.ic_play_48dp);
-        welPlay3d.pauseShowNextImage(500);
-    }
-
-    @OnClick(R.id.wel_iv_fore)
-    public void submitFore() {
-        delayHideView(10000);
-        welIvPasue.setImageResource(R.drawable.ic_play_48dp);
-        welPlay3d.pauseShowForeImage(500);
-    }
-
 
     /*  * 以下使用本地存存储的用户信息登陆    */
     private ProgressDialog waitPlg;
@@ -206,7 +175,7 @@ public class WelcomeActivity extends BaseActivity {
             }
             String result = object.toString();
             UserInfo userInfo = GsonUtils.json2Object(result, UserInfo.class);
-            if(userInfo==null){
+            if (userInfo == null) {
                 waitPlg.dismiss();
                 Toast.makeText(WelcomeActivity.this, "获取用户信息失败！", Toast.LENGTH_SHORT).show();
 //                startMainActivity(null);
@@ -218,6 +187,7 @@ public class WelcomeActivity extends BaseActivity {
                 startMainActivity(userInfo);
             }
         }
+
         @Override
         public void failed(Object object) {
             FlyLog.i("<WelcomeActivity>upLoginInfo->failed:object-->" + object.toString());
@@ -241,7 +211,6 @@ public class WelcomeActivity extends BaseActivity {
         iHttp.postString(URLS.URL + "/API/User/upLoginInfo", params, HTTPTAG, upLoginInfo);
     }
 
-    @OnClick(R.id.wel_bt_goHome)
     public void goHome() {
         /**
          * 如果本地没有缓存用户登陆信息，需要重新登陆或注册用户
@@ -255,6 +224,7 @@ public class WelcomeActivity extends BaseActivity {
             finish();
         }
     }
+
     private void startMainActivity(UserInfo userInfo) {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
         Bundle bundle = new Bundle();
@@ -262,5 +232,33 @@ public class WelcomeActivity extends BaseActivity {
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.wel_iv_pasue:
+                delayHideView(10000);
+                if (!welPlay3d.isPlay()) {
+                    welPlay3d.playAnimition(0);
+                    welIvPasue.setImageResource(R.drawable.ic_pause_48dp);
+                } else {
+                    welPlay3d.finishAnimition(300);
+                    welIvPasue.setImageResource(R.drawable.ic_play_48dp);
+                }
+                break;
+
+            case R.id.wel_iv_next:
+                delayHideView(10000);
+                welIvPasue.setImageResource(R.drawable.ic_play_48dp);
+                welPlay3d.pauseShowNextImage(500);
+                break;
+
+            case R.id.wel_iv_fore:
+                delayHideView(10000);
+                welIvPasue.setImageResource(R.drawable.ic_play_48dp);
+                welPlay3d.pauseShowForeImage(500);
+                break;
+        }
     }
 }

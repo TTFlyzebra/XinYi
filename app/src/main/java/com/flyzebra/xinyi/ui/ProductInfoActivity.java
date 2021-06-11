@@ -1,10 +1,6 @@
 package com.flyzebra.xinyi.ui;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -17,12 +13,9 @@ import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.URLS;
-import com.flyzebra.xinyi.utils.FlyLog;
-import com.flyzebra.xinyi.utils.ResUtils;
 import com.flyzebra.xinyi.utils.SerializableMap;
 import com.flyzebra.xinyi.view.AttrChildGridView;
 import com.flyzebra.xinyi.view.ChildGridView;
-import com.flyzebra.xinyi.view.ChildViewPager;
 import com.flyzebra.xinyi.view.pullzoom.PullToZoomScrollViewEx;
 import com.flyzebra.xinyi.wxapi.PayActivity;
 
@@ -30,18 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by FlyZebra on 2016/4/8.
  */
 public class ProductInfoActivity extends BaseActivity {
     public static final String PRODUCT = "PRODUCT";
-    @Bind(R.id.scroll_view)
-    PullToZoomScrollViewEx scrollView;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
+    private PullToZoomScrollViewEx scrollView;
+    private Toolbar toolbar;
     private Map<String, Object> product;
 
 
@@ -49,13 +38,13 @@ public class ProductInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productinfo);
-        ButterKnife.bind(this);
         //初始化轮播
         Intent intent = getIntent();
         if (intent != null) {
             SerializableMap serializableMap = (SerializableMap) intent.getSerializableExtra(PRODUCT);
             product = serializableMap.getMap();
         }
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle((String) product.get(IAdapter.PR1_NAME));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -158,7 +147,6 @@ public class ProductInfoActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        ButterKnife.unbind(this);
         super.onDestroy();
     }
 }

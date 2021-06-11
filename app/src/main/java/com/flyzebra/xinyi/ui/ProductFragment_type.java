@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * FlyZebra
@@ -31,9 +29,7 @@ import butterknife.ButterKnife;
 public class ProductFragment_type extends BaseFragment {
     private static final String ARG_TYPE = "TYPE";
     private static final String ARG_RESID = "RESID";
-    @Bind(R.id.poi_type_rv_01)
     RefreshRecyclerView poiTypeRv01;
-    @Bind(R.id.newwork_error)
     LinearLayout newworkError;
     private int ptype_id;
     private int ResID;
@@ -70,7 +66,9 @@ public class ProductFragment_type extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = LayoutInflater.from(activity).inflate(R.layout.fragment_product_type, container, false);
-        ButterKnife.bind(this, rootView);
+
+        poiTypeRv01 = (RefreshRecyclerView) rootView.findViewById(R.id.poi_type_rv_01);
+        newworkError = (LinearLayout) rootView.findViewById(R.id.newwork_error);
 
         poiTypeRv01.setId(ResID);
         poiTypeRv01.setLayoutManager(new LinearLayoutManager(activity));
@@ -135,6 +133,5 @@ public class ProductFragment_type extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 }

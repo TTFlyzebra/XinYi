@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.flyzebra.xinyi.R;
-import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.model.http.GetHttp;
+import com.flyzebra.xinyi.model.http.IHttp;
 import com.flyzebra.xinyi.ui.BaseActivity;
 import com.tencent.mm.sdk.constants.Build;
 import com.tencent.mm.sdk.modelpay.PayReq;
@@ -19,24 +19,23 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class PayActivity extends BaseActivity {
-    IHttp iHttp = GetHttp.getIHttp();
-    @Bind(R.id.appay_btn)
-    Button appayBtn;
-
+public class PayActivity extends BaseActivity implements View.OnClickListener {
+    private IHttp iHttp = GetHttp.getIHttp();
+    private Button appayBtn;
+    private Button checkpayBtn;
     private IWXAPI api;
-
     private String testpayurl = "http://wxpay.weixin.qq.com/pub_v2/app/app_pay.php?plat=android";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay);
-        ButterKnife.bind(this);
+
+        appayBtn = (Button) findViewById(R.id.appay_btn);
+        checkpayBtn = (Button) findViewById(R.id.check_pay_btn);
+        appayBtn.setOnClickListener(this);
+        checkpayBtn.setOnClickListener(this);
         api = WXAPIFactory.createWXAPI(this, "wxb4ba3c02aa476ea1");
 
     }
@@ -45,7 +44,6 @@ public class PayActivity extends BaseActivity {
         return api.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
     }
 
-    @OnClick({R.id.appay_btn, R.id.check_pay_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.appay_btn:

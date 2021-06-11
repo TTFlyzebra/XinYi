@@ -17,18 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * 主页
  * Created by FlyZebra on 2016/2/29.
  */
 public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
-    @Bind(R.id.home_rv_01)
-    RefreshRecyclerView homeRv01;
-    @Bind(R.id.newwork_error)
-    LinearLayout newworkError;
+    private RefreshRecyclerView homeRv01;
+    private LinearLayout newworkError;
     private List RLList;
     private List homeShopsList;//ViewPager商店展示
     private List homeHotsList;//首页热销产品推荐
@@ -47,7 +43,10 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        ButterKnife.bind(this, rootView);
+
+        homeRv01 = (RefreshRecyclerView) rootView.findViewById(R.id.home_rv_01);
+        newworkError = (LinearLayout) rootView.findViewById(R.id.newwork_error);
+
         homeRv01.setLayoutManager(new LinearLayoutManager(activity));
         if (RLList == null) {
             RLList = new ArrayList<Map<String, Object>>();
@@ -169,6 +168,5 @@ public class HomeFragment extends BaseFragment implements IHttp.HttpResult {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 }

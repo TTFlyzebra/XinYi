@@ -11,14 +11,11 @@ import android.widget.TextView;
 
 import com.flyzebra.xinyi.R;
 import com.flyzebra.xinyi.data.URLS;
-import com.flyzebra.xinyi.utils.FlyLog;
 import com.flyzebra.xinyi.utils.SerializableMap;
 import com.flyzebra.xinyi.view.pullzoom.PullToZoomScrollViewEx;
 
 import java.util.Map;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * FlyZebra
@@ -27,15 +24,13 @@ import butterknife.ButterKnife;
 public class ShopInfoActivity extends BaseActivity {
 
     public static final String SHOP = "SHOP";
-    @Bind(R.id.scroll_view)
-    PullToZoomScrollViewEx scrollView;
+    private PullToZoomScrollViewEx scrollView;
     private Map<String,Object> shop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopinfo);
-        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -73,7 +68,6 @@ public class ShopInfoActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        ButterKnife.unbind(this);
         super.onDestroy();
     }
 }
